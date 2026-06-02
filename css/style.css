@@ -1,5 +1,4 @@
 /*! HTML5 Boilerplate v9.0.1 | MIT License | https://html5boilerplate.com/ */
-
 /* main.css 3.0.0 | MIT License | https://github.com/h5bp/main.css#readme */
 /*
  * What follows is the result of much research on cross-browser styling.
@@ -7,243 +6,812 @@
  * Kroc Camen, and the H5BP dev community and team.
  */
 
-/* ==========================================================================
-   Base styles: opinionated defaults
-   ========================================================================== */
 
 html {
   color: #222;
   font-size: 1em;
   line-height: 1.4;
-  background-color: #222;
-
+}
+body {
+  /*background-color: #8984b3; */
+  background-color: white;
+  font-family: Arial, sans-serif;
 }
 
-/*
- * Remove text-shadow in selection highlight:
- * https://twitter.com/miketaylr/status/12228805301
- *
- * Customize the background color to match your design.
- */
-
-::-moz-selection {
-  background: #b3d4fc;
-  text-shadow: none;
-}
-
-::selection {
-  background: #b3d4fc;
-  text-shadow: none;
-}
-
-/*
- * A better looking default horizontal rule
- */
-
-hr {
-  display: block;
-  height: 1px;
-  border: 0;
-  border-top: 1px solid #ccc;
-  margin: 1em 0;
-  padding: 0;
-}
-
-/*
- * Remove the gap between audio, canvas, iframes,
- * images, videos and the bottom of their containers:
- * https://github.com/h5bp/html5-boilerplate/issues/440
- */
-
-audio,
-canvas,
-iframe,
-img,
-svg,
-video {
-  vertical-align: middle;
-}
-
-/*
- * Remove default fieldset styles.
- */
-
-fieldset {
-  border: 0;
+* {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
-/*
- * Allow only vertical resizing of textareas.
- */
 
-textarea {
-  resize: vertical;
+/* TOP HEADER */
+.top-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  height: 50px;
+
+  padding: 0 40px;
+  background: black;
+  color: white;
 }
 
-/* ==========================================================================
-   Author's custom styles
-   ========================================================================== */
-
-/* ==========================================================================
-   Helper classes
-   ========================================================================== */
-
-/*
- * Hide visually and from screen readers
- */
-
-.hidden,
-[hidden] {
-  display: none !important;
+.US-flag {
+  height: 15px;
+  width: 25px;
 }
 
-/*
- * Hide only visually, but have it available for screen readers:
- * https://snook.ca/archives/html_and_css/hiding-content-for-accessibility
- *
- * 1. For long content, line feeds are not interpreted as spaces and small width
- *    causes content to wrap 1 word per line:
- *    https://medium.com/@jessebeach/beware-smushed-off-screen-accessible-text-5952a4c2cbfe
- */
+.left-menu {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 
-.visually-hidden {
-  border: 0;
-  clip: rect(0, 0, 0, 0);
-  height: 1px;
-  margin: -1px;
+  font-size: 14px;
+}
+
+
+.left-menu a {
+  color: white;
+  text-decoration: none;
+}
+
+.left-menu span {
+  color: gray;
+}
+
+.right-menu {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.right-menu a {
+  color: white;
+  text-decoration: none;
+}
+
+.right-menu span {
+  color: gray;
+}
+
+/* HERO SECTION */
+.hero {
+  position: relative;
+
+  width: 1940px;
+  max-width: 95vw;
+
+  max-height: 100vh;
+  height: 1090px;
+
+  margin: 0 auto;
+
   overflow: hidden;
-  padding: 0;
+}
+/* HERO TEXT */
+.hero-content {
   position: absolute;
-  white-space: nowrap;
-  width: 1px;
-  /* 1 */
+
+  left: 30px;
+  top: 52%;
+
+  transform: translateY(-50%);
+
+  z-index: 10;
+
+  color: white;
 }
 
-/*
- * Extends the .visually-hidden class to allow the element
- * to be focusable when navigated to via the keyboard:
- * https://www.drupal.org/node/897638
- */
+/* TITLE */
+.hero-content h1 {
+  font-size: 45px;
+  font-weight: 500;
+  font-family: "Libre Baskerville", serif;
 
-.visually-hidden.focusable:active,
-.visually-hidden.focusable:focus {
-  clip: auto;
-  height: auto;
-  margin: 0;
-  overflow: visible;
-  position: static;
-  white-space: inherit;
-  width: auto;
+  margin-bottom: 10px;
 }
 
-/*
- * Hide visually and from screen readers, but maintain layout
- */
+/* SUBTITLE */
+.hero-content p {
+  font-size: 15px;
+  margin-bottom: 30px;
+}
 
-.invisible {
+/* BUTTON */
+.hero-content button {
+  width: 150px;
+  height: 56px;
+
+  border: none;
+
+  background: #111;
+  color: white;
+
+  font-size: 14px;
+
+
+  cursor: pointer;
+
+  transition: 0.3s;
+}
+
+.hero-content button:hover {
+  background: #333;
+}
+
+
+
+/* MAIN HEADER */
+.main-header {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  z-index: 1000;
+
+  transition:
+    transform 0.3s ease,
+    background-color 0.3s ease,
+    top 0.3s ease;
+
+  width: 100%;
+  height: 80px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 40px;
+
+  transform: translateY(0);
+
+  background: transparent;
+  color: white;
+}
+
+.main-header.scrolled {
+  background: white;
+  color: black;
+}
+
+.main-header.scrolled .nav-menu a {
+  color: black;
+}
+
+.main-header.hidden {
+  transform: translateY(-120%);
+}
+
+.main-header:not(.hidden) {
+  transform: translateY(0);
+}
+
+.main-header:hover {
+  background: white;
+  color: black;
+}
+.main-header:hover .nav-menu a {
+  color: black;
+}
+
+.main-header:hover .logo {
+  filter: brightness(1) invert(0);
+}
+
+.main-header.scrolled .logo {
+  filter: brightness(1) invert(0);
+}
+.main-header:hover .header-icons img,
+.main-header.scrolled .header-icons img {
+  filter: brightness(0);
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 50px;
+}
+
+.nav-menu {
+  display: flex;
+  gap: 50px;
+}
+
+.nav-item {
+  position: relative;
+}
+
+
+.has-dropdown:hover .mega-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+/* Mega Menu */
+.mega-menu {
+  position: fixed;
+
+  top: 80px;
+  left: 0;
+
+  width: 95vw;
+  max-width: 1940px;
+
+  background: white;
+
+  padding: 30px 40px;
+
+  display: flex;
+  gap: 60px;
+
+  opacity: 0;
   visibility: hidden;
+
+  transform: translateY(10px);
+
+  transition: all 0.25s ease;
+
 }
 
-/*
- * Clearfix: contain floats
- *
- * The use of `table` rather than `block` is only necessary if using
- * `::before` to contain the top-margins of child elements.
- */
+.mega-column {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 
-.clearfix::before,
-.clearfix::after {
-  content: "";
-  display: table;
+  min-width: 150px;
 }
 
-.clearfix::after {
-  clear: both;
+.mega-column h4 {
+  font-size: 13px;
+  font-weight: 700;
+
+  color: #222;
+
+  margin-bottom: 8px;
 }
 
-/* ==========================================================================
-   EXAMPLE Media Queries for Responsive Design.
-   These examples override the primary ('mobile first') styles.
-   Modify as content requires.
-   ========================================================================== */
+.mega-column a {
+  color: #333;
+  text-decoration: none;
 
-@media only screen and (min-width: 35em) {
-  /* Style adjustments for viewports that meet the condition */
+  font-size: 14px;
 }
 
-@media print,
-  (-webkit-min-device-pixel-ratio: 1.25),
-  (min-resolution: 1.25dppx),
-  (min-resolution: 120dpi) {
-  /* Style adjustments for high resolution devices */
+/* NEW DROPDOWN */
+
+.new-dropdown {
+  position: fixed;
+
+  top: 80px;
+  left: 0;
+
+  width: 95vw;
+  max-width: 1940px;
+
+  background: white;
+
+  padding: 30px 190px 60px 270px;
+
+  display: flex;
+  gap: 20px;
+
+  opacity: 0;
+  visibility: hidden;
+
+  transform: translateY(10px);
+
+  transition: all 0.25s ease;
 }
 
-/* ==========================================================================
-   Print styles.
-   Inlined to avoid the additional HTTP request:
-   https://www.phpied.com/delay-loading-your-print-css/
-   ========================================================================== */
-
-@media print {
-  *,
-  *::before,
-  *::after {
-    background: #fff !important;
-    color: #000 !important;
-    /* Black prints faster */
-    box-shadow: none !important;
-    text-shadow: none !important;
-  }
-
-  a,
-  a:visited {
-    text-decoration: underline;
-  }
-
-  a[href]::after {
-    content: " (" attr(href) ")";
-  }
-
-  abbr[title]::after {
-    content: " (" attr(title) ")";
-  }
-
-  /*
-   * Don't show links that are fragment identifiers,
-   * or use the `javascript:` pseudo protocol
-   */
-  a[href^="#"]::after,
-  a[href^="javascript:"]::after {
-    content: "";
-  }
-
-  pre {
-    white-space: pre-wrap !important;
-  }
-
-  pre,
-  blockquote {
-    border: 1px solid #999;
-    page-break-inside: avoid;
-  }
-
-  tr,
-  img {
-    page-break-inside: avoid;
-  }
-
-  p,
-  h2,
-  h3 {
-    orphans: 3;
-    widows: 3;
-  }
-
-  h2,
-  h3 {
-    page-break-after: avoid;
-  }
+.nav-item:hover .new-dropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
 }
 
+.new-card {
+  width: 270px;
+
+  text-decoration: none;
+  color: #111;
+}
+
+.new-card img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+
+  object-fit: cover;
+
+  display: block;
+
+  transition: transform .3s ease;
+}
+
+.new-card span {
+  display: block;
+
+  margin-top: 10px;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  text-decoration: underline;
+}
+
+.new-card:hover img {
+  transform: scale(1.02);
+}
+
+
+
+.featured {
+  padding-right: 40px;
+  border-right: 1px solid #ddd;
+
+  margin-left: 190px;
+}
+
+.featured a {
+  font-weight: 700;
+}
+
+.nav-menu a {
+  color: white;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.top-header a:hover,
+.nav-menu a:hover {
+  opacity: 0.7;
+}
+
+/* ICONS */
+.location-pin {
+  width: 15px;
+  height: 15px;
+}
+
+.recycle-icon {
+  width: 15px;
+  height: 15px;
+}
+
+.header-icons {
+  display: flex;
+  gap: 30px;
+  font-size: 20px;
+  cursor: pointer;
+}
+.header-icons img {
+  width: 20px;
+  height: 20px;
+}
+
+/* LOGO */
+.logo {
+  height: 55px;
+  width: 55px;
+  filter: brightness(0) invert(1);
+}
+
+/* VIDEO */
+#video-background {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+}
+
+
+/* CATEGORIES SECTION */
+.categories {
+  width: 1940px;
+  max-width: 95vw;
+
+  margin: 5px auto 0;
+
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.category-card {
+  position: relative;
+
+  height: 430px;
+
+  overflow: hidden;
+  text-decoration: none;
+  color: white;
+
+  border-right: 1px solid rgba(255,255,255,0.2);
+}
+
+.category-card:last-child {
+  border-right: none;
+}
+
+.category-card img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  transition: transform 0.5s ease;
+}
+
+
+.category-card h2 {
+  position: absolute;
+
+  top: 50%;
+  left: 50%;
+
+  transform: translate(-50%, -50%);
+
+  font-family: "Libre Baskerville", serif;
+  font-size: 25px;
+  font-weight: 400;
+
+  z-index: 2;
+}
+
+.category-card:hover img {
+  transform: scale(1.05);
+}
+
+.category-card:hover .overlay {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+
+
+.grey-days {
+  width: 1940px;
+  max-width: 95vw;
+  margin: 50px auto 100px;
+  text-align: center;
+}
+
+.grey-days-content h2 {
+  font-family: "Libre Baskerville", serif;
+  font-size: 36px;
+  margin-bottom: 20px;
+  color: #111;
+}
+
+.grey-days-content p {
+  font-size: 14px;
+  line-height: 1.6;
+  max-width: 700px;
+  margin: 0 auto 30px;
+  color: #111;
+}
+
+.grey-days-content button {
+  background: #111;
+  color: white;
+  border: none;
+  padding: 14px 28px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.grey-days-content button:hover {
+  background: #333;
+}
+
+
+
+.product-grid {
+  width: 1860px;
+  max-width: 95vw;
+  margin: 50px auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+
+  row-gap: 60px;
+}
+
+.product-card {
+  width: 605px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.product-card img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  display: block;
+}
+.product-title {
+  font-weight: bold;
+  text-decoration: none;
+  color: black;
+}
+
+.product-title:hover {
+  text-decoration: underline;
+}
+
+.product-subtitle {
+  font-size: 13px;
+  color: #555;
+}
+
+.product-price {
+  font-weight: bold;
+  margin-top: auto;
+}
+
+.old-price {
+  text-decoration: line-through;
+  font-weight: normal;
+  color: #999;
+}
+
+
+/* FEATURED PRODUCTS */
+
+.featured-products {
+  width: 1940px;
+  max-width: 95vw;
+
+  margin: 100px auto;
+
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 4px;
+}
+
+.featured-card {
+  background: none;
+}
+
+.featured-card img {
+  width: 100%;
+  display: block;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+}
+
+.featured-info {
+  text-align: center;
+  padding: 20px 20px 50px;
+}
+
+.featured-info h2 {
+  font-family: "Libre Baskerville", serif;
+  font-size: 38px;
+  font-weight: 400;
+  color: #111;
+  margin-bottom: 20px;
+}
+
+.featured-info p {
+  font-size: 16px;
+  color: #111;
+  margin-bottom: 30px;
+}
+
+.featured-info button {
+  width: 140px;
+  height: 50px;
+  border: none;
+  background: #111;
+  color: white;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.featured-info button:hover {
+  background: #333;
+}
+
+
+/* FOOTER */
+
+.footer {
+  background: #000;
+  color: white;
+  margin-top: 100px;
+}
+
+/* SIGNUP BAR */
+
+.footer-signup {
+  height: 110px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 10px;
+  gap: 30px;
+
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.footer-signup p {
+  font-size: 14px;
+}
+
+.footer-signup button {
+  width: 140px;
+  height: 50px;
+
+  border: none;
+
+  background: white;
+  color: black;
+
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.footer-signup button:hover {
+  background: #e8e8e8;
+}
+
+/* MAIN FOOTER */
+
+.footer-content {
+  width: 1500px;
+  max-width: 95vw;
+
+  margin: 0 auto;
+  padding: 90px 0 120px;
+
+  display: flex;
+  justify-content: space-between;
+  gap: 180px;
+}
+
+/* LINKS */
+
+.footer-links {
+  display: flex;
+  gap: 100px;
+  padding-left: 40px;
+}
+
+.footer-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.footer-column h3 {
+  font-size: 16px;
+  font-weight: 700;
+
+  margin-bottom: 16px;
+}
+
+.footer-column a {
+  color: white;
+  text-decoration: none;
+
+  font-size: 15px;
+  line-height: 1.7;
+  margin-bottom: 5px;
+
+  white-space: nowrap;
+}
+
+.footer-column a:hover {
+  text-decoration: underline;
+}
+
+/* BRAND BLOCK */
+
+.footer-brand {
+  max-width: 320px;
+}
+
+.footer-brand h2 {
+  font-family: "Libre Baskerville", serif;
+
+  font-size: 24px;
+  font-weight: 400;
+
+  margin-bottom: 24px;
+}
+
+.footer-logo {
+  width:56px;
+  margin-bottom: 25px;
+  filter: brightness(0) invert(1);
+}
+
+.footer-brand p {
+  font-size: 16px;
+  line-height: 1.6;
+
+  margin-bottom: 35px;
+}
+
+/* SOCIALS */
+
+.social-icons {
+  display: flex;
+  gap: 14px;
+}
+
+.social-icons img {
+  width: 30px;
+  height: 30px;
+
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+  filter: brightness(0) invert(1);
+}
+
+.social-icons img:hover {
+  opacity: 0.7;
+}
+
+
+/* SECOND FOOTER */
+
+.footer-secondary {
+  background: #f3f3f3;
+  color: #000;
+  font-size: 12px;
+}
+
+.footer-secondary-brands {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 35px;
+
+  padding: 25px 20px 15px;
+}
+
+.footer-secondary-brands span {
+  font-size: 13px;
+}
+
+.footer-secondary-brands img {
+  height: 34px;
+  width: auto;
+  object-fit: contain;
+}
+
+.footer-secondary-top {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  align-items: center;
+  justify-content: center;
+
+  padding: 15px 20px;
+}
+
+.footer-secondary-top a {
+  font-size: 14px;
+  color: #000;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.footer-secondary-top a:hover {
+  text-decoration: underline;
+}
+
+.footer-secondary-top .US-flag {
+  width: 25px;
+  height: 15px;
+}
+
+.footer-secondary-bottom {
+  text-align: center;
+  padding: 12px 0 20px;
+
+  color: #333;
+}
