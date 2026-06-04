@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Men's Shoes - New Balance</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/products.css">
+</head>
+<body class="products-page">
+
+<div id="top-header-container"></div>
+<section class="hero">
+  <div id="main-header-container"></div>
+</section>
+
+<main class="products-main">
+  <!-- Breadcrumbs -->
+  <nav class="breadcrumb"></nav>
+
+  <!-- Category title -->
+  <h1 class="category-title"></h1>
+
+  <div class="products-wrapper">
+
+    <!-- Filters -->
+    <aside class="filters">
+      <div class="filter-group">
+        <h4>Product Type</h4>
+        <div class="filter-content">
+          <button class="filter-option" data-filter="category" data-value="shoes">Shoes</button>
+          <button class="filter-option" data-filter="category" data-value="clothing">Clothing</button>
+          <button class="filter-option"  data-filter="category" data-value="accessories">Accessories</button>
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <h4>Mens Footwear Size</h4>
+        <div class="filter-content">
+          <button class="filter-option" data-filter="sizes" data-value="7">7</button>
+          <button class="filter-option" data-filter="sizes" data-value="7.5">7.5</button>
+          <button class="filter-option" data-filter="sizes" data-value="8">8</button>
+          <button class="filter-option" data-filter="sizes" data-value="8.5">8.5</button>
+          <button class="filter-option" data-filter="sizes" data-value="9">9</button>
+          <button class="filter-option" data-filter="sizes" data-value="9.5">9.5</button>
+          <button class="filter-option" data-filter="sizes" data-value="10">10</button>
+          <button class="filter-option" data-filter="sizes" data-value="10.5">10.5</button>
+          <button class="filter-option" data-filter="sizes" data-value="11">11</button>
+          <button class="filter-option" data-filter="sizes" data-value="11.5">11.5</button>
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <h4>Adult Footwear Size</h4>
+        <div class="filter-content">
+          <button class="filter-option">M3 / W4.5</button>
+          <button class="filter-option">M3.5 / W5</button>
+          <button class="filter-option">M4 / W5.5</button>
+          <button class="filter-option">M4.5 / W6</button>
+
+          <button class="filter-option">M5 / W6.5</button>
+          <button class="filter-option">M5.5 / W7</button>
+          <button class="filter-option">M6 / W7.5</button>
+          <button class="filter-option">M6.5 / W8</button>
+
+          <button class="filter-option">M7 / W8.5</button>
+          <button class="filter-option">M7.5 / W9</button>
+          <button class="filter-option">M8 / W9.5</button>
+          <button class="filter-option">M8.5 / W10</button>
+
+          <button class="filter-option">M9 / W10.5</button>
+          <button class="filter-option">M9.5 / W11</button>
+          <button class="filter-option">M10 / W11.5</button>
+          <button class="filter-option">M10.5 / W12</button>
+
+          <button class="filter-option">M11 / W12.5</button>
+          <button class="filter-option">M11.5 / W13</button>
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <h4>Price</h4>
+        <div class="filter-content">
+          <button class="filter-option" data-filter="price" data-value="25-45">$25-$49.99</button>
+          <button class="filter-option" data-filter="price" data-value="50-75">$50-$74.99</button>
+          <button class="filter-option" data-filter="price" data-value="75-100">$75-$99.99</button>
+          <button class="filter-option" data-filter="price" data-value="100-125">$100-$124.99</button>
+          <button class="filter-option" data-filter="price" data-value="125-150">$125-$149.99</button>
+          <button class="filter-option" data-filter="price" data-value="150-175">$150-$174.99</button>
+          <button class="filter-option" data-filter="price" data-value="175-200">$175-$199.99</button>
+          <button class="filter-option" data-filter="price" data-value="200">over $200</button>
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <h4>Mens Clothing Size</h4>
+        <div class="filter-content">
+          <button class="filter-option">XS</button>
+          <button class="filter-option">S</button>
+          <button class="filter-option">M</button>
+          <button class="filter-option">L</button>
+          <button class="filter-option">XL</button>
+          <button class="filter-option">2XL</button>
+          <button class="filter-option">3XL</button>
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <h4>Accessory Type</h4>
+        <div class="filter-content color-filter">
+          <button class="filter-option">Hats</button>
+          <button class="filter-option">Socks</button>
+          <button class="filter-option">Bags</button>
+        </div>
+      </div>
+
+
+      <div class="filter-group">
+        <h4>Color</h4>
+        <div class="filter-content color-filter">
+          <button class="filter-option color-swatch" data-filter="colors" data-value="black" style="background:black"></button>
+          <button class="filter-option color-swatch" data-filter="colors" data-value="white" style="background:white"></button>
+          <button class="filter-option color-swatch" data-filter="colors" data-value="green" style="background:green"></button>
+          <button class="filter-option color-swatch" data-filter="colors" data-value="blue" style="background:blue"></button>
+          <button class="filter-option color-swatch" data-filter="colors" data-value="gray" style="background:gray"></button>
+          <button class="filter-option color-swatch" data-filter="colors" data-value="red" style="background:red"></button>
+          <button class="filter-option color-swatch" data-filter="colors" data-value="pink" style="background:pink"></button>
+          <button class="filter-option color-swatch" data-filter="colors" data-value="tan" style="background:tan"></button>
+          <button class="filter-option color-swatch" data-filter="colors" data-value="brown" style="background:brown"></button>
+          <button class="filter-option color-swatch" data-filter="colors" data-value="yellow" style="background:yellow"></button>
+          <button class="filter-option color-swatch" data-filter="colors" data-value="purple" style="background:purple"></button>
+          <button class="filter-option color-swatch" data-filter="colors" data-value="orange" style="background:orange"></button>
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <h4>Gender</h4>
+        <div class="filter-content">
+          <button class="filter-option" data-filter="gender" data-value="Men">Men</button>
+          <button class="filter-option" data-filter="gender" data-value="Women">Women</button>
+          <button class="filter-option" data-filter="gender" data-value="Unisex">Unisex</button>
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <h4>Activity</h4>
+        <div class="filter-content">
+          <button class="filter-option" data-filter="activity" data-value="Running">Running</button>
+          <button class="filter-option" data-filter="activity" data-value="Lifestyle">Lifestyle</button>
+          <button class="filter-option" data-filter="activity" data-value="Basketball">Basketball</button>
+          <button class="filter-option" data-filter="activity" data-value="Training">Training</button>
+          <button class="filter-option" data-filter="activity" data-value="Walking">Walking</button>
+          <button class="filter-option" data-filter="activity" data-value="Tennis">Tennis</button>
+          <button class="filter-option" data-filter="activity" data-value="Golf">Golf</button>
+          <button class="filter-option" data-filter="activity" data-value="Baseball">Baseball</button>
+          <button class="filter-option" data-filter="activity" data-value="Skateboarding">Skateboarding</button>
+          <button class="filter-option" data-filter="activity" data-value="Soccer">Soccer</button>
+          <button class="filter-option" data-filter="activity" data-value="Lacrosse">Lacrosse</button>
+          <button class="filter-option" data-filter="activity" data-value="Pickleball">Pickleball</button>
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <h4>Model</h4>
+      </div>
+    </aside>
+
+    <!-- Product grid -->
+    <section class="product-grid" id="product-grid">
+    </section>
+  </div>
+</main>
+
+<div id="footer-container"></div>
+
+<script src="js/loadComponents.js"></script>
+
+<script type="module" src="js/pageFilters.js"></script>
+<script type="module" src="js/app.js"></script>
+
+</body>
+</html>
