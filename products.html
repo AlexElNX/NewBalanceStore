@@ -25,17 +25,22 @@
 
     <!-- Filters -->
     <aside class="filters">
-      <div class="filter-group">
+
+      <button id="clear-filters-btn">
+        Clear Filters
+      </button>
+
+      <div class="filter-group product-type-filter">
         <h4>Product Type</h4>
         <div class="filter-content">
-          <button class="filter-option" data-filter="category" data-value="shoes">Shoes</button>
+          <button class="filter-option" data-filter="category" data-value="footwear">Shoes</button>
           <button class="filter-option" data-filter="category" data-value="clothing">Clothing</button>
           <button class="filter-option"  data-filter="category" data-value="accessories">Accessories</button>
         </div>
       </div>
 
-      <div class="filter-group">
-        <h4>Mens Footwear Size</h4>
+      <div class="filter-group footwear-size-filter">
+        <h4>Footwear Size</h4>
         <div class="filter-content">
           <button class="filter-option" data-filter="sizes" data-value="7">7</button>
           <button class="filter-option" data-filter="sizes" data-value="7.5">7.5</button>
@@ -47,34 +52,6 @@
           <button class="filter-option" data-filter="sizes" data-value="10.5">10.5</button>
           <button class="filter-option" data-filter="sizes" data-value="11">11</button>
           <button class="filter-option" data-filter="sizes" data-value="11.5">11.5</button>
-        </div>
-      </div>
-
-      <div class="filter-group">
-        <h4>Adult Footwear Size</h4>
-        <div class="filter-content">
-          <button class="filter-option">M3 / W4.5</button>
-          <button class="filter-option">M3.5 / W5</button>
-          <button class="filter-option">M4 / W5.5</button>
-          <button class="filter-option">M4.5 / W6</button>
-
-          <button class="filter-option">M5 / W6.5</button>
-          <button class="filter-option">M5.5 / W7</button>
-          <button class="filter-option">M6 / W7.5</button>
-          <button class="filter-option">M6.5 / W8</button>
-
-          <button class="filter-option">M7 / W8.5</button>
-          <button class="filter-option">M7.5 / W9</button>
-          <button class="filter-option">M8 / W9.5</button>
-          <button class="filter-option">M8.5 / W10</button>
-
-          <button class="filter-option">M9 / W10.5</button>
-          <button class="filter-option">M9.5 / W11</button>
-          <button class="filter-option">M10 / W11.5</button>
-          <button class="filter-option">M10.5 / W12</button>
-
-          <button class="filter-option">M11 / W12.5</button>
-          <button class="filter-option">M11.5 / W13</button>
         </div>
       </div>
 
@@ -92,25 +69,25 @@
         </div>
       </div>
 
-      <div class="filter-group">
-        <h4>Mens Clothing Size</h4>
+      <div class="filter-group clothing-size-filter">
+        <h4>Clothing Size</h4>
         <div class="filter-content">
-          <button class="filter-option">XS</button>
-          <button class="filter-option">S</button>
-          <button class="filter-option">M</button>
-          <button class="filter-option">L</button>
-          <button class="filter-option">XL</button>
-          <button class="filter-option">2XL</button>
-          <button class="filter-option">3XL</button>
+          <button class="filter-option" data-filter="sizes" data-value="XS">XS</button>
+          <button class="filter-option" data-filter="sizes" data-value="S">S</button>
+          <button class="filter-option" data-filter="sizes" data-value="M">M</button>
+          <button class="filter-option" data-filter="sizes" data-value="L">L</button>
+          <button class="filter-option" data-filter="sizes" data-value="XL">XL</button>
+          <button class="filter-option" data-filter="sizes" data-value="2XL">2XL</button>
+          <button class="filter-option" data-filter="sizes" data-value="3XL">3XL</button>
         </div>
       </div>
 
-      <div class="filter-group">
+      <div class="filter-group accessory-type-filter">
         <h4>Accessory Type</h4>
         <div class="filter-content color-filter">
-          <button class="filter-option">Hats</button>
-          <button class="filter-option">Socks</button>
-          <button class="filter-option">Bags</button>
+          <button class="filter-option" data-filter="category" data-value="hats & gloves">Hats & Gloves</button>
+          <button class="filter-option" data-filter="category" data-value="socks">Socks</button>
+          <button class="filter-option" data-filter="category" data-value="bags">Bags</button>
         </div>
       </div>
 
@@ -142,7 +119,7 @@
         </div>
       </div>
 
-      <div class="filter-group">
+      <div class="filter-group activity-filter">
         <h4>Activity</h4>
         <div class="filter-content">
           <button class="filter-option" data-filter="activity" data-value="Running">Running</button>
@@ -159,17 +136,49 @@
           <button class="filter-option" data-filter="activity" data-value="Pickleball">Pickleball</button>
         </div>
       </div>
-
-      <div class="filter-group">
-        <h4>Model</h4>
-      </div>
     </aside>
 
-    <!-- Product grid -->
-    <section class="product-grid" id="product-grid">
-    </section>
+
+    <div class="products-content">
+
+      <div class="products-toolbar">
+
+        <select id="sort-select">
+          <option value="featured">Featured</option>
+          <option value="price-low">Price: Low to High</option>
+          <option value="price-high">Price: High to Low</option>
+          <option value="newest">Newest</option>
+          <option value="available">Available</option>
+        </select>
+
+      </div>
+
+      <!-- Product grid -->
+      <section class="product-grid" id="product-grid"></section>
+    </div>
   </div>
 </main>
+
+
+<div class="product-drawer-overlay"></div>
+
+<aside class="product-drawer">
+  <button class="drawer-close">✕</button>
+
+  <div id="drawer-gallery" class="drawer-gallery"></div>
+
+  <div class="drawer-info">
+    <h2 id="drawer-name"></h2>
+
+    <div id="drawer-price"></div>
+
+    <div id="drawer-colors"></div>
+
+    <div id="drawer-sizes"></div>
+
+    <button id="drawer-add-to-cart">Add to Bag</button>
+  </div>
+</aside>
 
 <div id="footer-container"></div>
 

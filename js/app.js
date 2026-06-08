@@ -7,6 +7,8 @@ import { products } from "./data/productsData.js";
 import { filterProducts } from "./filters/filterProducts.js";
 import { renderProducts } from "./renderProducts.js";
 import { activeFilters } from "./filters/activeFilters.js";
+import { updateClearButton } from "./pageFilters.js";
+import { updateVisibleFilters } from "./pageFilters.js";
 
 
 document.addEventListener("componentsLoaded", () => {
@@ -67,10 +69,19 @@ document.querySelectorAll('.filter-option').forEach(option => {
     else {
       activeFilters[filterType] = activeFilters[filterType].filter(item => item !== value);
     }
+    updateClearButton();
 
-    renderProducts(filterProducts(products));
+    const productsToRender = filterProducts(products);
+    renderProducts(productsToRender);
+    updateVisibleFilters(productsToRender);
+
 
   });
 
 });
 
+
+const response = await fetch("./js/data/banner.json");
+const data = await response.json();
+
+console.log(data);

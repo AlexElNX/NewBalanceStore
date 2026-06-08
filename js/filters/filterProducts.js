@@ -10,7 +10,7 @@ export function filterProducts(products) {
 
     const sizeMatch =
       activeFilters.sizes.length === 0 ||
-      product.sizes.some(size => activeFilters.sizes.includes(size.toString()));
+      product.sizes.some(size => activeFilters.sizes.includes(size.toString().toLowerCase()));
 
     const priceMatch =
       activeFilters.price.length === 0 ||
@@ -34,6 +34,7 @@ export function filterProducts(products) {
 
     const categoryMatch =
       activeFilters.category.length === 0 ||
+      activeFilters.category.includes(product.type.toLowerCase()) ||
       activeFilters.category.includes(product.category.toLowerCase());
 
     return colorMatch && sizeMatch && priceMatch && genderMatch && activityMatch && categoryMatch;

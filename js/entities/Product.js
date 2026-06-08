@@ -1,3 +1,5 @@
+import { openProductDrawer } from "/js/productDrawer.js";
+
 export class Product {
   id;
   images;
@@ -7,10 +9,10 @@ export class Product {
   sizes;
   colors;
   gender;
+  type;
   category;
   activity;
   description;
-  rating
   isNew;
   inStock;
 
@@ -20,13 +22,13 @@ export class Product {
               price = 0,
               oldPrice = 0,
               gender = "Unknown",
-              category = "",
-              activity = "",
+              type = "Unknown",
+              category = "Unknown",
+              activity = "Unknown",
               description = "Unknown",
               images = [],
               colors = [],
               sizes = [],
-              rating = 0,
               isNew = false,
               inStock = true
   ) {
@@ -38,10 +40,10 @@ export class Product {
     this.sizes = sizes;
     this.colors = colors;
     this.gender = gender;
+    this.type = type;
     this.category = category;
     this.activity = activity;
     this.description = description;
-    this.rating = rating;
     this.isNew = isNew;
     this.inStock = inStock;
   }
@@ -50,10 +52,20 @@ export class Product {
     const card = document.createElement("div");
     card.classList.add('product-card');
 
+    const firstColor = Object.keys(this.images)[0];
+    let activeColor = firstColor;
+    const colors = Object.keys(this.images);
+
     const image = document.createElement("img");
-    image.src = this.images[0];
+    image.src = this.images[activeColor][0];
     image.alt = this.name;
     image.classList.add('main-product-image');
+
+    const newBadge = document.createElement("span");
+    if(this.isNew) {
+      newBadge.textContent = "New";
+      newBadge.classList.add("new-badge");
+    }
 
     const title = document.createElement("a");
     title.textContent = this.name;
@@ -77,11 +89,6 @@ export class Product {
       price.append(oldPrice);
     }
 
-    const rating = document.createElement("p");
-    rating.textContent = "⭐".repeat(this.rating);
-    rating.classList.add('product-rating');
-
-
 
     const sliderWrapper = document.createElement("div");
     sliderWrapper.classList.add("color-slider-wrapper");
@@ -99,36 +106,49 @@ export class Product {
 
     const VISIBLE_COLORS = 8;
     let startIndex = 0;
-    let activeImage = this.images[0];
 
     const renderColors = () => {
       colorSlider.innerHTML = "";
 
-      this.images
+      image.addEventListener("mouseenter", () => {
+        const colorImages = this.images[activeColor];
+
+        if(colorImages.length > 1) {
+          image.src = colorImages[1];
+        }
+      });
+
+      image.addEventListener("mouseleave", () => {
+        image.src = this.images[activeColor][0];
+      });
+
+
+      colors
         .slice(startIndex, startIndex + VISIBLE_COLORS)
-        .forEach(imagePath => {
+        .forEach(color => {
 
           const colorImage = document.createElement("img");
-          colorImage.src = imagePath;
+          colorImage.src = this.images[color][0];
 
-          if(imagePath === activeImage) {
+          if(color === activeColor) {
             colorImage.classList.add('active');
           }
 
           colorImage.addEventListener("click", () => {
-            activeImage = imagePath;
-            image.src = imagePath;
+            activeColor = color;
+            image.src = this.images[color][0];
             renderColors();
           });
 
           colorSlider.append(colorImage);
         });
 
+
       prevBtn.style.visibility =
         startIndex === 0 ? "hidden" : "visible";
 
       nextBtn.style.visibility =
-        startIndex + VISIBLE_COLORS >= this.images.length ? "hidden" : "visible";
+        startIndex + VISIBLE_COLORS >= colors.length ? "hidden" : "visible";
     };
 
     prevBtn.addEventListener("click", () => {
@@ -139,16 +159,28 @@ export class Product {
     });
 
     nextBtn.addEventListener("click", () => {
-      if (startIndex + VISIBLE_COLORS < this.images.length) {
+      if (startIndex + VISIBLE_COLORS < colors.length) {
         startIndex++;
         renderColors();
       }
     });
 
-    if (this.images.length <= VISIBLE_COLORS) {
+    if (colors.length <= VISIBLE_COLORS) {
       prevBtn.style.display = "none";
       nextBtn.style.display = "none";
     }
+
+
+
+
+    const quickAddBtn = document.createElement("button");
+    quickAddBtn.classList.add('quick-add-btn');
+    quickAddBtn.innerHTML = `<img src="img/svg/header/bag.svg" alt="bag">`;
+
+    quickAddBtn.addEventListener("click", () => {
+      openProductDrawer(this);
+    });
+
 
     renderColors();
 
@@ -160,7 +192,9 @@ export class Product {
 
     card.append(
       image,
+      quickAddBtn,
       sliderWrapper,
+      newBadge,
       title,
       subtitle,
       price
