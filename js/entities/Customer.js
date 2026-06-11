@@ -17,9 +17,4 @@ export class Customer {
   changeEmail(newEmail) {
     this.email = newEmail;
   }
-  showOrders() {
-    for(let i = 0; i < this.orders.length; ++i) {
-      console.log(`Order[` + i + ']: ' + this.orders[i].id);
-    }
-  }
 }

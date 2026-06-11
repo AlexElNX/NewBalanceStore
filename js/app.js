@@ -80,8 +80,17 @@ document.querySelectorAll('.filter-option').forEach(option => {
 
 });
 
+try {
+  const response = await fetch("./js/data/banner.json");
 
-const response = await fetch("./js/data/banner.json");
-const data = await response.json();
+  if(!response.ok) {
+    throw new Error(response.statusText);
+  }
 
-console.log(data);
+  const data = await response.json();
+
+  console.log(data);
+}
+catch (error) {
+  console.error(error);
+}

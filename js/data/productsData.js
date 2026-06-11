@@ -14,27 +14,27 @@ export const products = [
     "Lifestyle sneaker",
     {
       white: [
-        "img/products/9060/white/9060-white1.jpg",
-        "img/products/9060/white/9060-white2.jpg",
-        "img/products/9060/white/9060-white3.jpg",
-        "img/products/9060/white/9060-white4.jpg",
-        "img/products/9060/white/9060-white5.jpg",
-        "img/products/9060/white/9060-white6.jpg",
-        "img/products/9060/white/9060-white7.jpg",
-        "img/products/9060/white/9060-white8.jpg",
-        "img/products/9060/white/9060-white9.jpg"
+        "/NewBalanceShop/img/products/9060/white/9060-white1.jpg",
+        "/NewBalanceShop/img/products/9060/white/9060-white2.jpg",
+        "/NewBalanceShop/img/products/9060/white/9060-white3.jpg",
+        "/NewBalanceShop/img/products/9060/white/9060-white4.jpg",
+        "/NewBalanceShop/img/products/9060/white/9060-white5.jpg",
+        "/NewBalanceShop/img/products/9060/white/9060-white6.jpg",
+        "/NewBalanceShop/img/products/9060/white/9060-white7.jpg",
+        "/NewBalanceShop/img/products/9060/white/9060-white8.jpg",
+        "/NewBalanceShop/img/products/9060/white/9060-white9.jpg"
       ],
       black: [
-        "img/products/9060/black/9060-black1.jpg",
-        "img/products/9060/black/9060-black2.jpg"
+        "/NewBalanceShop/img/products/9060/black/9060-black1.jpg",
+        "/NewBalanceShop/img/products/9060/black/9060-black2.jpg"
       ],
       gray: [
-        "img/products/9060/gray/9060-gray1.jpg",
-        "img/products/9060/gray/9060-gray2.jpg"
+        "/NewBalanceShop/img/products/9060/gray/9060-gray1.jpg",
+        "/NewBalanceShop/img/products/9060/gray/9060-gray2.jpg"
       ],
       tan: [
-        "img/products/9060/tan/9060-tan1.jpg",
-        "img/products/9060/tan/9060-tan2.jpg"
+        "/NewBalanceShop/img/products/9060/tan/9060-tan1.jpg",
+        "/NewBalanceShop/img/products/9060/tan/9060-tan2.jpg"
       ]
     },
 
@@ -54,13 +54,13 @@ export const products = [
     "Lifestyle sneaker",
     {
       white: [
-      "img/products/2002R/white/2002R-White.jpg"
+      "/NewBalanceShop/img/products/2002R/white/2002R-White.jpg"
       ],
       black: [
-        "img/products/2002R/black/2002R-Black.jpg"
+        "/NewBalanceShop/img/products/2002R/black/2002R-Black.jpg"
       ],
       gray: [
-        "img/products/2002R/gray/2002R-Gray.jpg"
+        "/NewBalanceShop/img/products/2002R/gray/2002R-Gray.jpg"
       ]
     },
     ["black", "gray", "white"],
@@ -80,25 +80,25 @@ export const products = [
     "Lifestyle Socks",
     {
       white1: [
-        "img/products/530/white-1/530-White1.jpg"
+        "/NewBalanceShop/img/products/530/white-1/530-White1.jpg"
       ],
       white2: [
-        "img/products/530/white-2/530-White1.jpg"
+        "/NewBalanceShop/img/products/530/white-2/530-White1.jpg"
       ],
       black: [
-        "img/products/530/black/530-Black.jpg"
+        "/NewBalanceShop/img/products/530/black/530-Black.jpg"
       ],
       black_and_white: [
-        "img/products/530/black-and-white/530-Black-And-White.jpg"
+        "/NewBalanceShop/img/products/530/black-and-white/530-Black-And-White.jpg"
       ],
       gray: [
-        "img/products/530/gray/530-Gray.jpg"
+        "/NewBalanceShop/img/products/530/gray/530-Gray.jpg"
       ],
       tan: [
-        "img/products/530/tan/530-Tan.jpg"
+        "/NewBalanceShop/img/products/530/tan/530-Tan.jpg"
       ],
       pink: [
-        "img/products/530/pink/530-Pink.jpg"
+        "/NewBalanceShop/img/products/530/pink/530-Pink.jpg"
       ]
     },
 
@@ -118,16 +118,16 @@ export const products = [
     "Soccer T-Shirt",
     {
       white1: [
-        "img/products/Soccer-Shirt/white/soccer-shirt-white1.jpg",
-        "img/products/Soccer-Shirt/white/soccer-shirt-white2.jpg"
+        "/NewBalanceShop/img/products/Soccer-Shirt/white/soccer-shirt-white1.jpg",
+        "/NewBalanceShop/img/products/Soccer-Shirt/white/soccer-shirt-white2.jpg"
       ],
       red: [
-        "img/products/Soccer-Shirt/red/soccer-shirt-red1.jpg",
-        "img/products/Soccer-Shirt/red/soccer-shirt-red2.jpg"
+        "/NewBalanceShop/img/products/Soccer-Shirt/red/soccer-shirt-red1.jpg",
+        "/NewBalanceShop/img/products/Soccer-Shirt/red/soccer-shirt-red2.jpg"
       ],
       black: [
-        "img/products/Soccer-Shirt/black/soccer-shirt-black1.jpg",
-        "img/products/Soccer-Shirt/black/soccer-shirt-black2.jpg"
+        "/NewBalanceShop/img/products/Soccer-Shirt/black/soccer-shirt-black1.jpg",
+        "/NewBalanceShop/img/products/Soccer-Shirt/black/soccer-shirt-black2.jpg"
       ]
     },
 
@@ -141,15 +141,15 @@ export const products = [
     19.99,
     null,
     "Unisex",
-    "Clothing",
-    "Shirts",
-    "Soccer",
+    "Accessories",
+    "Socks",
+    "",
     "Soccer T-Shirt",
     {
       multi_color: [
-        "img/products/Klutch-Crew-2-Pack/Klutch-Crew-2-Pack-1.jpg",
-        "img/products/Klutch-Crew-2-Pack/Klutch-Crew-2-Pack-2.jpg",
-        "img/products/Klutch-Crew-2-Pack/Klutch-Crew-2-Pack-3.jpg"
+        "/NewBalanceShop/img/products/Klutch-Crew-2-Pack/Klutch-Crew-2-Pack-1.jpg",
+        "/NewBalanceShop/img/products/Klutch-Crew-2-Pack/Klutch-Crew-2-Pack-2.jpg",
+        "/NewBalanceShop/img/products/Klutch-Crew-2-Pack/Klutch-Crew-2-Pack-3.jpg"
       ]
     },
 

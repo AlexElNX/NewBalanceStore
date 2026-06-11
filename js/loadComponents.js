@@ -5,20 +5,22 @@ async function loadComponent(selector, path) {
   document.querySelector(selector).innerHTML = html;
 }
 
+const basePath = window.location.pathname.includes("pages") ? "../components/" : "./components/";
+
 document.addEventListener("DOMContentLoaded", async () => {
   await loadComponent(
     "#top-header-container",
-    "components/top-header.html"
+    `${basePath}top-header.html`
   );
 
   await loadComponent(
     "#main-header-container",
-    "components/main-header.html"
+    `${basePath}main-header.html`
   );
 
   await loadComponent(
     "#footer-container",
-    "components/footer.html"
+    `${basePath}footer.html`
   );
 
   document.dispatchEvent(new Event("componentsLoaded"));

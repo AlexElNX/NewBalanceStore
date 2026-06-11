@@ -1,0 +1,163 @@
+body {
+  margin: 0;
+  background: #f7f7f7;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #111;
+}
+
+.checkout-header {
+  background: #fff;
+  border-bottom: 1px solid #ddd;
+  padding: 15px 0;
+}
+
+.header-inner {
+  width: 1180px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.brand img {
+  height: 28px;
+}
+
+.cart {
+  font-size: 24px;
+}
+
+.checkout-wrapper {
+  width: 1180px;
+  margin: 30px auto;
+}
+
+.breadcrumbs {
+  font-size: 14px;
+  margin-bottom: 20px;
+  color: #555;
+}
+
+.breadcrumbs span {
+  margin: 0 5px;
+}
+
+.checkout-grid {
+  display: grid;
+  grid-template-columns: 1fr 390px;
+  gap: 40px;
+}
+
+.section h2 {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 15px;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+input[type=text],
+input[type=email],
+input[type=tel] {
+  height: 40px;
+  border: 1px solid #d8d8d8;
+  padding: 0 12px;
+  font-size: 14px;
+  border-radius: 2px;
+  background: #fff;
+}
+
+.newsletter {
+  font-size: 12px;
+  color: #333;
+}
+
+.newsletter a {
+  color: #111;
+  text-decoration: underline;
+}
+
+.shipping-method-section .shipping-option {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  border: 1px solid #ccc;
+  margin-bottom: 5px;
+  cursor: pointer;
+  border-radius: 2px;
+  background: #fff;
+}
+
+.shipping-method-section .shipping-option.active {
+  border-color: #111;
+}
+
+.shipping-option input {
+  margin-right: 12px;
+}
+
+.shipping-info {
+  font-size: 14px;
+}
+
+.continue-btn {
+  margin-top: 20px;
+  height: 48px;
+  width: 180px;
+  border: none;
+  background: #111;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 2px;
+}
+
+.continue-btn:hover {
+  background: #333;
+}
+
+.summary {
+  background: #efefef;
+  padding: 20px;
+  border-radius: 2px;
+}
+
+.summary h2 {
+  margin-top: 0;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.shipping-product {
+  margin-top: 20px;
+}
+
+.product {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.product img {
+  width: 80px;
+  height: auto;
+  border: 1px solid #d8d8d8;
+}
+
+.product-details p {
+  margin: 3px 0;
+  font-size: 13px;
+}

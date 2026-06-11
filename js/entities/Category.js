@@ -3,14 +3,12 @@ export class Category {
   description;
   products;
   gender;
-  season;
 
-  constructor(name = "", description = "", products = [], gender = "", season = "") {
+  constructor(name = "", description = "", products = [], gender = "") {
     this.name = name;
     this.description = description;
     this.products = products;
     this.gender = gender;
-    this.season = season;
   }
 
   addProduct(product) {

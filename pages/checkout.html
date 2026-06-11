@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Checkout</title>
+  <link rel="stylesheet" href="../css/checkout.css">
+</head>
+<body>
+
+<header class="checkout-header">
+  <div class="header-inner">
+    <div class="brand">
+      <img src="/NewBalanceShop/img/svg/footer/logo.svg" alt="NB Logo">
+      <span>Secure checkout</span>
+    </div>
+    <div class="cart">🛒</div>
+  </div>
+</header>
+
+<div class="checkout-wrapper">
+
+  <div class="breadcrumbs">
+    Shipping info <span>></span> Payment <span>></span> Review and buy
+  </div>
+
+  <div class="checkout-grid">
+
+    <div class="checkout-main">
+
+      <!-- Contact Section -->
+      <section class="section contact-section">
+        <h2>Contact</h2>
+        <div class="row">
+          <input type="email" placeholder="Email *">
+          <input type="tel" placeholder="Phone number *">
+        </div>
+        <label class="newsletter">
+          <input type="checkbox"> Sign up for email to hear about product launches, exclusive offers and athlete news. By subscribing, I am agreeing to the New Balance <a href="#">Privacy Policy</a> and <a href="#">Terms & Conditions</a>.
+        </label>
+      </section>
+
+      <!-- Shipping Address Section -->
+      <section class="section shipping-section">
+        <h2>Shipping address</h2>
+        <div class="row">
+          <input type="text" placeholder="First Name *">
+          <input type="text" placeholder="Last Name *">
+        </div>
+        <input type="text" placeholder="Street Address *">
+      </section>
+
+      <!-- Shipping Method Section -->
+      <section class="section shipping-method-section">
+        <h2>Shipping method</h2>
+        <div class="shipping-option active">
+          <input type="radio" name="shipping" checked>
+          <div class="shipping-info">
+            <strong>Standard - FREE</strong> (2-5 business days once shipped)
+          </div>
+        </div>
+        <div class="shipping-option">
+          <input type="radio" name="shipping">
+          <div class="shipping-info">
+            <strong>Expedited - $19.95</strong> (2 business days once shipped)
+          </div>
+        </div>
+        <div class="shipping-option">
+          <input type="radio" name="shipping">
+          <div class="shipping-info">
+            <strong>Rush - $25.95</strong> (in-stock items ship within 2 business days)
+          </div>
+        </div>
+      </section>
+
+      <button class="continue-btn">Continue to Payment</button>
+
+    </div>
+
+    <!-- Summary Section -->
+    <aside class="summary">
+      <h2>Order Summary</h2>
+      <p>Subtotal: $119.99</p>
+      <p>Shipping: Standard - FREE</p>
+      <p>Total Tax: $0.00</p>
+      <p><strong>Order Total: $119.99</strong></p>
+
+      <div class="shipping-product">
+        <h3>Shipping</h3>
+        <div class="product">
+          <img src="/NewBalanceShop/img/products/9060/white/9060-white1.jpg" alt="204L Shoes">
+          <div class="product-details">
+            <p><strong>204L</strong></p>
+            <p>Unisex</p>
+            <p>Color: SILVER METALLIC with BLACK</p>
+            <p>Size: M9 / W10.5 | Width: Standard</p>
+            <p>Qty: 1 @ $119.99</p>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+  </div>
+</div>
+
+</body>
+</html>

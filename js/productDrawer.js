@@ -1,4 +1,9 @@
+import { addToRecentlyViewed } from "/NewBalanceShop/js/utils/recentlyViewed.js";
+import { addToCart } from "/NewBalanceShop/js/utils/cartStorage.js";
+
 export function openProductDrawer(product) {
+
+  addToRecentlyViewed(product);
 
   const name = document.querySelector("#drawer-name");
   const price = document.querySelector("#drawer-price");
@@ -136,6 +141,26 @@ export function openProductDrawer(product) {
   renderGallery();
   renderColors();
   renderSizes();
+
+  const addToCartBtn =
+    document.querySelector("#drawer-add-to-cart");
+
+  addToCartBtn.onclick = () => {
+
+    if (!activeSize) {
+      alert("Please select a size");
+      return;
+    }
+
+    addToCart(
+      product,
+      activeColor,
+      activeSize
+    );
+
+    closeDrawer();
+  };
+
 
   const drawer = document.querySelector(".product-drawer");
   const overlay = document.querySelector(".product-drawer-overlay");

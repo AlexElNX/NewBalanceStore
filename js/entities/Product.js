@@ -109,7 +109,6 @@ export class Product {
 
     const renderColors = () => {
       colorSlider.innerHTML = "";
-
       image.addEventListener("mouseenter", () => {
         const colorImages = this.images[activeColor];
 
@@ -175,7 +174,7 @@ export class Product {
 
     const quickAddBtn = document.createElement("button");
     quickAddBtn.classList.add('quick-add-btn');
-    quickAddBtn.innerHTML = `<img src="img/svg/header/bag.svg" alt="bag">`;
+    quickAddBtn.innerHTML = `<img src="/NewBalanceShop/img/svg/header/bag.svg" alt="bag">`;
 
     quickAddBtn.addEventListener("click", () => {
       openProductDrawer(this);

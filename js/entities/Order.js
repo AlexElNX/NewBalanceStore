@@ -16,10 +16,5 @@ export class Order {
   changeStatus(newStatus) {
     this.status = newStatus;
   }
-  printOrder() {
-    for(let i = 0; i < this.products.length; ++i) {
-      console.log(`${this.id}; ${this.products[i].name}; ${this.status}; ${this.date}; ${this.customer};`);
-    }
-  }
 
 }
