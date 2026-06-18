@@ -1,14 +1,11 @@
-// import { Cart } from './entities/Cart.js';
-// import { Category } from "./entities/Category.js";
-// import { Customer } from "./entities/Customer.js";
-// import { Manufacturer } from "./entities/Manufacturer.js";
-// import { Order } from "./entities/Order.js";
-import { products } from "./data/productsData.js";
-import { filterProducts } from "./filters/filterProducts.js";
-import { renderProducts } from "./renderProducts.js";
-import { activeFilters } from "./filters/activeFilters.js";
-import { updateClearButton } from "./pageFilters.js";
-import { updateVisibleFilters } from "./pageFilters.js";
+function displayIcon() {
+  const link = document.createElement('link');
+  link.rel = 'icon';
+  link.type = 'image/svg+xml';
+  link.href = '/NewBalanceShop/img/svg/header/logo.svg';
+  document.head.appendChild(link);
+}
+displayIcon();
 
 
 document.addEventListener("componentsLoaded", () => {
@@ -47,41 +44,9 @@ document.addEventListener("componentsLoaded", () => {
 });
 
 
-document.querySelectorAll('.filter-group h4').forEach(title => {
-  title.addEventListener('click', () => {
-    title.parentElement.classList.toggle('active');
-  });
-});
-
-
-
-document.querySelectorAll('.filter-option').forEach(option => {
-  option.addEventListener('click', () => {
-
-    const filterType = option.dataset.filter;
-    const value = option.dataset.value.toLowerCase();
-
-    option.classList.toggle('active');
-
-    if(option.classList.contains('active')) {
-      activeFilters[filterType].push(value);
-    }
-    else {
-      activeFilters[filterType] = activeFilters[filterType].filter(item => item !== value);
-    }
-    updateClearButton();
-
-    const productsToRender = filterProducts(products);
-    renderProducts(productsToRender);
-    updateVisibleFilters(productsToRender);
-
-
-  });
-
-});
 
 try {
-  const response = await fetch("./js/data/banner.json");
+  const response = await fetch("/NewBalanceShop/js/data/banner.json");
 
   if(!response.ok) {
     throw new Error(response.statusText);

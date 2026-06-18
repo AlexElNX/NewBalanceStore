@@ -554,6 +554,7 @@ body {
   text-decoration: line-through;
   font-weight: normal;
   color: #999;
+  margin-left: 10px;
 }
 
 
@@ -814,4 +815,30 @@ body {
   padding: 12px 0 20px;
 
   color: #333;
+}
+
+
+.cart-link {
+  position: relative;
+}
+
+.cart-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+
+  min-width: 18px;
+  height: 18px;
+
+  border-radius: 50%;
+
+  background: #cf0a2c;
+  color: white;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

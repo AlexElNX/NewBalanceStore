@@ -1,7 +1,8 @@
 import { addToRecentlyViewed } from "/NewBalanceShop/js/utils/recentlyViewed.js";
 import { addToCart } from "/NewBalanceShop/js/utils/cartStorage.js";
 
-export function openProductDrawer(product) {
+
+export function openProductDrawer(product, selectedColor = null) {
 
   addToRecentlyViewed(product);
 
@@ -19,7 +20,7 @@ export function openProductDrawer(product) {
     price.innerHTML = `<span class="current-price">$${product.price}</span>`;
   }
 
-  let activeColor = Object.keys(product.images)[0];
+  let activeColor = selectedColor || Object.keys(product.images)[0];
   let activeSize = null;
 
   const gallery = document.querySelector("#drawer-gallery");
@@ -157,7 +158,6 @@ export function openProductDrawer(product) {
       activeColor,
       activeSize
     );
-
     closeDrawer();
   };
 

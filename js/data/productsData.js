@@ -5,13 +5,13 @@ export const products = [
   new Product(
     1,
     "9060",
-    459.99,
-    999.99,
+    159.99,
+    199.99,
     "Unisex",
     "Footwear",
     "Shoes",
     "Lifestyle",
-    "Lifestyle sneaker",
+    "Lifestyle shoes",
     {
       white: [
         "/NewBalanceShop/img/products/9060/white/9060-white1.jpg",
@@ -51,7 +51,7 @@ export const products = [
     "Footwear",
     "Shoes",
     "Lifestyle",
-    "Lifestyle sneaker",
+    "Lifestyle shoes",
     {
       white: [
       "/NewBalanceShop/img/products/2002R/white/2002R-White.jpg"
@@ -77,7 +77,7 @@ export const products = [
     "Footwear",
     "Shoes",
     "Lifestyle",
-    "Lifestyle Socks",
+    "Lifestyle shoes",
     {
       white1: [
         "/NewBalanceShop/img/products/530/white-1/530-White1.jpg"
@@ -144,7 +144,7 @@ export const products = [
     "Accessories",
     "Socks",
     "",
-    "Soccer T-Shirt",
+    "Klutch Crew 2 Pack",
     {
       multi_color: [
         "/NewBalanceShop/img/products/Klutch-Crew-2-Pack/Klutch-Crew-2-Pack-1.jpg",
@@ -155,6 +155,31 @@ export const products = [
 
     ["multi color"],
     ["S", "M", "L", "XL"],
+  ),
+
+  new Product(
+    6,
+    "Klutch Athletics French Terry Crew",
+    79.99,
+    null,
+    "Women",
+    "Clothing",
+    "Hoodies & Sweatshirts",
+    "Training",
+    "Klutch Athletics French Terry Crew",
+    {
+      pink: [
+        "/NewBalanceShop/img/products/Klutch-Athletics-French-Terry-Crew/pink/Klutch-Athletics-French-Terry-Crew-Pink1.jpg",
+        "/NewBalanceShop/img/products/Klutch-Athletics-French-Terry-Crew/pink/Klutch-Athletics-French-Terry-Crew-Pink2.jpg"
+      ],
+      gray: [
+        "/NewBalanceShop/img/products/Klutch-Athletics-French-Terry-Crew/gray/Klutch-Athletics-French-Terry-Crew-Gray1.jpg",
+        "/NewBalanceShop/img/products/Klutch-Athletics-French-Terry-Crew/gray/Klutch-Athletics-French-Terry-Crew-Gray2.jpg"
+      ]
+    },
+
+    ["pink", "gray"],
+    ["XS", "S", "M", "L", "XL", "2XL"],
   )
 
 ];

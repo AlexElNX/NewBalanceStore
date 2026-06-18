@@ -44,7 +44,8 @@ if(sale === "true") {
   filteredProducts = filteredProducts.filter(product => product.oldPrice);
 }
 
-const title = document.querySelector(".category-title");
+
+
 
 function capitalize(str) {
   if(str) {
@@ -127,6 +128,13 @@ export function updateVisibleFilters(products) {
 
 
 const isNew = params.get("new");
+
+if(isNew === "true") {
+  filteredProducts = filteredProducts.filter(product => product.isNew === true);
+}
+
+const title = document.querySelector(".category-title");
+
 if(gender && activity) {
   title.textContent = `${capitalize(gender)} ${capitalize(activity)}`;
 }
@@ -153,6 +161,7 @@ else {
 
 
 const breadcrumbs = document.querySelector(".breadcrumb");
+
 if(sale === "true") {
   if(activity) {
     breadcrumbs.textContent = `Sale / ${capitalize(gender) ?? ""} / ${capitalize(category) ?? ""} / ${capitalize(activity)}`;

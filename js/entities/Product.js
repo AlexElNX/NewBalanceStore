@@ -52,8 +52,7 @@ export class Product {
     const card = document.createElement("div");
     card.classList.add('product-card');
 
-    const firstColor = Object.keys(this.images)[0];
-    let activeColor = firstColor;
+    let activeColor = Object.keys(this.images)[0];
     const colors = Object.keys(this.images);
 
     const image = document.createElement("img");
@@ -177,7 +176,7 @@ export class Product {
     quickAddBtn.innerHTML = `<img src="/NewBalanceShop/img/svg/header/bag.svg" alt="bag">`;
 
     quickAddBtn.addEventListener("click", () => {
-      openProductDrawer(this);
+      openProductDrawer(this, activeColor);
     });
 
 

@@ -1,6 +1,6 @@
 import { getRecentlyViewed } from "../utils/recentlyViewed.js";
 import { products } from "../data/productsData.js";
-import { removeFromCart } from "../utils/cartStorage.js";
+import {removeFromCart, updateCartQuantity} from "../utils/cartStorage.js";
 
 export class Cart {
   products;
@@ -177,7 +177,7 @@ export class Cart {
         qty.textContent = `Qty: ${cartProduct.quantity}`;
         updatePrice();
         this.updateSummary();
-
+        updateCartQuantity(product.id, cartProduct.color, cartProduct.size, cartProduct.quantity);
       }
     })
 
@@ -195,6 +195,8 @@ export class Cart {
         qty.textContent = `Qty: ${cartProduct.quantity}`;
         updatePrice();
         this.updateSummary();
+        updateCartQuantity(product.id, cartProduct.color, cartProduct.size, cartProduct.quantity);
+
       }
     })
 
@@ -227,6 +229,7 @@ export class Cart {
         cartProduct.color,
         cartProduct.size
       );
+
 
       this.removeProduct(
         product.id,
@@ -295,6 +298,9 @@ export class Cart {
     const checkoutBtn = document.createElement("button");
     checkoutBtn.classList.add("checkout-btn");
     checkoutBtn.textContent = "Checkout";
+    checkoutBtn.addEventListener("click", () => {
+      window.location.href = "/NewBalanceShop/pages/checkout.html";
+    });
 
     summary.append(
       title,

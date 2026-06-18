@@ -46,3 +46,19 @@ export function removeFromCart(productId, color, size) {
 
   saveCart(cart);
 }
+
+export function updateCartQuantity(productId, color, size, quantity) {
+  const cart = getCart();
+
+  const item = cart.find(item =>
+    item.productId === productId &&
+    item.color === color &&
+    item.size === size
+  );
+
+  if (item) {
+    item.quantity = quantity;
+  }
+
+  saveCart(cart);
+}

@@ -10,10 +10,16 @@
 <header class="checkout-header">
   <div class="header-inner">
     <div class="brand">
-      <img src="/NewBalanceShop/img/svg/footer/logo.svg" alt="NB Logo">
+      <a href="/NewBalanceShop/index.html">
+        <img src="/NewBalanceShop/img/svg/footer/logo.svg" alt="NB Logo">
+      </a>
       <span>Secure checkout</span>
     </div>
-    <div class="cart">🛒</div>
+    <div class="cart">
+      <a href="/NewBalanceShop/pages/cart.html">
+        <img src="/NewBalanceShop/img/svg/header/cart.svg" alt="">
+      </a>
+    </div>
   </div>
 </header>
 
@@ -31,45 +37,21 @@
       <section class="section contact-section">
         <h2>Contact</h2>
         <div class="row">
-          <input type="email" placeholder="Email *">
-          <input type="tel" placeholder="Phone number *">
+          <input id="email" type="email" placeholder="Email">
+          <input id="phone" type="tel" placeholder="Phone number">
         </div>
         <label class="newsletter">
           <input type="checkbox"> Sign up for email to hear about product launches, exclusive offers and athlete news. By subscribing, I am agreeing to the New Balance <a href="#">Privacy Policy</a> and <a href="#">Terms & Conditions</a>.
         </label>
       </section>
 
-      <!-- Shipping Address Section -->
       <section class="section shipping-section">
         <h2>Shipping address</h2>
         <div class="row">
-          <input type="text" placeholder="First Name *">
-          <input type="text" placeholder="Last Name *">
+          <input id="first-name" type="text" placeholder="First Name">
+          <input id="last-name" type="text" placeholder="Last Name">
         </div>
-        <input type="text" placeholder="Street Address *">
-      </section>
-
-      <!-- Shipping Method Section -->
-      <section class="section shipping-method-section">
-        <h2>Shipping method</h2>
-        <div class="shipping-option active">
-          <input type="radio" name="shipping" checked>
-          <div class="shipping-info">
-            <strong>Standard - FREE</strong> (2-5 business days once shipped)
-          </div>
-        </div>
-        <div class="shipping-option">
-          <input type="radio" name="shipping">
-          <div class="shipping-info">
-            <strong>Expedited - $19.95</strong> (2 business days once shipped)
-          </div>
-        </div>
-        <div class="shipping-option">
-          <input type="radio" name="shipping">
-          <div class="shipping-info">
-            <strong>Rush - $25.95</strong> (in-stock items ship within 2 business days)
-          </div>
-        </div>
+        <input id="address" type="text" placeholder="Street Address">
       </section>
 
       <button class="continue-btn">Continue to Payment</button>
@@ -79,28 +61,64 @@
     <!-- Summary Section -->
     <aside class="summary">
       <h2>Order Summary</h2>
-      <p>Subtotal: $119.99</p>
-      <p>Shipping: Standard - FREE</p>
-      <p>Total Tax: $0.00</p>
-      <p><strong>Order Total: $119.99</strong></p>
 
-      <div class="shipping-product">
-        <h3>Shipping</h3>
-        <div class="product">
-          <img src="/NewBalanceShop/img/products/9060/white/9060-white1.jpg" alt="204L Shoes">
-          <div class="product-details">
-            <p><strong>204L</strong></p>
-            <p>Unisex</p>
-            <p>Color: SILVER METALLIC with BLACK</p>
-            <p>Size: M9 / W10.5 | Width: Standard</p>
-            <p>Qty: 1 @ $119.99</p>
-          </div>
-        </div>
-      </div>
+      <p class="summary-row subtotal">
+        <span>Subtotal</span>
+        <span>$0.00</span>
+      </p>
+
+      <p class="summary-row shipping-price">
+        <span>Shipping: Standard</span>
+        <span>FREE</span>
+      </p>
+
+      <p class="summary-row">
+        <span>Total Tax</span>
+        <span>$0.00</span>
+      </p>
+
+      <p class="summary-row order-total">
+        <span>Order Total</span>
+        <span>$0.00</span>
+      </p>
+      <div class="checkout-products"></div>
     </aside>
 
   </div>
 </div>
+
+<template id="checkout-product-template">
+
+  <div class="checkout-product">
+
+    <img
+      class="checkout-product-image"
+      src=""
+      alt=""
+    >
+
+    <div class="checkout-product-info">
+
+      <h4 class="checkout-product-name"></h4>
+
+      <p class="checkout-product-gender"></p>
+
+      <p class="checkout-product-color"></p>
+
+      <p class="checkout-product-size"></p>
+
+      <p class="checkout-product-quantity"></p>
+
+      <p class="checkout-product-price"></p>
+
+    </div>
+
+  </div>
+
+</template>
+
+<script type="module" src="../js/checkout.js"></script>
+<script type="module" src="../js/app.js"></script>
 
 </body>
 </html>

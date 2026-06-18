@@ -1,20 +1,15 @@
 export class Customer {
-  name;
+  firstName;
+  lastName;
   email;
   address;
-  orders;
+  phoneNumber;
 
-  constructor(name = "", email = "", address = "", orders = []) {
-    this.name = name;
+  constructor(firstName = "", lastName = "", email = "", address = "", phoneNumber = "") {
+    this.firstName = firstName;
+    this.lastName = lastName;
     this.email = email;
     this.address = address;
-    this.orders = orders;
-  }
-
-  changeAddress(newAddress) {
-    this.address = newAddress;
-  }
-  changeEmail(newEmail) {
-    this.email = newEmail;
+    this.phoneNumber = phoneNumber;
   }
 }

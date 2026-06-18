@@ -13,8 +13,31 @@ export class Order {
     this.date = date;
   }
 
-  changeStatus(newStatus) {
-    this.status = newStatus;
+
+  createOrder(orderId) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve(`Order created: ${orderId}`);
+      }, 1000);
+    });
   }
 
+  processOrder(orderId) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve(`Order processed: ${orderId}`);
+      }, 2000);
+    });
+  }
+
+
+  deliveryOrder(orderId) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve(`Order delivered: ${orderId}`);
+      }, 3000);
+    });
+  }
 }
+
+
