@@ -44,18 +44,24 @@ document.addEventListener("componentsLoaded", () => {
 });
 
 
+async function init() {
+  try {
+    const response = await fetch("/NewBalanceShop/js/data/banner.json");
 
-try {
-  const response = await fetch("/NewBalanceShop/js/data/banner.json");
+    if(!response.ok) {
+      throw new Error(response.statusText);
+    }
 
-  if(!response.ok) {
-    throw new Error(response.statusText);
+    const data = await response.json();
+
+    console.log(data);
   }
-
-  const data = await response.json();
-
-  console.log(data);
+  catch (error) {
+    console.error(error);
+  }
 }
-catch (error) {
-  console.error(error);
-}
+
+init();
+
+
+
