@@ -4,16 +4,18 @@ using System.Text;
 
 using NewBalanceStore.Domain.Enums;
 
-namespace NewBalanceStore.Domain.Entities;
-
-public class Order
+namespace NewBalanceStore.Domain.Entities
 {
-    public string Id { get; set; } = string.Empty;
-    public string UserId { get; set; } = string.Empty;
-    public List<OrderItem> Items { get; set; } = new();
-    public CustomerInfo Customer { get; set; } = new();
-    public ShippingAddress ShippingAddress { get; set; } = new();
-    public decimal TotalPrice { get; set; }
-    public OrderStatus Status { get; set; } = OrderStatus.Pending;
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public class Order
+    {
+        public int Id { get; set; }
+        public string CustomerName { get; set; } = string.Empty;
+        public string CustomerEmail { get; set; } = string.Empty;
+        public string CustomerPhone { get; set; } = string.Empty;
+        public string ShippingAddress { get; set; } = string.Empty;
+        public decimal TotalAmount { get; set; }
+        public string Status { get; set; } = "Pending";
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public List<OrderItem> Items { get; set; } = new();
+    }
 }
