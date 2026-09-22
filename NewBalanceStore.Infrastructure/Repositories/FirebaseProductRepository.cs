@@ -21,34 +21,33 @@ public class FirebaseProductRepository : IProductRepository
 
     public async Task<List<Product>> GetAllAsync()
     {
-        try
+        var objects = await _firebaseClient
+            .Child(CollectionName)
+            .OnceAsync<Newtonsoft.Json.Linq.JObject>();
+
+        var productsList = new List<Product>();
+
+        foreach (var item in objects)
         {
-            var productsDict = await _firebaseClient
-                .Child(CollectionName)
-                .OnceSingleAsync<Dictionary<string, Product>>();
-
-            if (productsDict == null) return new List<Product>();
-
-            return productsDict
-                .Where(pair => pair.Value != null)
-                .Select(pair =>
+            try
+            {
+                var product = item.Object?.ToObject<Product>();
+                if (product != null)
                 {
-                    var product = pair.Value;
-                    if (string.IsNullOrEmpty(product.Id))
+                    if (int.TryParse(item.Key, out int parsedId))
                     {
-                        product.Id = pair.Key;
+                        product.Id = parsedId;
                     }
-                    return product;
-                }).ToList();
+                    productsList.Add(product);
+                }
+            }
+            catch
+            {
+                continue;
+            }
         }
-        catch
-        {
-            var productsList = await _firebaseClient
-                .Child(CollectionName)
-                .OnceSingleAsync<List<Product>>();
 
-            return productsList?.Where(p => p != null).ToList() ?? new List<Product>();
-        }
+        return productsList;
     }
 
     public async Task<Product?> GetByIdAsync(string id)
@@ -57,9 +56,9 @@ public class FirebaseProductRepository : IProductRepository
             .Child($"{CollectionName}/{id}")
             .OnceSingleAsync<Product>();
 
-        if (product != null)
+        if (product != null && int.TryParse(id, out int parsedId))
         {
-            product.Id = id;
+            product.Id = parsedId;
         }
 
         return product;
@@ -67,9 +66,11 @@ public class FirebaseProductRepository : IProductRepository
 
     public async Task CreateAsync(Product item)
     {
-        if (string.IsNullOrEmpty(item.Id))
+        
+        if (item.Id <= 0)
         {
-            item.Id = Guid.NewGuid().ToString();
+            
+            item.Id = (int)(DateTime.UtcNow.Ticks % int.MaxValue);
         }
 
         await _firebaseClient

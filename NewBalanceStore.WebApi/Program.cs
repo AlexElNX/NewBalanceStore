@@ -1,13 +1,22 @@
-﻿using NewBalanceStore.Domain.Interfaces; 
+﻿using Firebase.Database;
+using NewBalanceStore.Domain.Interfaces; 
 using NewBalanceStore.Application.Interfaces;
 using NewBalanceStore.Application.Services;   
 using NewBalanceStore.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddSingleton(new FirebaseClient("https://newbalancestore-bc142-default-rtdb.europe-west1.firebasedatabase.app/"));
+
 builder.Services.AddScoped<IProductRepository, FirebaseProductRepository>();
 builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IOrderRepository, FirebaseOrderRepository>();
+builder.Services.AddScoped<IOrderService, OrderService>();
+
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
 builder.Services.AddControllers();
+
 
 builder.Services.AddCors(options =>
 {

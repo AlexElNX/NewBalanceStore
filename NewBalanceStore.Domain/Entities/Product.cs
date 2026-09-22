@@ -8,15 +8,20 @@ namespace NewBalanceStore.Domain.Entities;
 
 public class Product
 {
-    public string Id { get; set; } = string.Empty;
+    public int Id { get; set; }
     public string Name { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
-    public ProductType Type { get; set; }
-    public string Category { get; set; } = string.Empty;
-    public Gender Gender { get; set; }
+    public string Type { get; set; } = string.Empty;        
+    public string Category { get; set; } = string.Empty;   
+    public string Activity { get; set; } = string.Empty;   
+    public string Gender { get; set; } = string.Empty;   
+
     public decimal Price { get; set; }
     public decimal? OldPrice { get; set; }
-    public List<string> Images { get; set; } = new();
     public bool IsNew { get; set; }
+
+    public List<string> Colors { get; set; } = new();
+    public Dictionary<string, List<string>> Images { get; set; } = new();
+
     public List<ProductVariant> Variants { get; set; } = new();
 }
