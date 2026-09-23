@@ -8,6 +8,8 @@
 
 	<ItemGroup>
 	  <PackageReference Include="AutoMapper" Version="16.2.0" />
+	  <PackageReference Include="CloudinaryDotNet" Version="1.29.3" />
+	  <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.3.13" />
 	</ItemGroup>
 
 	<ItemGroup>

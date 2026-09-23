@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using NewBalanceStore.Application.DTOs;
 using NewBalanceStore.Application.Interfaces;
+using NewBalanceStore.Infrastructure.Services;
 
 namespace NewBalanceStore.WebApi.Controllers;
 
@@ -10,10 +11,12 @@ namespace NewBalanceStore.WebApi.Controllers;
 public class ProductsController : ControllerBase
 {
     private readonly IProductService _productService;
+    private readonly IPhotoService _photoService;
 
-    public ProductsController(IProductService productService)
+    public ProductsController(IProductService productService, IPhotoService photoService)
     {
         _productService = productService;
+        _photoService = photoService;
     }
 
     [HttpGet]
@@ -39,6 +42,19 @@ public class ProductsController : ControllerBase
     {
         var createdProduct = await _productService.CreateAsync(dto);
         return CreatedAtAction(nameof(GetById), new { id = createdProduct.Id }, createdProduct);
+    }
+    [HttpPost("upload-image")]
+    public async Task<IActionResult> UploadImage(IFormFile file)
+    {
+        if (file == null || file.Length == 0)
+            return BadRequest("Файл не выбран");
+
+        var result = await _photoService.AddPhotoAsync(file);
+
+        if (result.Error != null)
+            return BadRequest(result.Error.Message);
+
+        return Ok(new { Url = result.SecureUrl.ToString() });
     }
 
     [HttpPut("{id}")]

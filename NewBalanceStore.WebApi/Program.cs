@@ -8,11 +8,14 @@ using NewBalanceStore.Domain.Interfaces;
 using NewBalanceStore.Infrastructure.Repositories;
 using NewBalanceStore.Infrastructure.Services;
 using Microsoft.OpenApi.Models;
+using NewBalanceStore.Infrastructure.Configurations;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
+builder.Services.AddScoped<IPhotoService, PhotoService>();
 
 builder.Services.AddSwaggerGen(c =>
 {
