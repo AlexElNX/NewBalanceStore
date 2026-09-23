@@ -13,9 +13,12 @@
 		<PackageReference Include="FirebaseDatabase.net" Version="5.0.0" />
 		<PackageReference Include="Google.Cloud.Firestore" Version="4.4.0" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="10.0.0-preview.1.25080.5" />
+		<PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.23.0" />
+		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.23.0" />
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\NewBalanceStore.Application\NewBalanceStore.Application.csproj" />
 		<ProjectReference Include="..\NewBalanceStore.Domain\NewBalanceStore.Domain.csproj" />
 	</ItemGroup>
 
