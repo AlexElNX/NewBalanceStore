@@ -8,6 +8,7 @@ import Login from "./pages/Login/Login.jsx";
 import Admin from "./pages/Admin/Admin/Admin.jsx";
 import AddProduct from "./pages/Admin/AddProduct/AddProduct.jsx";
 import ManageProducts from "./pages/Admin/ManageProducts/ManageProducts.jsx";
+import NotFound from "./pages/NotFound/NotFound.jsx";
 
 function App() {
 
@@ -23,7 +24,7 @@ function App() {
             <Route path="/manage-products" element={<ManageProducts />} />
             <Route path="/login" element={<Login />} />
 
-
+            <Route path="*" element={<NotFound />} />
         </Routes>
     </>
   )
