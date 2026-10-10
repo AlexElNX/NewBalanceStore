@@ -90,15 +90,12 @@
 
 @media (min-width: 2560px) {
     .sticky {
-        width: 640px;
+        width: 600px;
         grid-template-columns: 158px 1fr;
-        gap: 10px 32px;
-        padding: 28px 24px 28px 32px;
     }
-
-    .name { font-size: 22px; }
-    .gender { font-size: 19px; }
-    .button { height: 80px; font-size: 20px; }
+    .name { font-size: 20px; }
+    .gender { font-size: 14px; }
+    .button { height: 40px; font-size: 17px; }
 }
 
 @media (max-width: 1023px) {

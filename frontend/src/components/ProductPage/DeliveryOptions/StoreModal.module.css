@@ -168,15 +168,15 @@
 
 @media (min-width: 2560px) {
     .modal {
-        width: 980px;
+        width: 700px;
         padding: 32px 36px 48px;
     }
 
-    .title { font-size: 34px; }
+    .title { font-size: 24px; }
     .label { font-size: 16px; }
-    .field input.input { font-size: 21px; }
-    .nearMe { font-size: 22px; min-height: 86px; }
-    .field { min-height: 86px; }
+    .field input.input { font-size: 16px; }
+    .nearMe { font-size: 16px; min-height: 20px; }
+    .field { min-height: 20px; }
     .or { font-size: 18px; }
 }
 

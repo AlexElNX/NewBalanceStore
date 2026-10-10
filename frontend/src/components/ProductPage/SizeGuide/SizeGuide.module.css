@@ -251,32 +251,32 @@
 
 @media (min-width: 2560px) {
     .panel {
-        width: 720px;
+        width: 840px;
     }
 
     .title,
     .subtitle {
-        font-size: 36px;
+        font-size: 23px;
     }
 
     .intro,
     .download,
     .footer,
     .switchButton {
-        font-size: 22px;
+        font-size: 16px;
     }
 
     .switch {
-        width: 620px;
+        width: 380px;
     }
 
     .table {
-        font-size: 20px;
+        font-size: 16px;
     }
 
     .table th,
     .table td {
-        min-width: 220px;
+        min-width: 120px;
     }
 
     .tableNarrow th,

@@ -75,7 +75,7 @@
 
 .active {
     border-color: #000;
-    box-shadow: inset 0 0 0 1px #000;
+    background: #ededed;
 }
 
 .unavailable {
@@ -137,7 +137,7 @@
     }
 
     .size {
-        min-height: 60px;
+        min-height: 45px;
     }
 }
 

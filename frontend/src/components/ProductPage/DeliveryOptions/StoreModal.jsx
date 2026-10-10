@@ -55,10 +55,12 @@ function StoreModal({ onClose }) {
                             type="text"
                             inputMode="numeric"
                             autoComplete="postal-code"
-                            maxLength={10}
+                            maxLength={5}
                             value={zip}
-                            onChange={event => setZip(event.target.value)}
-                        />
+                            onChange={event => {
+                                const numericValue = event.target.value.replace(/\D/g, "").slice(0, 5);
+                                setZip(numericValue);
+                            }}                        />
                         <button type="submit" className={styles.searchButton} aria-label="Search stores">
                             <SearchIcon />
                         </button>

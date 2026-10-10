@@ -24,7 +24,6 @@ import { addToRecentlyViewed, getRecentlyViewed } from "../../utils/recentlyView
 import { formatColorName, formatPrice, formatSizeLabel, formatTypeLabel } from "../../utils/productFormat.js";
 import { createProductView, getCartQuantity, pickRelatedProducts } from "./productView.js";
 
-const LOW_STOCK_THRESHOLD = 3;
 const MAX_QUANTITY_PER_ITEM = 5;
 
 function Product() {
@@ -270,23 +269,6 @@ function ProductView({ product }) {
     const hasDiscount = product.hasDiscount();
     const breadcrumbs = getBreadcrumbs(product);
 
-    let stockMessage;
-    if (!productInStock || !colorInStock) {
-        stockMessage = { tone: "out", text: "This color is currently out of stock" };
-    }
-    else if (selectedSize === null) {
-        stockMessage = { tone: "muted", text: "Select a size to check availability" };
-    }
-    else if (stock === 0) {
-        stockMessage = { tone: "out", text: "Out of stock" };
-    }
-    else if (stock <= LOW_STOCK_THRESHOLD) {
-        stockMessage = { tone: "low", text: `Only ${stock} left in stock` };
-    }
-    else {
-        stockMessage = { tone: "in", text: "In stock" };
-    }
-
     const collection = getCollectionName(product.name);
 
     const accordionItems = [
@@ -404,16 +386,6 @@ function ProductView({ product }) {
                         onChange={setQuantity}
                         disabled={buttonDisabled}
                     />
-
-                    {stockMessage && (
-                        <p className={`${styles.stock} ${styles[`stock_${stockMessage.tone}`]}`} aria-live="polite">
-                            <span className={styles.stockDot} aria-hidden="true" />
-                            {stockMessage.text}
-                            {selectedSize !== null && inCart > 0 && (
-                                <span className={styles.inBag}> · {inCart} already in your bag</span>
-                            )}
-                        </p>
-                    )}
 
                     <button
                         ref={addButtonRef}
