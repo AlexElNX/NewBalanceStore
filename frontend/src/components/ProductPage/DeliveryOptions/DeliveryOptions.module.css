@@ -48,8 +48,8 @@
 
 @media (min-width: 2560px) {
     .option {
-        min-height: 84px;
-        font-size: 21px;
+        min-height: 50px;
+        font-size: 15px;
     }
 
     .option svg {

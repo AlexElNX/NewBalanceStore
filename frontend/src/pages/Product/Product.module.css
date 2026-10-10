@@ -115,23 +115,6 @@
     font-weight: 400;
 }
 
-.stock {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 8px;
-    margin-top: 20px;
-    font-size: 13px;
-}
-
-.stockDot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: currentColor;
-    flex-shrink: 0;
-}
-
 .stock_in { color: #1f7a3a; }
 .stock_low { color: #b45309; }
 .stock_out { color: #c8102e; }
@@ -263,35 +246,41 @@
 
 @media (min-width: 1921px) {
     .page {
-        --info-width: 480px;
-        --column-gap: 64px;
-        max-width: 1880px;
+        --info-width: 420px;
+        --column-gap: 48px;
+        max-width: 1560px;
         --gutter: 48px;
     }
 
-    .breadcrumbs { font-size: 14px; }
-    .name { font-size: 32px; }
-    .price { font-size: 18px; }
-    .stock { font-size: 15px; }
-    .selection, .payments { font-size: 14px; }
-    .addToBag, .primaryButton { height: 56px; font-size: 17px; }
+    .breadcrumbs { font-size: 13px; }
+    .name { font-size: 28px; }
+    .price { font-size: 16px; }
+    .selection, .payments { font-size: 13px; }
+    .addToBag, .primaryButton { height: 50px; font-size: 16px; }
 }
 
 @media (min-width: 2560px) {
     .page {
-        --info-width: 620px;
-        --column-gap: 88px;
+        --info-width: 460px;
+        --column-gap: 56px;
         --gutter: 64px;
-        max-width: 2480px;
+        max-width: 1550px;
     }
 
-    .breadcrumbs { font-size: 18px; }
-    .name { font-size: 44px; }
-    .price { font-size: 24px; }
-    .discount { font-size: 18px; }
-    .stock { font-size: 18px; }
-    .selection, .payments { font-size: 17px; }
-    .addToBag, .primaryButton { height: 72px; font-size: 22px; }
+    .hero :global(.main-header) {
+        width: 95vw;
+        max-width: 1940px;
+        left: 0;
+        right: 0;
+        margin: 0 auto;
+    }
+
+    .breadcrumbs { font-size: 14px; }
+    .name { font-size: 30px; }
+    .price { font-size: 17px; }
+    .discount { font-size: 14px; }
+    .selection, .payments { font-size: 14px; }
+    .addToBag, .primaryButton { height: 52px; font-size: 16px; }
 }
 
 @media (max-width: 1280px) {
@@ -303,7 +292,6 @@
 }
 
 @media (max-width: 1023px) {
-
     .page {
         --gutter: 24px;
         padding-bottom: 72px;
@@ -387,12 +375,12 @@
 
 @media (min-width: 1921px) {
     .description {
-        font-size: 15px;
+        font-size: 14px;
     }
 }
 
 @media (min-width: 2560px) {
     .description {
-        font-size: 18px;
+        font-size: 15px;
     }
 }

@@ -108,7 +108,7 @@
 }
 
 @media (min-width: 2560px) {
-    .trigger { font-size: 24px; padding: 22px 16px 22px 0; }
-    .panel { font-size: 20px; }
-    .icon { width: 24px; height: 24px; }
+    .trigger { font-size: 19px; padding: 22px 16px 22px 0; }
+    .panel { font-size: 15px; }
+    .icon { width: 12px; height: 12px; }
 }

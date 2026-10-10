@@ -17,7 +17,7 @@ body {
 .productsPage.hero {
     position: relative;
     width: 100%;
-    max-width: 1860px;
+    max-width: 1940px;
     height: 10px;
     min-height: 10px;
     margin: 0 auto;
@@ -26,7 +26,7 @@ body {
 
 .productsMain {
     width: 100%;
-    max-width: 1860px;
+    max-width: 1940px;
     margin: 120px auto 80px;
     padding: 0 20px;
 }

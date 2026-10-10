@@ -59,7 +59,7 @@
 
 @media (min-width: 2560px) {
     .label { font-size: 18px; }
-    .stepper { height: 64px; }
-    .button { width: 64px; font-size: 26px; }
-    .value { min-width: 64px; font-size: 20px; }
+    .stepper { height: 20px; }
+    .button { width: 20px; font-size: 26px; }
+    .value { min-width: 64px; font-size: 15px; }
 }

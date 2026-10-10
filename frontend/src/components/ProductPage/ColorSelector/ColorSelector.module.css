@@ -79,11 +79,11 @@
 
 @media (min-width: 2560px) {
     .swatches {
-        --swatch-size: 80px;
+        --swatch-size: 60px;
     }
 
     .label {
-        font-size: 18px;
+        font-size: 15px;
     }
 }
 
