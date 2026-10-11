@@ -1,3 +1,11 @@
+import product204L from '../../src/assets/images/main-page/U204L1KP.jpg';
+import productAthleticsPremiumLogoRelaxedCropCrew from '../../src/assets/images/main-page/WT53507AHH.jpg';
+import product574Core from '../../src/assets/images/main-page/ML574EVG.jpg';
+import productAthleticsJerseyTShirt from '../../src/assets/images/main-page/WT41501AHH.jpg';
+import productNBNumeric770 from '../../src/assets/images/main-page/UN770GRY.jpg';
+import productAthleticsFrenchTerryShort from '../../src/assets/images/main-page/WS41508AHH.jpg';
+
+
 export const homeProducts = [
     {
         id: "home-204l",
@@ -5,7 +13,7 @@ export const homeProducts = [
         gender: "Unisex",
         price: 119.99,
         oldPrice: null,
-        image: "../src/assets/images/main-page/U204L1KP.jpg",
+        image: product204L,
     },
 
     {
@@ -14,7 +22,7 @@ export const homeProducts = [
         gender: "Women",
         price: 63.75,
         oldPrice: 84.99,
-        image: "../../src/assets/images/main-page/WT53507AHH.jpg",
+        image: productAthleticsPremiumLogoRelaxedCropCrew,
     },
 
     {
@@ -23,7 +31,7 @@ export const homeProducts = [
         gender: "Men",
         price: 74.99,
         oldPrice: 99.99,
-        image: "../../../src/assets/images/main-page/ML574EVG.jpg",
+        image: product574Core,
     },
 
     {
@@ -32,7 +40,7 @@ export const homeProducts = [
         gender: "Women",
         price: 31.49,
         oldPrice: 44.99,
-        image: "../src/assets/images/main-page/WT41501AHH.jpg",
+        image: productAthleticsJerseyTShirt,
     },
 
     {
@@ -41,7 +49,7 @@ export const homeProducts = [
         gender: "Unisex",
         price: 124.99,
         oldPrice: null,
-        image: "../src/assets/images/main-page/UN770GRY.jpg",
+        image: productNBNumeric770,
     },
 
     {
@@ -50,6 +58,6 @@ export const homeProducts = [
         gender: "Women",
         price: 45.49,
         oldPrice: 64.99,
-        image: "../src/assets/images/main-page/WS41508AHH.jpg",
+        image: productAthleticsFrenchTerryShort,
     }
 ];
