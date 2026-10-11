@@ -113,13 +113,20 @@ function ImageViewer({ images, alt, startIndex, onClose }) {
     const [index, setIndex] = useState(startIndex);
     const touchStartX = useRef(null);
     const lastIndex = images.length - 1;
+    const [closing, setClosing] = useState(false);
+
+    const requestClose = useCallback(() => setClosing(true), []);
+
+    const handleAnimationEnd = (event) => {
+        if (closing && event.target === event.currentTarget) onClose();
+    };
 
     const next = useCallback(() => setIndex(i => Math.min(i + 1, lastIndex)), [lastIndex]);
     const prev = useCallback(() => setIndex(i => Math.max(i - 1, 0)), []);
 
     useEffect(() => {
         const onKey = (event) => {
-            if (event.key === "Escape") onClose();
+            if (event.key === "Escape") requestClose();
             if (event.key === "ArrowRight") next();
             if (event.key === "ArrowLeft") prev();
         };
@@ -131,7 +138,7 @@ function ImageViewer({ images, alt, startIndex, onClose }) {
             document.removeEventListener("keydown", onKey);
             document.body.style.overflow = "";
         };
-    }, [onClose, next, prev]);
+    }, [requestClose, next, prev]);
 
     const handleTouchStart = (event) => {
         touchStartX.current = event.touches[0].clientX;
@@ -149,14 +156,15 @@ function ImageViewer({ images, alt, startIndex, onClose }) {
 
     return createPortal(
         <div
-            className={styles.viewer}
+            className={`${styles.viewer} ${closing ? styles.viewerClosing : ""}`}
             role="dialog"
             aria-modal="true"
             aria-label={alt}
             onTouchStart={handleTouchStart}
             onTouchEnd={handleTouchEnd}
+            onAnimationEnd={handleAnimationEnd}
         >
-            <button type="button" className={styles.viewerClose} onClick={onClose} aria-label="Close">
+            <button type="button" className={styles.viewerClose} onClick={requestClose} aria-label="Close">
                 <svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true">
                     <path d="M4 4l18 18M22 4 4 22" stroke="currentColor" strokeWidth="3.2" strokeLinecap="round" />
                 </svg>

@@ -66,7 +66,7 @@
     align-self: end;
     height: 60px;
     border: none;
-    border-radius: 4px;
+    border-radius: 2px;
     background: #111;
     color: #fff;
     font-size: 15px;
@@ -80,8 +80,9 @@
 }
 
 .button:disabled {
-    background: #bdbdbd;
-    cursor: not-allowed;
+    background: #e8e8e8;
+    color: #767676;
+    cursor: default;
 }
 
 .icon {
@@ -90,12 +91,15 @@
 
 @media (min-width: 2560px) {
     .sticky {
-        width: 600px;
+        width: 640px;
         grid-template-columns: 158px 1fr;
+        gap: 10px 32px;
+        padding: 28px 24px 28px 32px;
     }
-    .name { font-size: 20px; }
-    .gender { font-size: 14px; }
-    .button { height: 40px; font-size: 17px; }
+
+    .name { font-size: 22px; }
+    .gender { font-size: 19px; }
+    .button { height: 80px; font-size: 20px; }
 }
 
 @media (max-width: 1023px) {

@@ -1,5 +1,5 @@
 import styles from "./SizeGuide.module.css";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import {
     APPAREL_SIZES,
@@ -17,10 +17,17 @@ function SizeGuide({ product, onClose }) {
     const [unit, setUnit] = useState("in");
     const closeRef = useRef(null);
     const tableWrapRef = useRef(null);
+    const [closing, setClosing] = useState(false);
+
+    const requestClose = useCallback(() => setClosing(true), []);
+
+    const handleAnimationEnd = (event) => {
+        if (closing && event.target === event.currentTarget) onClose();
+    };
 
     useEffect(() => {
         const onKey = (event) => {
-            if (event.key === "Escape") onClose();
+            if (event.key === "Escape") requestClose();
         };
 
         document.addEventListener("keydown", onKey);
@@ -31,7 +38,7 @@ function SizeGuide({ product, onClose }) {
             document.removeEventListener("keydown", onKey);
             document.body.style.overflow = "";
         };
-    }, [onClose]);
+    }, [requestClose]);
 
     let table;
     if (isShoes) {
@@ -53,9 +60,15 @@ function SizeGuide({ product, onClose }) {
 
     return createPortal(
         <>
-            <div className={styles.overlay} onClick={onClose} />
+            <div className={`${styles.overlay} ${closing ? styles.overlayClosing : ""}`} onClick={requestClose} />
 
-            <aside className={styles.panel} role="dialog" aria-modal="true" aria-labelledby="size-guide-title">
+            <aside
+                className={`${styles.panel} ${closing ? styles.panelClosing : ""}`}
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="size-guide-title"
+                onAnimationEnd={handleAnimationEnd}
+            >
                 <div className={styles.header}>
                     <h2 id="size-guide-title" className={styles.title}>
                         {isShoes ? "Size and width guide" : "Size guide"}
@@ -64,7 +77,7 @@ function SizeGuide({ product, onClose }) {
                         ref={closeRef}
                         type="button"
                         className={styles.close}
-                        onClick={onClose}
+                        onClick={requestClose}
                         aria-label="Close size guide"
                     >
                         ✕

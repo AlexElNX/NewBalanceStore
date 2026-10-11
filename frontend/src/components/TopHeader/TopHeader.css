@@ -3,10 +3,9 @@
     justify-content: space-between;
     align-items: center;
     gap: 12px;
-    height: 50px;
-
+    height: 57px;
     padding: 0 40px;
-    background: black;
+    background: #111111;
     color: white;
 }
 
@@ -28,8 +27,9 @@
 .left-menu {
     display: flex;
     align-items: center;
-    gap: 12px;
-    font-size: 14px;
+    gap: 5px;
+    font-size: 13px;
+    font-weight: 700;
 }
 
 .left-menu a {
@@ -45,6 +45,8 @@
     display: flex;
     align-items: center;
     gap: 12px;
+    font-size: 14px;
+    font-weight: 700;
 }
 
 .right-menu a {
@@ -88,6 +90,13 @@
 @media (max-width: 768px) {
 
     .top-header {
+        display: block;
+        height: 50px;
+        padding: 0;
+    }
+
+    .left-menu,
+    .right-menu {
         display: none;
     }
 }

@@ -6,8 +6,9 @@ import { useCart } from "../../context/useCart.js";
 
 function MainHeader({
                         theme = "dark",
-                        containerRef
-}) {
+                        containerRef,
+                        autoHide = true
+                    }) {
     const headerRef = useRef(null);
     const { cart } = useCart();
     const cartCount = cart.getProductCount();
@@ -64,7 +65,7 @@ function MainHeader({
         const header = headerRef.current;
         const container = containerRef?.current;
 
-        if (!header || !container) return;
+        if (!autoHide || !header || !container) return;
 
         let lastScroll = 0;
 
@@ -108,7 +109,7 @@ function MainHeader({
             window.removeEventListener("scroll", handleScroll);
             window.removeEventListener("resize", handleScroll);
         };
-    }, [containerRef, isMobileMenuOpen]);
+    }, [autoHide, containerRef, isMobileMenuOpen]);
 
     // Subheading for the menu header
     const getMenuTitle = () => {
@@ -418,7 +419,7 @@ function MainHeader({
                     </Link>
 
                     <Link to={"/cart"} className="cart-link" onClick={closeMobileMenu}>
-                        <img className="bag-icon"  src="../src/assets/icons/header/bag-icon.svg" alt="Cart"/>
+                        <img className="bag-icon" src="../src/assets/icons/header/bag-icon.svg" alt="Cart"/>
                         {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
                     </Link>
                 </div>

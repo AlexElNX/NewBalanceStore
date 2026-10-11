@@ -16,7 +16,7 @@
 .track {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 4px;
+    gap: 2px;
 }
 
 .slide {
@@ -70,7 +70,6 @@
         scroll-snap-align: start;
         cursor: pointer;
     }
-
 
     .bars {
         position: absolute;
@@ -145,7 +144,11 @@
     z-index: 100000;
     overflow: hidden;
     background: #fff;
-    animation: fadeIn .2s ease;
+    animation: viewerIn .4s cubic-bezier(.22, .61, .36, 1);
+}
+
+.viewerClosing {
+    animation: viewerOut .22s cubic-bezier(.55, .06, .68, .19) forwards;
 }
 
 .viewerTrack {
@@ -221,6 +224,11 @@
     .viewerTrack {
         transition: none;
     }
+
+    .viewer,
+    .viewerClosing {
+        animation-duration: .01s;
+    }
 }
 
 .viewerClose:focus-visible,
@@ -270,7 +278,12 @@
     .viewerNext { right: 8px; }
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+@keyframes viewerIn {
+    from { transform: translateX(100%); }
+    to { transform: none; }
+}
+
+@keyframes viewerOut {
+    from { transform: none; }
+    to { transform: translateX(100%); }
 }

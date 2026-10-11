@@ -152,6 +152,7 @@
     border: none;
     background: none;
     color: #c4c4c4;
+    cursor: pointer;
 }
 
 .scrollArrow:hover {
@@ -161,7 +162,7 @@
 .scrollTrack {
     position: relative;
     flex: 1;
-    height: 9px;
+    height: 12px;
 }
 
 .scrollThumb {
@@ -251,32 +252,32 @@
 
 @media (min-width: 2560px) {
     .panel {
-        width: 840px;
+        width: 720px;
     }
 
     .title,
     .subtitle {
-        font-size: 23px;
+        font-size: 36px;
     }
 
     .intro,
     .download,
     .footer,
     .switchButton {
-        font-size: 16px;
+        font-size: 22px;
     }
 
     .switch {
-        width: 380px;
+        width: 620px;
     }
 
     .table {
-        font-size: 16px;
+        font-size: 20px;
     }
 
     .table th,
     .table td {
-        min-width: 120px;
+        min-width: 220px;
     }
 
     .tableNarrow th,
@@ -339,6 +340,24 @@
         min-width: 0;
         width: 92px;
     }
+}
+
+.overlayClosing {
+    animation: fadeOut .25s ease forwards;
+}
+
+.panelClosing {
+    animation: slideOut .25s ease forwards;
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+@keyframes slideOut {
+    from { transform: none; }
+    to { transform: translateX(100%); }
 }
 
 @keyframes fadeIn {

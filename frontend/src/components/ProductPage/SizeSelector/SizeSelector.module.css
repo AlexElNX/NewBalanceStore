@@ -62,6 +62,7 @@
     cursor: pointer;
     overflow: hidden;
     transition: border-color .15s, box-shadow .15s;
+    border-radius: 2px;
 }
 
 .size:hover:not(:disabled) {
@@ -75,14 +76,17 @@
 
 .active {
     border-color: #000;
-    background: #ededed;
+    box-shadow: inset 0 0 0 1px #000;
 }
 
 .unavailable {
-    color: #b5b5b5;
-    background: #fafafa;
-    border-color: #e3e3e3;
-    cursor: not-allowed;
+    color: #a8a8a8;
+    background: #f2f2f2;
+    border-color: #dcdcdc;
+}
+
+.unavailable.active {
+    border-color: #000;
 }
 
 .unavailable::after {
@@ -100,19 +104,6 @@
     margin-top: 8px;
     color: #c8102e;
     font-size: 13px;
-}
-
-.width {
-    margin-top: 24px;
-}
-
-.width .label {
-    margin-bottom: 12px;
-}
-
-.widthOption {
-    min-width: 104px;
-    padding: 8px 16px;
 }
 
 @media (min-width: 1921px) {
@@ -137,7 +128,7 @@
     }
 
     .size {
-        min-height: 45px;
+        min-height: 60px;
     }
 }
 

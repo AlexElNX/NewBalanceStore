@@ -11,7 +11,6 @@ import ProductCarousel from "../../components/ProductCarousel/ProductCarousel.js
 import ProductGallery from "../../components/ProductPage/ProductGallery/ProductGallery.jsx";
 import ColorSelector from "../../components/ProductPage/ColorSelector/ColorSelector.jsx";
 import SizeSelector from "../../components/ProductPage/SizeSelector/SizeSelector.jsx";
-import QuantitySelector from "../../components/ProductPage/QuantitySelector/QuantitySelector.jsx";
 import ProductAccordion from "../../components/ProductPage/ProductAccordion/ProductAccordion.jsx";
 import StickyAddToBag from "../../components/ProductPage/StickyAddToBag/StickyAddToBag.jsx";
 import DeliveryOptions from "../../components/ProductPage/DeliveryOptions/DeliveryOptions.jsx";
@@ -21,14 +20,18 @@ import { useCart } from "../../context/useCart.js";
 import { fetchProduct } from "../../services/api/productsApi.js";
 import { getProducts } from "../../services/productsService.js";
 import { addToRecentlyViewed, getRecentlyViewed } from "../../utils/recentlyViewed.js";
-import { formatColorName, formatPrice, formatSizeLabel, formatTypeLabel } from "../../utils/productFormat.js";
+import { formatColorName, formatPrice, formatSizeLabel, formatTypeLabel, getSizeGrid } from "../../utils/productFormat.js";
 import { createProductView, getCartQuantity, pickRelatedProducts } from "./productView.js";
 
 const MAX_QUANTITY_PER_ITEM = 5;
+const HEADER_HIDE_AFTER = 70;
 
 function Product() {
     const { id } = useParams();
     const pageRef = useRef(null);
+    const hideAfterRef = useRef(HEADER_HIDE_AFTER);
+    const headerRef = useRef(null);
+    const header = useHeaderAutoHide(headerRef, hideAfterRef);
 
     const [reloadKey, setReloadKey] = useState(0);
     const [result, setResult] = useState({ key: null, status: "loading", product: null });
@@ -111,11 +114,17 @@ function Product() {
 
     return (
         <>
-            <TopHeader />
+            <div
+                ref={headerRef}
+                className={`${styles.headerBar}${header.hidden ? ` ${styles.headerHidden}` : ""}`}
+                style={!header.hidden && header.shift > 0 ? { transform: `translateY(-${header.shift}px)` } : undefined}
+            >
+                <TopHeader />
 
-            <section ref={pageRef} className={styles.hero}>
-                <MainHeader theme={"light"} containerRef={pageRef} />
-            </section>
+                <section ref={pageRef} className={styles.hero}>
+                    <MainHeader theme={"light"} containerRef={pageRef} autoHide={false} />
+                </section>
+            </div>
 
             <main className={styles.page}>
                 {status === "loading" && <ProductSkeleton />}
@@ -134,7 +143,7 @@ function Product() {
                 )}
 
                 {status === "ready" && product && (
-                    <ProductView key={product.id} product={product} />
+                    <ProductView key={product.id} product={product} hideAfterRef={hideAfterRef} />
                 )}
 
                 {status === "ready" && (
@@ -150,14 +159,17 @@ function Product() {
     );
 }
 
-function ProductView({ product }) {
+function ProductView({ product, hideAfterRef }) {
     const { cart, dispatch } = useCart();
     const [searchParams, setSearchParams] = useSearchParams();
 
     const sizeRef = useRef(null);
     const addButtonRef = useRef(null);
+    const galleryRef = useRef(null);
+    const infoRef = useRef(null);
+    const priceRef = useRef(null);
+    const columnScroll = useColumnScroll(galleryRef, infoRef, priceRef, hideAfterRef);
 
-    const [quantity, setQuantity] = useState(1);
     const [sizeError, setSizeError] = useState(false);
     const [showAddedPopup, setShowAddedPopup] = useState(false);
     const [showSticky, setShowSticky] = useState(false);
@@ -173,8 +185,9 @@ function ProductView({ product }) {
     const selectedColor = product.colors.includes(colorParam) ? colorParam : defaultColor;
 
     const sizeParam = searchParams.get("size");
-    const selectedSize = sizeParam !== null && product.isAvailable(selectedColor, sizeParam)
-        ? product.getVariant(selectedColor, sizeParam).size
+    const sizeGrid = useMemo(() => getSizeGrid(product), [product]);
+    const selectedSize = sizeParam !== null
+        ? sizeGrid.find(size => String(size) === String(sizeParam)) ?? null
         : null;
 
     const updateParams = (changes) => {
@@ -189,15 +202,12 @@ function ProductView({ product }) {
     };
 
     const handleColorSelect = (color) => {
-        const keepSize = selectedSize !== null && product.isAvailable(color, selectedSize);
-        updateParams({ color, size: keepSize ? selectedSize : null });
-        setQuantity(1);
+        updateParams({ color, size: selectedSize });
     };
 
     const handleSizeSelect = (size) => {
         updateParams({ color: selectedColor, size });
         setSizeError(false);
-        setQuantity(1);
     };
 
     const stock = selectedSize !== null ? product.getAvailableQuantity(selectedColor, selectedSize) : 0;
@@ -205,9 +215,6 @@ function ProductView({ product }) {
     const canAddMore = Math.max(0, Math.min(MAX_QUANTITY_PER_ITEM, stock) - inCart);
     const colorInStock = product.isColorAvailable(selectedColor);
     const productInStock = product.isAvailable();
-
-    const maxQuantity = selectedSize !== null ? canAddMore : MAX_QUANTITY_PER_ITEM;
-    const safeQuantity = Math.min(quantity, Math.max(1, maxQuantity));
 
     let buttonLabel = "Add to bag";
     let buttonDisabled = false;
@@ -217,7 +224,7 @@ function ProductView({ product }) {
         buttonDisabled = true;
     }
     else if (selectedSize !== null && canAddMore === 0) {
-        buttonLabel = inCart > 0 ? "Max quantity in bag" : "Out of stock";
+        if (inCart > 0) buttonLabel = "Max quantity in bag";
         buttonDisabled = true;
     }
 
@@ -242,20 +249,17 @@ function ProductView({ product }) {
             return;
         }
 
-        for (let i = 0; i < safeQuantity; i++) {
-            dispatch({
-                type: "ADD_PRODUCT",
-                payload: {
-                    product: { id: product.id },
-                    productId: product.id,
-                    color: selectedColor,
-                    size: selectedSize,
-                    quantity: safeQuantity
-                }
-            });
-        }
+        dispatch({
+            type: "ADD_PRODUCT",
+            payload: {
+                product: { id: product.id },
+                productId: product.id,
+                color: selectedColor,
+                size: selectedSize,
+                quantity: 1
+            }
+        });
 
-        setQuantity(1);
         setShowAddedPopup(true);
     };
 
@@ -269,8 +273,6 @@ function ProductView({ product }) {
     const hasDiscount = product.hasDiscount();
     const breadcrumbs = getBreadcrumbs(product);
 
-    const collection = getCollectionName(product.name);
-
     const accordionItems = [
         {
             id: "description",
@@ -278,16 +280,14 @@ function ProductView({ product }) {
             defaultOpen: true,
             content: (
                 <div className={styles.description}>
-                    {collection && (
-                        <p>
-                            <strong>
-                                Looking for other options? Shop the{" "}
-                                <Link className={styles.descriptionLink} to={`/products?collection=${encodeURIComponent(collection)}`}>
-                                    {collection}
-                                </Link>
-                            </strong>
-                        </p>
-                    )}
+                    <p>
+                        <strong>
+                            Looking for other options? Shop the{" "}
+                            <Link className={styles.descriptionLink} to={breadcrumbs[breadcrumbs.length - 1]?.to ?? "/products"}>
+                                {formatTypeLabel(product.type).toLowerCase()}
+                            </Link>
+                        </strong>
+                    </p>
                     <p>{product.description || "No description available."}</p>
                 </div>
             )
@@ -326,92 +326,87 @@ function ProductView({ product }) {
 
     return (
         <>
-            <div className={styles.layout}>
-                <div className={styles.galleryColumn}>
+            <div className={styles.layout} style={columnScroll}>
+                <div ref={galleryRef} className={styles.galleryColumn}>
                     <ProductGallery key={selectedColor} images={images} alt={`${product.name} ${formatColorName(selectedColor)}`} />
                 </div>
 
-                <div className={styles.infoColumn}>
-                    <nav className={styles.breadcrumbs} aria-label="Breadcrumb">
-                        {breadcrumbs.map((crumb, index) => (
-                            <span key={crumb.label} className={styles.crumb}>
-                                {index > 0 && <span className={styles.crumbSep}>/</span>}
-                                <Link to={crumb.to}>{crumb.label}</Link>
-                            </span>
-                        ))}
-                        {String(product.gender).toLowerCase() === "unisex" && (
-                            <span className={styles.crumbNote}>• Unisex</span>
-                        )}
-                    </nav>
-
-                    {product.isNew && <span className={styles.badge}>New</span>}
-
-                    <h1 className={styles.name}>{product.name}</h1>
-
-                    <div className={styles.price}>
-                        <span className={hasDiscount ? styles.salePrice : ""}>
-                            {formatPrice(product.price)}
-                        </span>
-                        {hasDiscount && (
-                            <>
-                                <span className={styles.oldPrice}>
-                                    <span className={styles.srOnly}>Original price: </span>
-                                    {formatPrice(product.oldPrice)}
+                <div ref={infoRef} className={styles.infoColumn}>
+                    <div className={styles.summary}>
+                        <nav className={styles.breadcrumbs} aria-label="Breadcrumb">
+                            {breadcrumbs.map((crumb, index) => (
+                                <span key={crumb.label} className={styles.crumb}>
+                                    {index > 0 && <span className={styles.crumbSep}>/</span>}
+                                    <Link to={crumb.to}>{crumb.label}</Link>
                                 </span>
-                                <span className={styles.discount}>
-                                    Save {product.getDiscountPercent()}%
-                                </span>
-                            </>
-                        )}
+                            ))}
+                            {String(product.gender).toLowerCase() === "unisex" && (
+                                <span className={styles.crumbNote}><span className={styles.crumbDot} aria-hidden="true">•</span>Unisex</span>
+                            )}
+                        </nav>
+
+                        {product.isNew && <span className={styles.badge}>New</span>}
+
+                        <h1 className={styles.name}>{product.name}</h1>
+
+                        <div ref={priceRef} className={styles.price}>
+                            <span>{formatPrice(product.price)}</span>
+                            {hasDiscount && (
+                                <>
+                                    <span className={styles.oldPrice}>
+                                        <span className={styles.srOnly}>Original price: </span>
+                                        {formatPrice(product.oldPrice)}
+                                    </span>
+                                    <span className={styles.discount}>
+                                        {product.getDiscountPercent()}% off
+                                    </span>
+                                </>
+                            )}
+                        </div>
                     </div>
 
-                    <ColorSelector
-                        product={product}
-                        selectedColor={selectedColor}
-                        onSelect={handleColorSelect}
-                    />
+                    <div className={styles.details}>
+                        <ColorSelector
+                            product={product}
+                            selectedColor={selectedColor}
+                            onSelect={handleColorSelect}
+                        />
 
-                    <SizeSelector
-                        ref={sizeRef}
-                        product={product}
-                        color={selectedColor}
-                        selectedSize={selectedSize}
-                        onSelect={handleSizeSelect}
-                        showError={sizeError}
-                    />
+                        <SizeSelector
+                            ref={sizeRef}
+                            product={product}
+                            color={selectedColor}
+                            selectedSize={selectedSize}
+                            onSelect={handleSizeSelect}
+                            showError={sizeError}
+                        />
 
-                    <QuantitySelector
-                        value={safeQuantity}
-                        max={maxQuantity}
-                        onChange={setQuantity}
-                        disabled={buttonDisabled}
-                    />
+                        <button
+                            ref={addButtonRef}
+                            type="button"
+                            className={styles.addToBag}
+                            onClick={handleAddToBag}
+                            disabled={buttonDisabled}
+                        >
+                            {buttonLabel}
+                        </button>
 
-                    <button
-                        ref={addButtonRef}
-                        type="button"
-                        className={styles.addToBag}
-                        onClick={handleAddToBag}
-                        disabled={buttonDisabled}
-                    >
-                        {buttonLabel}
-                    </button>
+                        {selectedSize !== null && !buttonDisabled && (
+                            <p className={styles.selection}>
+                                {formatColorName(selectedColor)} · Size {formatSizeLabel(product, selectedSize)}
+                            </p>
+                        )}
 
-                    {selectedSize !== null && !buttonDisabled && (
-                        <p className={styles.selection}>
-                            {formatColorName(selectedColor)} · Size {formatSizeLabel(product, selectedSize)} · Qty {safeQuantity}
+                        <p className={styles.payments}>
+                            or 4 interest-free payments of <strong>{formatPrice(product.price / 4)}</strong>
                         </p>
-                    )}
 
-                    <p className={styles.payments}>
-                        or 4 interest-free payments of <strong>{formatPrice(product.price / 4)}</strong>
-                    </p>
+                        <DeliveryOptions />
 
-                    <DeliveryOptions />
+                        <ProductAccordion items={accordionItems} />
 
-                    <ProductAccordion items={accordionItems} />
-
-                    {sizeGuideOpen && <SizeGuide product={product} onClose={closeSizeGuide} />}
+                        {sizeGuideOpen && <SizeGuide product={product} onClose={closeSizeGuide} />}
+                    </div>
                 </div>
             </div>
 
@@ -429,8 +424,95 @@ function ProductView({ product }) {
     );
 }
 
-function getCollectionName(name) {
-    return String(name ?? "").trim().split(/\s+/)[0] ?? "";
+const STICKY_BOTTOM = 24;
+const PRICE_GAP = 16;
+
+function useHeaderAutoHide(headerRef, hideAfterRef) {
+    const [state, setState] = useState({ hidden: false, shift: 0 });
+
+    useEffect(() => {
+        let lastScroll = window.scrollY;
+        let scrolledAway = false;
+
+        const handleScroll = () => {
+            const currentScroll = window.scrollY;
+            const topBarHeight = headerRef.current?.firstElementChild?.offsetHeight ?? 0;
+
+            if (currentScroll <= 0) scrolledAway = false;
+
+            if (!scrolledAway && currentScroll <= hideAfterRef.current) {
+                setState({ hidden: false, shift: 0 });
+            }
+            else if (currentScroll > lastScroll) {
+                scrolledAway = true;
+                setState({ hidden: true, shift: 0 });
+            }
+            else if (currentScroll < lastScroll) {
+                setState({ hidden: false, shift: Math.min(topBarHeight, currentScroll) });
+            }
+
+            lastScroll = currentScroll;
+        };
+
+        window.addEventListener("scroll", handleScroll, { passive: true });
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, [headerRef, hideAfterRef]);
+
+    return state;
+}
+
+function useColumnScroll(galleryRef, infoRef, priceRef, hideAfterRef) {
+    const [vars, setVars] = useState({});
+
+    useEffect(() => {
+        const gallery = galleryRef.current;
+        const info = infoRef.current;
+        const price = priceRef.current;
+        if (!gallery || !info || !price || typeof ResizeObserver === "undefined") return;
+
+        const desktop = window.matchMedia("(min-width: 1024px)");
+        document.body.classList.add(styles.stickyBody);
+
+        const update = () => {
+            if (!desktop.matches) {
+                hideAfterRef.current = HEADER_HIDE_AFTER;
+                setVars({});
+                return;
+            }
+
+            const viewport = window.innerHeight;
+            const layoutTop = Math.round(gallery.parentElement.getBoundingClientRect().top + window.scrollY);
+            const galleryHeight = gallery.offsetHeight;
+            const infoHeight = info.offsetHeight;
+            const priceOffset = Math.round(price.getBoundingClientRect().top - info.getBoundingClientRect().top);
+            const toColors = Math.max(0, priceOffset - PRICE_GAP);
+            const infoScroll = Math.max(toColors, layoutTop + infoHeight + STICKY_BOTTOM - viewport);
+
+            hideAfterRef.current = Math.max(HEADER_HIDE_AFTER, toColors);
+
+            setVars({
+                "--gallery-top": `${layoutTop}px`,
+                "--info-top": `${layoutTop - infoScroll}px`,
+                "--layout-height": `${galleryHeight + infoScroll}px`
+            });
+        };
+
+        const observer = new ResizeObserver(update);
+        observer.observe(gallery);
+        observer.observe(info);
+        window.addEventListener("resize", update);
+        desktop.addEventListener("change", update);
+
+        return () => {
+            observer.disconnect();
+            window.removeEventListener("resize", update);
+            desktop.removeEventListener("change", update);
+            document.body.classList.remove(styles.stickyBody);
+            hideAfterRef.current = HEADER_HIDE_AFTER;
+        };
+    }, [galleryRef, infoRef, priceRef, hideAfterRef]);
+
+    return vars;
 }
 
 function getBreadcrumbs(product) {

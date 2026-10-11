@@ -46,8 +46,7 @@ const SizeSelector = forwardRef(function SizeSelector(
                             key={size}
                             role="radio"
                             aria-checked={isActive}
-                            aria-disabled={!available}
-                            disabled={!available}
+                            aria-label={available ? undefined : `${formatSizeLabel(product, size)}, out of stock`}
                             onClick={() => onSelect(size)}
                             className={`${styles.size} ${isActive ? styles.active : ""} ${!available ? styles.unavailable : ""}`}
                         >
