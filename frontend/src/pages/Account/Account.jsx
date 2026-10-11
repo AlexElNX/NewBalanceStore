@@ -6,6 +6,11 @@ import MainHeader from "../../components/MainHeader/MainHeader.jsx";
 import Footer from "../../components/Footer/Footer.jsx";
 import { getCurrentUser, logout } from "../../services/api/authService.js";
 
+// Images
+import photo1 from '../../../src/assets/images/account-page/photo1.jpg';
+import photo2 from '../../../src/assets/images/account-page/photo2.jpg';
+import photo3 from '../../../src/assets/images/account-page/photo3.jpg';
+
 function Account() {
     const pageRef = useRef(null);
     const navigate = useNavigate();
@@ -107,7 +112,7 @@ function Account() {
                                 <div className={styles.benefitsGrid}>
                                     <div className={styles.benefitCard}>
                                         <div className={styles.benefitImgPlaceholder}>
-                                            <img src="../../../src/assets/images/account-page/photo1.jpg" alt=""/>
+                                            <img src={photo1} alt=""/>
                                         </div>
                                         <h4>Free shipping & returns</h4>
                                         <p>Get free shipping and returns on all orders.</p>
@@ -115,7 +120,7 @@ function Account() {
 
                                     <div className={styles.benefitCard}>
                                         <div className={styles.benefitImgPlaceholder}>
-                                            <img src="../../../src/assets/images/account-page/photo2.jpg" alt=""/>
+                                            <img src={photo2} alt=""/>
                                         </div>
                                         <h4>Special offers</h4>
                                         <p>Receive members-only offers and sales.</p>
@@ -123,7 +128,7 @@ function Account() {
 
                                     <div className={styles.benefitCard}>
                                         <div className={styles.benefitImgPlaceholder}>
-                                            <img src="../../../src/assets/images/account-page/photo3.jpg" alt=""/>
+                                            <img src={photo3} alt=""/>
                                         </div>
                                         <h4>Birthday rewards</h4>
                                         <p>Members receive a special gift on their birthday.</p>
