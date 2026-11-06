@@ -57,6 +57,21 @@ public class FirebaseUserRepository : IUserRepository
             .Child($"{CollectionName}/{user.Id}")
             .PutAsync(user);
     }
+    /// <summary>
+    /// Оновлює дані існуючого користувача (наприклад, при збереженні Refresh Token).
+    /// </summary>
+    /// <param name="user">Об'єкт користувача з оновленими полями.</param>
+    public async Task UpdateAsync(User user)
+    {
+        if (string.IsNullOrEmpty(user.Id))
+        {
+            throw new ArgumentException("ID користувача не може бути порожнім.");
+        }
+
+        await _firebaseClient
+            .Child($"{CollectionName}/{user.Id}")
+            .PutAsync(user);
+    }
 
     /// <summary>
     /// Отримує всіх користувачів із бази даних.

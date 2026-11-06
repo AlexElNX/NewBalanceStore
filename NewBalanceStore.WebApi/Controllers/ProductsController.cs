@@ -1,5 +1,9 @@
+using ErrorOr;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using NewBalanceStore.Application.CQRS.Products.Commands;
+using NewBalanceStore.Application.CQRS.Products.Queries;
 using NewBalanceStore.Application.DTOs;
 using NewBalanceStore.Application.Interfaces;
 using NewBalanceStore.Domain.Interfaces;
@@ -16,16 +20,26 @@ public class ProductsController : ControllerBase
 {
     private readonly IProductService _productService;
     private readonly IPhotoService _photoService;
+    private readonly IMediator _mediator;
 
     /// <summary>
     /// Ініціалізує новий екземпляр контролера <see cref="ProductsController"/>.
     /// </summary>
     /// <param name="productService">Сервіс управління товарами.</param>
     /// <param name="photoService">Сервіс завантаження фотографій до Cloudinary.</param>
-    public ProductsController(IProductService productService, IPhotoService photoService)
+    /// <param name="mediator">Mediator для обробки команд.</param>
+    public ProductsController(IProductService productService, IPhotoService photoService, IMediator mediator)
     {
         _productService = productService;
         _photoService = photoService;
+        _mediator = mediator;
+    }
+
+    [Authorize(Policy = "RequireAdminRole")]
+    [HttpGet("analytics")]
+    public IActionResult GetAnalytics()
+    {
+        return Ok(new { message = "Це секретна аналітика лише для адміністраторів!" });
     }
 
     /// <summary>
@@ -49,13 +63,32 @@ public class ProductsController : ControllerBase
     /// <response code="200">Товар успешно найден и возвращен</response>
     /// <response code="404">Товар с указанным ID не найден</response>
     [HttpGet("{id}")]
-    public async Task<ActionResult<ProductDto>> GetById(string id)
+    [ProducesResponseType(typeof(ProductDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetById(string id)
     {
-        var product = await _productService.GetByIdAsync(id);
-        if (product == null)
-            return NotFound(new { message = $"Товар с ID '{id}' не найден." });
+        var result = await _mediator.Send(new GetProductByIdQuery(id));
 
-        return Ok(product);
+        return result.Match(
+            product => Ok(product),
+            errors =>
+            {
+                var firstError = errors[0];
+
+                var statusCode = firstError.Type switch
+                {
+                    ErrorType.NotFound => StatusCodes.Status404NotFound,
+                    ErrorType.Validation => StatusCodes.Status400BadRequest,
+                    ErrorType.Unauthorized => StatusCodes.Status401Unauthorized,
+                    _ => StatusCodes.Status500InternalServerError
+                };
+
+                return Problem(
+                    statusCode: statusCode,
+                    title: firstError.Description
+                );
+            }
+        );
     }
 
     /// <summary>
@@ -68,10 +101,23 @@ public class ProductsController : ControllerBase
     /// <response code="403">Недостаточно прав (требуется роль Admin)</response>
     [HttpPost]
     [Authorize(Roles = "Admin")]
-    public async Task<ActionResult<ProductDto>> Create([FromBody] CreateProductDto dto)
+    [ProducesResponseType(typeof(ProductDto), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult> Create([FromBody] CreateProductDto dto)
     {
-        var createdProduct = await _productService.CreateAsync(dto);
-        return CreatedAtAction(nameof(GetById), new { id = createdProduct.Id }, createdProduct);
+        var result = await _mediator.Send(new CreateProductCommand(dto));
+
+        return result.Match(
+            product => CreatedAtAction(nameof(GetById), new { id = product.Id }, product),
+            errors =>
+            {
+                var firstError = errors[0];
+                return Problem(
+                    statusCode: StatusCodes.Status400BadRequest,
+                    title: firstError.Description
+                );
+            }
+        );
     }
 
     /// <summary>
@@ -107,13 +153,18 @@ public class ProductsController : ControllerBase
     /// <response code="401">Неавторизованный доступ</response>
     [HttpPut("{id}")]
     [Authorize(Roles = "Admin")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Update(string id, [FromBody] CreateProductDto dto)
     {
-        var updated = await _productService.UpdateAsync(id, dto);
-        if (!updated)
-            return NotFound(new { message = $"Товар с ID '{id}' не найден." });
+        var result = await _mediator.Send(new UpdateProductCommand(id, dto));
 
-        return NoContent();
+        return result.Match<IActionResult>(
+            success => NoContent(),
+            errors => errors[0].Type == ErrorType.NotFound
+                ? NotFound(errors[0].Description)
+                : BadRequest(errors[0].Description)
+        );
     }
 
     /// <summary>
@@ -124,12 +175,22 @@ public class ProductsController : ControllerBase
     /// <response code="404">Товар с указанным ID не найден</response>
     [HttpDelete("{id}")]
     [Authorize(Roles = "Admin")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Delete(string id)
     {
-        var deleted = await _productService.DeleteAsync(id);
-        if (!deleted)
-            return NotFound(new { message = $"Товар с ID '{id}' не найден." });
+        var result = await _mediator.Send(new DeleteProductCommand(id));
 
-        return NoContent();
+        return result.Match<IActionResult>(
+            success => NoContent(),
+            errors => errors[0].Type == ErrorType.NotFound
+                ? NotFound(errors[0].Description)
+                : BadRequest(errors[0].Description)
+        );
+    }
+
+    public static implicit operator ProductsController(AuthController v)
+    {
+        throw new NotImplementedException();
     }
 }

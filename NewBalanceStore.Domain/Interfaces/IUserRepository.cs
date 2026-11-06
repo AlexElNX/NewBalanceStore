@@ -21,6 +21,13 @@ public interface IUserRepository
     Task CreateAsync(User user);
 
     /// <summary>
+    /// Асинхронно обновляет данные пользователя.
+    /// </summary>
+    /// <param name="user">Пользователь для обновления.</param>
+    /// <returns>Задача, представляющая асинхронную операцию обновления.</returns>
+    Task UpdateAsync(User user);
+
+    /// <summary>
     /// Отримує перелік усіх користувачів системи.
     /// </summary>
     /// <returns>Колекція сутностей <see cref="User"/>.</returns>

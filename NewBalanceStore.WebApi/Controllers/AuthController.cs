@@ -48,9 +48,9 @@ public class AuthController : ControllerBase
 
     /// <summary>
     /// Вхід користувача в систему за допомогою Email та пароля.
+    /// Повертає Access Token та дані користувача в тілі, а Refresh Token записує у захищену HttpOnly куку.
     /// </summary>
     /// <param name="loginDto">Облікові дані користувача.</param>
-    /// <returns>Відповідь із дійсним JWT-токеном сесії та роллю користувача.</returns>
     /// <response code="200">Автентифікація успішна, надано токен доступу.</response>
     /// <response code="401">Невірний логін або пароль.</response>
     [HttpPost("login")]
@@ -60,12 +60,59 @@ public class AuthController : ControllerBase
     {
         try
         {
-            var result = await _authService.LoginAsync(loginDto);
-            return Ok(result);
+            var (accessToken, refreshToken) = await _authService.LoginAsync(loginDto);
+
+            SetRefreshTokenCookie(refreshToken);
+
+            var response = new AuthResponseDto
+            {
+                Token = accessToken,
+                Email = loginDto.Email
+            };
+
+            return Ok(response);
         }
         catch (UnauthorizedAccessException ex)
         {
             return Unauthorized(new { message = ex.Message });
         }
+    }
+
+    /// <summary>
+    /// Оновлення Access Token за допомогою валідного Refresh Token із куки.
+    /// </summary>
+    [HttpPost("refresh")]
+    public async Task<IActionResult> RefreshToken()
+    {
+        if (!Request.Cookies.TryGetValue("refreshToken", out var refreshToken) || string.IsNullOrEmpty(refreshToken))
+        {
+            return Unauthorized(new { message = "Refresh Token відсутній у куках." });
+        }
+
+        try
+        {
+            var (newAccessToken, newRefreshToken) = await _authService.RefreshTokenAsync(refreshToken);
+
+            SetRefreshTokenCookie(newRefreshToken);
+
+            return Ok(new { AccessToken = newAccessToken });
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            return Unauthorized(new { message = ex.Message });
+        }
+    }
+
+    private void SetRefreshTokenCookie(string refreshToken)
+    {
+        var cookieOptions = new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = true,
+            SameSite = SameSiteMode.Strict,
+            Expires = DateTime.UtcNow.AddDays(7)
+        };
+
+        Response.Cookies.Append("refreshToken", refreshToken, cookieOptions);
     }
 }

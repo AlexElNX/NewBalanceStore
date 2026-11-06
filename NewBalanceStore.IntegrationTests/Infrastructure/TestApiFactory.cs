@@ -1,6 +1,3 @@
-using System.Security.Claims;
-using Moq;
-using System.Text.Encodings.Web;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -10,8 +7,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Moq;
+using NewBalanceStore.Application.Common.Security;
 using NewBalanceStore.Domain.Entities;
 using NewBalanceStore.Domain.Interfaces;
+using System.Security.Claims;
+using System.Text.Encodings.Web;
 
 namespace NewBalanceStore.IntegrationTests.Infrastructure;
 
@@ -50,6 +51,11 @@ public sealed class TestApiFactory : WebApplicationFactory<Program>
                 options.DefaultForbidScheme = TestAuthenticationHandler.SchemeName;
             }).AddScheme<AuthenticationSchemeOptions, TestAuthenticationHandler>(
                 TestAuthenticationHandler.SchemeName, _ => { });
+
+            services.RemoveAll<IJwtTokenGenerator>();
+            services.AddSingleton(Mock.Of<IJwtTokenGenerator>(g =>
+                g.GenerateAccessToken(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<IList<string>>()) == "test-token"
+            ));
         });
     }
 }

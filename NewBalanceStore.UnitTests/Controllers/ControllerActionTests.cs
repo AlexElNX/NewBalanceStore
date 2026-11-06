@@ -1,12 +1,18 @@
+using ErrorOr;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using NUnit.Framework;
+using NewBalanceStore.Application.CQRS.Orders.Commands;
+using NewBalanceStore.Application.CQRS.Orders.Queries;
+using NewBalanceStore.Application.CQRS.Products.Commands;
+using NewBalanceStore.Application.CQRS.Products.Queries;
 using NewBalanceStore.Application.DTOs;
 using NewBalanceStore.Application.Interfaces;
 using NewBalanceStore.Application.Services;
 using NewBalanceStore.Domain.Interfaces;
 using NewBalanceStore.WebApi.Controllers;
+using NUnit.Framework;
 using Assert = NUnit.Framework.Assert;
 
 namespace NewBalanceStore.UnitTests.Controllers;
@@ -16,6 +22,7 @@ public class ProductsControllerTests
 {
     private Mock<IProductService> _productServiceMock = null!;
     private Mock<IPhotoService> _photoServiceMock = null!;
+    private Mock<IMediator> _mediatorMock = null!;
     private ProductsController _controller = null!;
 
     [SetUp]
@@ -23,7 +30,9 @@ public class ProductsControllerTests
     {
         _productServiceMock = new Mock<IProductService>();
         _photoServiceMock = new Mock<IPhotoService>();
-        _controller = new ProductsController(_productServiceMock.Object, _photoServiceMock.Object);
+        _mediatorMock = new Mock<IMediator>();
+
+        _controller = new ProductsController(_productServiceMock.Object, _photoServiceMock.Object, _mediatorMock.Object);
     }
 
     [Test]
@@ -42,39 +51,45 @@ public class ProductsControllerTests
     [Test]
     public async Task GetById_WhenProductExists_ReturnsOk()
     {
-        _productServiceMock.Setup(s => s.GetByIdAsync("1"))
+        _mediatorMock.Setup(m => m.Send(It.IsAny<GetProductByIdQuery>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(new ProductDto { Id = 1, Name = "Sneaker" });
 
         var result = await _controller.GetById("1");
 
-        Assert.That(result.Result, Is.InstanceOf<OkObjectResult>());
-        Assert.That(((OkObjectResult)result.Result!).Value, Is.InstanceOf<ProductDto>());
+        Assert.That(result, Is.InstanceOf<OkObjectResult>());
+        Assert.That(((OkObjectResult)result).Value, Is.InstanceOf<ProductDto>());
     }
 
     [Test]
     public async Task GetById_WhenProductDoesNotExist_ReturnsNotFound()
     {
-        _productServiceMock.Setup(s => s.GetByIdAsync("missing")).ReturnsAsync((ProductDto?)null);
+        _mediatorMock.Setup(m => m.Send(It.IsAny<GetProductByIdQuery>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(Error.NotFound("Product.NotFound", "Не найден"));
 
         var result = await _controller.GetById("missing");
 
-        Assert.That(result.Result, Is.InstanceOf<NotFoundObjectResult>());
+        Assert.That(result, Is.InstanceOf<ObjectResult>());
+        var objectResult = (ObjectResult)result;
+        Assert.That(objectResult.StatusCode, Is.EqualTo(StatusCodes.Status404NotFound));
     }
 
     [Test]
     public async Task Create_ReturnsCreatedAtAction()
     {
         var dto = new CreateProductDto { Name = "Sneaker" };
-        _productServiceMock.Setup(s => s.CreateAsync(dto))
+
+        _mediatorMock
+            .Setup(m => m.Send(It.IsAny<CreateProductCommand>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(new ProductDto { Id = 7, Name = "Sneaker" });
 
         var result = await _controller.Create(dto);
 
-        Assert.That(result.Result, Is.InstanceOf<CreatedAtActionResult>());
-        var created = (CreatedAtActionResult)result.Result!;
+        Assert.That(result, Is.InstanceOf<CreatedAtActionResult>());
+        var created = (CreatedAtActionResult)result;
         Assert.That(created.ActionName, Is.EqualTo(nameof(ProductsController.GetById)));
         Assert.That(created.RouteValues!["id"], Is.EqualTo(7));
-        _productServiceMock.Verify(s => s.CreateAsync(dto), Times.Once);
+
+        _mediatorMock.Verify(m => m.Send(It.IsAny<CreateProductCommand>(), It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Test]
@@ -96,7 +111,7 @@ public class ProductsControllerTests
 
         var result = await _controller.Update("missing", new CreateProductDto());
 
-        Assert.That(result, Is.InstanceOf<NotFoundObjectResult>());
+        Assert.That(result, Is.InstanceOf<NotFoundResult>());
     }
 
     [Test]
@@ -116,7 +131,7 @@ public class ProductsControllerTests
 
         var result = await _controller.Delete("missing");
 
-        Assert.That(result, Is.InstanceOf<NotFoundObjectResult>());
+        Assert.That(result, Is.InstanceOf<NotFoundResult>());
     }
 
     [Test]
@@ -159,21 +174,22 @@ public class ProductsControllerTests
 [TestFixture]
 public class OrdersControllerTests
 {
-    private Mock<IOrderService> _orderServiceMock = null!;
+    private Mock<IMediator> _mediatorMock = null!;
     private OrdersController _controller = null!;
 
     [SetUp]
     public void SetUp()
     {
-        _orderServiceMock = new Mock<IOrderService>();
-        _controller = new OrdersController(_orderServiceMock.Object);
+        _mediatorMock = new Mock<IMediator>();
+        _controller = new OrdersController(_mediatorMock.Object);
     }
 
     [Test]
     public async Task Create_ReturnsCreatedAtAction()
     {
         var dto = new CreateOrderDto { CustomerName = "John Doe" };
-        _orderServiceMock.Setup(s => s.CreateOrderAsync(dto))
+
+        _mediatorMock.Setup(m => m.Send(It.IsAny<CreateOrderCommand>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(new OrderDto { Id = 3, CustomerName = "John Doe" });
 
         var result = await _controller.Create(dto);
@@ -182,12 +198,14 @@ public class OrdersControllerTests
         var created = (CreatedAtActionResult)result;
         Assert.That(created.ActionName, Is.EqualTo(nameof(OrdersController.GetById)));
         Assert.That(created.RouteValues!["id"], Is.EqualTo(3));
+
+        _mediatorMock.Verify(m => m.Send(It.IsAny<CreateOrderCommand>(), It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Test]
     public async Task GetById_WhenOrderExists_ReturnsOk()
     {
-        _orderServiceMock.Setup(s => s.GetOrderByIdAsync(3))
+        _mediatorMock.Setup(m => m.Send(It.IsAny<GetOrderByIdQuery>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(new OrderDto { Id = 3 });
 
         var result = await _controller.GetById(3);
@@ -198,7 +216,8 @@ public class OrdersControllerTests
     [Test]
     public async Task GetById_WhenOrderDoesNotExist_ReturnsNotFound()
     {
-        _orderServiceMock.Setup(s => s.GetOrderByIdAsync(999)).ReturnsAsync((OrderDto?)null);
+        _mediatorMock.Setup(m => m.Send(It.IsAny<GetOrderByIdQuery>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync((OrderDto?)null);
 
         var result = await _controller.GetById(999);
 
@@ -206,15 +225,15 @@ public class OrdersControllerTests
     }
 
     [Test]
-    public async Task UpdateStatus_DelegatesToServiceAndReturnsNoContent()
+    public async Task UpdateStatus_DelegatesToMediatorAndReturnsNoContent()
     {
-        _orderServiceMock.Setup(s => s.UpdateOrderStatusAsync(3, "Shipped"))
-            .Returns(Task.CompletedTask);
+        _mediatorMock.Setup(m => m.Send(It.IsAny<UpdateOrderStatusCommand>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(Unit.Value);
 
         var result = await _controller.UpdateStatus(3, "Shipped");
 
         Assert.That(result, Is.InstanceOf<NoContentResult>());
-        _orderServiceMock.Verify(s => s.UpdateOrderStatusAsync(3, "Shipped"), Times.Once);
+        _mediatorMock.Verify(m => m.Send(It.IsAny<UpdateOrderStatusCommand>(), It.IsAny<CancellationToken>()), Times.Once);
     }
 }
 
@@ -259,8 +278,9 @@ public class AuthControllerTests
     public async Task Login_WhenSuccessful_ReturnsOk()
     {
         var dto = new UserLoginDto { Email = "test@example.com", Password = "secret" };
+
         _authServiceMock.Setup(s => s.LoginAsync(dto))
-            .ReturnsAsync(new AuthResponseDto { Email = dto.Email, Token = "token" });
+            .ReturnsAsync(("access-token", "refresh-token"));
 
         var result = await _controller.Login(dto);
 

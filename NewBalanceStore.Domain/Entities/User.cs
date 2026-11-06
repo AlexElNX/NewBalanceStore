@@ -45,6 +45,16 @@ public class User
     public UserRole Role { get; set; } = UserRole.Customer;
 
     /// <summary>
+    /// Токен оновлення (Refresh Token) для забезпечення довготривалих сесій.
+    /// </summary>
+    public string? RefreshToken { get; set; }
+
+    /// <summary>
+    /// Дата та час завершення терміну дії Refresh Token (в UTC).
+    /// </summary>
+    public DateTime? RefreshTokenExpiryTime { get; set; }
+
+    /// <summary>
     /// Обчислювана властивість: повне ім'я та прізвище користувача.
     /// </summary>
     public string FullName => $"{FirstName} {LastName}".Trim();

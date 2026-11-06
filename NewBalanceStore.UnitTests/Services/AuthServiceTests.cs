@@ -1,6 +1,8 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using NewBalanceStore.Infrastructure.Authentication;
+using Microsoft.Extensions.Configuration;
 using Moq;
 using NewBalanceStore.Application.DTOs;
+using NewBalanceStore.Application.Common.Security;
 using NewBalanceStore.Domain.Entities;
 using NewBalanceStore.Domain.Interfaces;
 using NewBalanceStore.Infrastructure.Services;
@@ -28,7 +30,13 @@ public class AuthServiceTests
 
         var fakeUserRepository = new FakeUserRepository();
         var emailServiceMock = new Mock<IEmailService>();
-        _authService = new AuthService(fakeUserRepository, configuration, emailServiceMock.Object); 
+
+        var jwtTokenGeneratorMock = new Mock<IJwtTokenGenerator>();
+        jwtTokenGeneratorMock
+            .Setup(g => g.GenerateAccessToken(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<IList<string>>()))
+            .Returns("test-access-token");
+
+        _authService = new AuthService(fakeUserRepository, jwtTokenGeneratorMock.Object);
     }
 
     [Test]
@@ -63,7 +71,7 @@ public class AuthServiceTests
     }
 
     [Test]
-    public async Task LoginAsync_ShouldReturnToken_WhenCredentialsAreValid()
+    public async Task LoginAsync_ShouldReturnTokens_WhenCredentialsAreValid()
     {
         var email = $"login_{Guid.NewGuid()}@example.com";
         var password = "CorrectPassword123!";
@@ -77,11 +85,12 @@ public class AuthServiceTests
 
         var loginDto = new UserLoginDto { Email = email, Password = password };
 
-        var result = await _authService.LoginAsync(loginDto);
+        var (accessToken, refreshToken) = await _authService.LoginAsync(loginDto);
 
-        Assert.NotNull(result);
-        Assert.NotNull(result.Token);
-        Assert.That(result.Email, Is.EqualTo(email));
+        Assert.NotNull(accessToken);
+        Assert.That(accessToken, Is.Not.Empty);
+        Assert.NotNull(refreshToken);
+        Assert.That(refreshToken, Is.Not.Empty);
     }
 
     [Test]
@@ -101,7 +110,7 @@ public class AuthServiceTests
     }
 
     [Test]
-    public async Task LoginAsync_ShouldReturnToken_WhenEmailDiffersOnlyByCase()
+    public async Task LoginAsync_ShouldReturnTokens_WhenEmailDiffersOnlyByCase()
     {
         var email = $"case_{Guid.NewGuid()}@example.com";
         const string password = "CorrectPassword123!";
@@ -112,14 +121,15 @@ public class AuthServiceTests
             FullName = "Alex Smith"
         });
 
-        var result = await _authService.LoginAsync(new UserLoginDto
+        var (accessToken, refreshToken) = await _authService.LoginAsync(new UserLoginDto
         {
             Email = email.ToUpperInvariant(),
             Password = password
         });
 
-        Assert.NotNull(result.Token);
-        Assert.That(result.Email, Is.EqualTo(email));
+        Assert.NotNull(accessToken);
+        Assert.That(accessToken, Is.Not.Empty);
+        Assert.NotNull(refreshToken);
     }
 
     [Test]
@@ -133,6 +143,7 @@ public class AuthServiceTests
 
         await Assert.ThrowsAsync<UnauthorizedAccessException>(() => _authService.LoginAsync(loginDto));
     }
+
     public class FakeUserRepository : IUserRepository
     {
         private readonly List<User> _users = new();
@@ -156,6 +167,17 @@ public class AuthServiceTests
         public Task<IEnumerable<User>> GetAllAsync()
         {
             return Task.FromResult<IEnumerable<User>>(_users);
+        }
+
+        public Task UpdateAsync(User user)
+        {
+            var existingUser = _users.FirstOrDefault(u => u.Id == user.Id);
+            if (existingUser != null)
+            {
+                _users.Remove(existingUser);
+                _users.Add(user);
+            }
+            return Task.CompletedTask;
         }
     }
 }
