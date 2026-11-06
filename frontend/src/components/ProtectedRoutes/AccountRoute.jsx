@@ -1,11 +1,12 @@
 import { Navigate } from "react-router-dom";
 import { getCurrentUser, getToken } from "../../services/api/authService.js";
+import NotFound from "../../pages/NotFound/NotFound.jsx";
 
 function AccountRoute({ children }) {
     const user = getCurrentUser();
 
     if (!user) {
-        return <Navigate to="/" replace />;
+        return <NotFound/>;
     }
 
     const token = getToken();

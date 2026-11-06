@@ -17,7 +17,6 @@
     justify-content: center;
     align-items: center;
     gap: 24px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .footer-signup p {
@@ -29,6 +28,7 @@
     width: 140px;
     height: 48px;
     border: none;
+    border-radius: 2px;
     background: white;
     color: black;
     font-weight: 600;
@@ -73,10 +73,37 @@
     margin-bottom: 18px;
 }
 
+.footer-column-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0;
+    border: none;
+    background: none;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    cursor: default;
+}
+
+.footer-column-chevron {
+    display: none;
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+}
+
+.footer-column-links {
+    display: flex;
+    flex-direction: column;
+}
+
 .footer-column a {
-    color: #cccccc;
+    color: #ffffff;
     text-decoration: none;
-    font-size: 14px;
+    font-size: 15px;
     line-height: 1.6;
     margin-bottom: 8px;
     transition: color 0.2s ease;
@@ -90,14 +117,15 @@
 /* BRAND SECTION */
 
 .footer-brand {
-    max-width: 320px;
+    max-width: 340px;
     flex-shrink: 0;
 }
 
 .footer-brand h2 {
     font-family: "Libre Baskerville", serif;
-    font-size: 22px;
+    font-size: 24px;
     font-weight: 400;
+    letter-spacing: -0.3px;
     margin-bottom: 20px;
 }
 
@@ -108,9 +136,9 @@
 }
 
 .footer-brand p {
-    font-size: 14px;
-    line-height: 1.6;
-    color: #cccccc;
+    font-size: 15px;
+    line-height: 2;
+    color: #ffffff;
     margin-bottom: 28px;
 }
 
@@ -121,23 +149,33 @@
     gap: 12px;
 }
 
+.social-icons a {
+    display: flex;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.social-icons a:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 3px;
+}
+
 .social-icons img {
     width: 26px;
     height: 26px;
     cursor: pointer;
-    transition: opacity 0.2s ease;
     filter: brightness(0) invert(1);
 }
 
-.social-icons img:hover {
-    opacity: 0.7;
+.footer-region {
+    display: none;
 }
 
 /* SECONDARY FOOTER */
 
 .footer-secondary {
-    background: #f3f3f3;
-    color: #000;
+    background: #fafafa;
+    color: #111;
     font-size: 12px;
     width: 100%;
 }
@@ -146,55 +184,89 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 30px;
-    padding: 24px 20px 16px;
-    border-bottom: 1px solid #e0e0e0;
+    gap: 32px;
+    padding: 28px 20px 0;
 }
 
 .footer-secondary-brands span {
-    font-size: 13px;
-    color: #555;
+    font-size: 14px;
+    color: #111;
+}
+
+.footer-secondary-brands a {
+    display: inline-flex;
+    align-items: center;
 }
 
 .footer-secondary-brands img {
-    height: 28px;
+    height: 30px;
     width: auto;
     object-fit: contain;
 }
 
 .footer-secondary-top {
     display: flex;
-    flex-wrap: wrap;
-    gap: 16px 24px;
+    flex-wrap: nowrap;
+    gap: 30px;
     align-items: center;
     justify-content: center;
-    padding: 20px 40px;
-    max-width: 1440px;
+    padding: 36px 40px 30px;
+    max-width: 1480px;
     margin: 0 auto;
 }
 
 .footer-secondary-top a {
-    font-size: 13px;
+    flex: 0 1 auto;
+    font-size: 14px;
+    line-height: 1.5;
     color: #111;
-    text-decoration: none;
     font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
 }
 
 .footer-secondary-top a:hover {
-    text-decoration: underline;
+    text-decoration-thickness: 2px;
 }
 
 .footer-secondary-top .US-flag {
-    width: 22px;
-    height: 14px;
+    flex-shrink: 0;
+    width: 32px;
+    height: 20px;
     object-fit: cover;
 }
 
-.footer-secondary-bottom {
-    text-align: center;
-    padding: 12px 20px 24px;
-    color: #666;
+.footer-secondary-top .footer-locale {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+    font-weight: 700;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.footer-locale-divider {
+    width: 1px;
+    height: 16px;
+    background: #111;
+}
+
+.footer-privacy-icon {
+    display: inline-block;
+    width: 48px;
+    height: 22px;
+    margin-left: 8px;
+    vertical-align: middle;
+}
+
+.footer-copyright {
+    flex: 0 1 150px;
+    margin: 0;
+    color: #111;
     font-size: 12px;
+    line-height: 1.6;
+    text-align: right;
 }
 
 /* ==============================
@@ -242,43 +314,141 @@
 /* Tablet Portrait */
 @media (max-width: 768px) {
     .footer-signup {
-        flex-direction: column;
-        text-align: center;
-        gap: 16px;
+        justify-content: center;
+        gap: 30px;
+        padding: 40px 18px 24px;
+    }
+
+    .footer-signup p {
+        max-width: 170px;
+        font-size: 16px;
+        font-weight: 700;
+        line-height: 1.5;
     }
 
     .footer-signup button {
-        width: 100%;
-        max-width: 300px;
+        flex-shrink: 0;
+        width: 160px;
+        height: 58px;
+        font-weight: 400;
+        font-size: 15px;
+    }
+
+    .footer-content {
+        flex-direction: column;
+        gap: 40px;
+        padding: 20px 18px 50px;
     }
 
     .footer-links {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 30px 20px;
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+    .footer-column h3 {
+        margin: 0;
+    }
+
+    .footer-column-toggle {
+        padding: 20px 0;
+        font-size: 17px;
+        font-weight: 500;
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .footer-column-toggle:focus-visible {
+        outline: 2px solid #fff;
+        outline-offset: 2px;
+    }
+
+    .footer-column-chevron {
+        display: block;
+    }
+
+    .footer-column-open .footer-column-chevron {
+        transform: rotate(180deg);
+    }
+
+    .footer-column-links {
+        display: none;
+        padding-bottom: 12px;
+    }
+
+    .footer-column-open .footer-column-links {
+        display: flex;
+    }
+
+    .footer-brand h2 {
+        font-size: 30px;
+    }
+
+    .footer-region {
+        display: flex;
+        align-items: center;
+        gap: 28px;
+        margin-top: 60px;
+        font-size: 13px;
+    }
+
+    .footer-region-flag {
+        width: 38px;
+        height: 22px;
+        object-fit: cover;
+    }
+
+    .footer-secondary {
+        background: #fafafa;
     }
 
     .footer-secondary-brands {
-        flex-direction: column;
-        gap: 15px;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        gap: 14px 24px;
+        padding: 36px 18px 30px;
+        border-bottom: none;
+    }
+
+    .footer-secondary-brands span {
+        flex-basis: 100%;
+        font-size: 15px;
+    }
+
+    .footer-secondary-brands img {
+        height: 26px;
     }
 
     .footer-secondary-top {
         flex-direction: column;
-        align-items: center;
-        text-align: center;
+        align-items: flex-start;
+        text-align: left;
         gap: 12px;
+        padding: 30px 18px 10px;
+    }
+
+    .footer-secondary-top a {
+        font-size: 15px;
+        font-weight: 700;
+        text-decoration: underline;
+        text-underline-offset: 3px;
+    }
+
+    .footer-secondary-top .US-flag,
+    .footer-secondary-top .footer-locale {
+        display: none;
+    }
+
+    .footer-copyright {
+        flex: none;
+        text-align: left;
+        padding: 12px 0 20px;
     }
 }
 
 /* Mobile */
 @media (max-width: 425px) {
     .footer-content {
-        padding: 40px 20px;
-    }
-
-    .footer-links {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 24px 15px;
+        padding: 20px 18px 50px;
     }
 
     .footer-column h3 {
@@ -286,21 +456,16 @@
     }
 
     .footer-column a {
-        font-size: 13px;
+        font-size: 14px;
         white-space: normal;
     }
 
     .footer-brand h2 {
-        font-size: 20px;
+        font-size: 26px;
     }
 }
 
 @media (max-width: 375px) {
-    .footer-links {
-        grid-template-columns: 1fr;
-        text-align: left;
-    }
-
     .social-icons {
         gap: 16px;
     }
@@ -308,11 +473,19 @@
 
 @media (max-width: 320px) {
     .footer-content {
-        padding: 30px 15px;
+        padding: 16px 15px 40px;
+    }
+
+    .footer-signup {
+        gap: 16px;
     }
 
     .footer-signup p {
-        font-size: 13px;
+        font-size: 14px;
+    }
+
+    .footer-signup button {
+        width: 130px;
     }
 
     .footer-secondary-top a {

@@ -9,6 +9,11 @@
     transform: translateY(-100%);
 }
 
+:global(body.search-open) .headerBar {
+    transform: none !important;
+    transition: none;
+}
+
 .hero {
     position: relative;
     width: 100%;
@@ -24,7 +29,7 @@
     border-bottom: 1px solid #e5e5e5;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 992px) {
     .hero {
         height: 66px;
     }
@@ -170,6 +175,28 @@
     color: #767676;
     font-weight: 400;
     cursor: default;
+}
+
+.lowStock {
+    margin: 32px 0 0;
+    color: #111;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.lowStock + .addToBag {
+    margin-top: 24px;
+}
+
+.soldOut {
+    margin: 32px 0 0;
+    color: #111;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.soldOut + .addToBag {
+    margin-top: 24px;
 }
 
 .selection {

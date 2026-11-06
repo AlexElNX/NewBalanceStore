@@ -1,0 +1,200 @@
+.trackPage.hero {
+    position: relative;
+    width: 100%;
+    max-width: 1940px;
+    height: 10px;
+    min-height: 10px;
+    margin: 0 auto;
+    overflow: visible;
+}
+
+.container {
+    width: 100%;
+    max-width: 1940px;
+    margin: 100px auto 0;
+    padding: 0 max(16px, 8.4vw) 60px;
+    color: #111;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.breadcrumbs {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+}
+
+.breadcrumbs a {
+    color: #111;
+    font-size: 16px;
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.separator {
+    color: #767676;
+}
+
+.content {
+    max-width: 980px;
+    margin: 44px auto 0;
+}
+
+.title {
+    margin: 0 0 12px;
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1.15;
+}
+
+.subtitle {
+    margin: 0 0 22px;
+    font-size: 16px;
+}
+
+.accountButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 166px;
+    height: 54px;
+    padding: 0 24px;
+    background: #222;
+    color: #fff;
+    font-family: inherit;
+    font-size: 14px;
+    text-decoration: none;
+    box-sizing: border-box;
+    transition: background 0.2s ease;
+}
+
+.accountButton:hover {
+    background: #000;
+}
+
+.faqTitle {
+    margin: 56px 0 10px;
+    font-size: 32px;
+    font-weight: 700;
+}
+
+.faqList {
+    padding: 0 0 0 9px;
+}
+
+.faqItem {
+    border-bottom: 1px solid #ddd;
+}
+
+.faqHeading {
+    margin: 0;
+    font-size: inherit;
+    font-weight: inherit;
+}
+
+.faqTrigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    width: 100%;
+    padding: 16px 0;
+    border: none;
+    background: none;
+    color: #111;
+    font-family: inherit;
+    font-size: 16px;
+    text-align: left;
+    cursor: pointer;
+}
+
+.faqTrigger:focus-visible {
+    outline: 2px solid #111;
+    outline-offset: 2px;
+}
+
+.chevron {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+}
+
+.chevronOpen {
+    transform: rotate(180deg);
+}
+
+.faqPanel {
+    padding: 4px 40px 24px 0;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.faqPanel:empty {
+    padding-bottom: 0;
+}
+
+.faqPanel p {
+    margin: 0 0 12px;
+}
+
+.faqPanel ul,
+.faqPanel ol {
+    margin: 0 0 12px;
+    padding-left: 22px;
+}
+
+.faqPanel li {
+    margin-bottom: 4px;
+}
+
+.faqPanel .plainList {
+    padding-left: 0;
+    list-style: none;
+}
+
+.faqPanel .plainList li {
+    margin-bottom: 0;
+}
+
+.faqPanel a {
+    color: inherit;
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    .container {
+        margin-top: 90px;
+        padding: 0 16px 32px;
+    }
+
+    .content {
+        margin-top: 28px;
+    }
+
+    .title {
+        font-size: 30px;
+    }
+
+    .accountButton {
+        width: 100%;
+    }
+
+    .faqTitle {
+        font-size: 28px;
+        margin-top: 44px;
+    }
+
+    .faqList {
+        padding: 0;
+    }
+
+    .faqTrigger {
+        font-size: 16px;
+    }
+
+    .faqPanel {
+        padding-right: 0;
+    }
+}

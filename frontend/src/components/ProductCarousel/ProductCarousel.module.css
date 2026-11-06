@@ -112,3 +112,30 @@
 @media (max-width: 480px) {
     .item { flex-basis: 70%; }
 }
+
+.wide .title {
+    padding: 0 40px;
+}
+
+.wide .item {
+    flex-basis: calc((100% - 4 * 4px) / 4.5);
+}
+
+.wide .item > div > :not(:first-child) {
+    padding-left: 26px;
+    padding-right: 16px;
+}
+
+@media (max-width: 1279px) {
+    .wide .item { flex-basis: calc((100% - 3 * 4px) / 3.5); }
+}
+
+@media (max-width: 1023px) {
+    .wide .item { flex-basis: calc((100% - 2 * 4px) / 2.5); }
+}
+
+@media (max-width: 767px) {
+    .wide .title { padding: 0 16px; }
+    .wide .item { flex-basis: 70%; }
+    .wide .item > div > :not(:first-child) { padding-left: 16px; }
+}

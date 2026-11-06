@@ -1,0 +1,340 @@
+.storePage.hero {
+    position: relative;
+    width: 100%;
+    max-width: 1940px;
+    height: 10px;
+    min-height: 10px;
+    margin: 0 auto;
+    overflow: visible;
+}
+
+.container {
+    width: 100%;
+    max-width: 1940px;
+    margin: 90px auto 0;
+    padding: 0 max(16px, 7.5vw) 40px;
+    color: #111;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.layout {
+    display: grid;
+    grid-template-columns: 450px minmax(0, 1fr);
+    min-height: 620px;
+    border-top: 1px solid #e5e5e5;
+}
+
+.panel {
+    border-right: 1px solid #e5e5e5;
+}
+
+.searchBlock {
+    padding: 32px 28px 28px;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.title {
+    margin: 0 0 24px;
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1.15;
+}
+
+.hint {
+    margin: 0 0 14px;
+    color: #666;
+    font-size: 15px;
+}
+
+.searchForm {
+    display: flex;
+    align-items: center;
+    height: 48px;
+    padding: 0 8px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    background: #f0f0f0;
+}
+
+.searchForm:focus-within {
+    border-color: #111;
+}
+
+.iconButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    border: none;
+    background: none;
+    color: #111;
+    cursor: pointer;
+}
+
+.iconButton:focus-visible {
+    outline: 2px solid #111;
+    outline-offset: 1px;
+}
+
+.icon {
+    width: 18px;
+    height: 18px;
+}
+
+.searchForm .searchInput {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    padding: 0 6px;
+    border: none;
+    border-radius: 0;
+    background: transparent;
+    color: #111;
+    font-family: inherit;
+    font-size: 15px;
+    outline: none;
+}
+
+.notice {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-top: 14px;
+    padding: 14px 14px 14px 16px;
+    border-left: 3px solid #cf0a2c;
+    background: #f7f7f7;
+    font-size: 14px;
+    line-height: 1.5;
+    animation: noticeIn 0.2s ease;
+}
+
+.noticeIcon {
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+    color: #cf0a2c;
+}
+
+.noticeText {
+    flex: 1;
+}
+
+.noticeText p {
+    margin: 0;
+    color: #444;
+}
+
+.noticeText .noticeTitle {
+    margin-bottom: 2px;
+    color: #111;
+    font-weight: 700;
+}
+
+.noticeClose {
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    border: none;
+    background: none;
+    color: #666;
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.noticeClose:hover {
+    color: #111;
+}
+
+@keyframes noticeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.directory {
+    margin: 0;
+    padding: 24px 28px;
+    border-bottom: 1px solid #e5e5e5;
+    font-size: 16px;
+    line-height: 2;
+}
+
+.directory a {
+    color: #cf0a2c;
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.results {
+    padding: 32px 0 0 40px;
+}
+
+.resultsHeader {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 8px 16px;
+    margin-bottom: 20px;
+}
+
+.resultsTitle {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.resultsCount {
+    color: #666;
+    font-size: 14px;
+}
+
+.clearButton {
+    margin-left: auto;
+    padding: 0;
+    border: none;
+    background: none;
+    color: #111;
+    font-family: inherit;
+    font-size: 14px;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    cursor: pointer;
+}
+
+.storeList {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.storeCard {
+    display: flex;
+    gap: 14px;
+    padding: 20px;
+    border: 1px solid #e5e5e5;
+    transition: border-color 0.2s ease;
+}
+
+.storeCard:hover {
+    border-color: #111;
+}
+
+.pin {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    color: #cf0a2c;
+}
+
+.storeInfo {
+    min-width: 0;
+}
+
+.storeName {
+    margin: 0 0 6px;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.storeCity {
+    margin: 0 0 6px;
+    color: #444;
+    font-size: 14px;
+}
+
+.storeLink {
+    color: #111;
+    font-size: 14px;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+button.storeLink {
+    padding: 0;
+    border: none;
+    background: none;
+    font-family: inherit;
+    cursor: pointer;
+}
+
+button.storeLink:disabled {
+    color: #757575;
+    text-decoration: none;
+    cursor: default;
+}
+
+.storeDetails {
+    margin-top: 10px;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.storeDetails p {
+    margin: 0;
+}
+
+.storeDetails button {
+    margin-top: 8px;
+}
+
+.empty {
+    padding: 48px 24px;
+    background: #f5f5f5;
+    color: #555;
+    font-size: 15px;
+    text-align: center;
+}
+
+.empty p {
+    margin: 0;
+}
+
+@media (max-width: 1024px) {
+    .layout {
+        grid-template-columns: minmax(0, 1fr);
+        min-height: 0;
+    }
+
+    .panel {
+        border-right: none;
+    }
+
+    .results {
+        padding: 28px 0 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 0 16px 32px;
+    }
+
+    .searchBlock {
+        padding: 24px 0;
+    }
+
+    .directory {
+        padding: 20px 0;
+    }
+
+    .title {
+        font-size: 26px;
+    }
+
+    .clearButton {
+        margin-left: 0;
+    }
+}

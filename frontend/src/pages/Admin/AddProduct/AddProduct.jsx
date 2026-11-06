@@ -5,12 +5,49 @@ import TopHeader from "../../../components/TopHeader/TopHeader.jsx";
 import MainHeader from "../../../components/MainHeader/MainHeader.jsx";
 import Footer from "../../../components/Footer/Footer.jsx";
 import { createProduct, fetchProduct, updateProduct } from "../../../services/api/productsApi.js";
+import Notice from "../../../components/Notice/Notice.jsx";
+import { getProductSubcategory } from "../../Products/productTaxonomy.js";
 
 const TYPE_TO_CATEGORY = {
     Footwear: "Shoes",
     Clothing: "Clothing",
     Accessories: "Accessories"
 };
+
+const SUBCATEGORIES = {
+    Shoes: [],
+    Clothing: ["Shirts", "Shorts", "Pants", "Hoodies & Sweatshirts", "Jackets & Vests"],
+    Accessories: ["Socks", "Bags", "Hats & Gloves"]
+};
+
+const KIDS_SUBCATEGORIES = {
+    Shoes: ["Big Kids", "Little Kids", "Babies & Toddlers"],
+    Clothing: ["Big Kids", "Little Kids", "Babies & Toddlers"],
+    Accessories: SUBCATEGORIES.Accessories
+};
+
+const KIDS_SHOE_SIZES = {
+    "Big Kids": [3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7],
+    "Little Kids": [10.5, 11, 11.5, 12, 12.5, 13, 13.5, 1, 1.5, 2, 2.5, 3],
+    "Babies & Toddlers": [2, 3, 4, 5, 6, 7, 8, 9, 10]
+};
+
+const SHOE_ACTIVITIES = ["Lifestyle", "Running", "Walking", "Cleats", "Training", "Hiking & Trail", "Tennis", "Basketball", "Skateboarding", "Sandals"];
+const MEN_SHOE_ACTIVITIES = ["Lifestyle", "Running", "Walking", "Cleats", "Basketball", "Hiking & Trail", "Skateboarding", "Training", "Tennis", "Sandals"];
+const SPORTS = ["Soccer", "Tennis", "Running", "Basketball", "Football", "Training", "Golf"];
+const KIDS_SPORTS = ["Basketball", "Baseball", "Soccer", "Running", "Tennis", "Lacrosse", "Skateboarding", "Softball"];
+
+function getSubcategoryOptions(category, gender) {
+    const source = gender === "Kids" ? KIDS_SUBCATEGORIES : SUBCATEGORIES;
+    return source[category] || [];
+}
+
+function getActivityOptions(category, gender) {
+    const isKids = gender === "Kids";
+    if (category === "Shoes")
+        return isKids ? ["Lifestyle", ...KIDS_SPORTS] : (gender === "Men" ? MEN_SHOE_ACTIVITIES : SHOE_ACTIVITIES);
+    return isKids ? KIDS_SPORTS : SPORTS;
+}
 
 function categoryToType(category) {
     if (category === "Shoes") return "Footwear";
@@ -32,6 +69,7 @@ function AddProduct() {
     const [loadedProduct, setLoadedProduct] = useState(null);
     const [loadError, setLoadError] = useState("");
     const [isSaving, setIsSaving] = useState(false);
+    const [notice, setNotice] = useState(null);
 
     // Form fields
     const [productName, setProductName] = useState("");
@@ -39,6 +77,7 @@ function AddProduct() {
     const [category, setCategory] = useState("Shoes");
     const [gender, setGender] = useState("Unisex");
     const [activity, setActivity] = useState("Lifestyle");
+    const [subcategory, setSubcategory] = useState("");
     const [price, setPrice] = useState("");
     const [oldPrice, setOldPrice] = useState("");
 
@@ -54,16 +93,20 @@ function AddProduct() {
 
     const availableColors = [
         "Black", "White", "Red", "Grey", "Blue",
-        "Green", "Pink", "Tan", "Orange", "Purple"
+        "Green", "Pink", "Tan", "Orange", "Purple",
+        "Brown", "Yellow"
     ];
 
     const footwearSizes = [5, 5.5, 6, 6.5, 7, 7.5, 8, 8.5, 9, 9.5, 10, 10.5, 11, 12, 12.5];
     const clothingSizes = ["XS", "S", "M", "L", "XL", "2XL"];
 
-    const activeSizesList = (category === "Clothing" || category === "Accessories") ? clothingSizes : footwearSizes;
+    const kidsShoeSizes = gender === "Kids" && category === "Shoes" ? KIDS_SHOE_SIZES[subcategory] : null;
+    const activeSizesList = (category === "Clothing" || category === "Accessories") ? clothingSizes : (kidsShoeSizes || footwearSizes);
 
-    const genderOptions = ["Unisex", "Men", "Women"];
-    const activityOptions = ["Lifestyle", "Running", "Training", "Soccer", "Basketball", "Tennis"];
+    const genderOptions = ["Unisex", "Men", "Women", "Kids"];
+    const isShoes = category === "Shoes";
+    const visibleActivityOptions = getActivityOptions(category, gender);
+    const subcategoryOptions = getSubcategoryOptions(category, gender);
 
     const extraColors = selectedColors.filter((colorKey) =>
         !availableColors.some((color) => color.toLowerCase() === colorKey)
@@ -110,9 +153,16 @@ function AddProduct() {
 
                 setProductName(product.name || "");
                 setDescription(product.description || "");
-                setCategory(TYPE_TO_CATEGORY[product.type] || "Accessories");
+                const loadedCategory = TYPE_TO_CATEGORY[product.type] || "Accessories";
+                setCategory(loadedCategory);
+                const loadedSubcategory = getProductSubcategory(product)?.label;
+                setSubcategory(getSubcategoryOptions(loadedCategory, product.gender).includes(loadedSubcategory) ? loadedSubcategory : "");
                 setGender(product.gender || "Unisex");
-                setActivity(product.activity || "Lifestyle");
+                const loadedActivity = product.activity || "";
+                if (product.type === "Footwear")
+                    setActivity(loadedActivity || "Lifestyle");
+                else
+                    setActivity(loadedActivity === "Lifestyle" ? "" : loadedActivity);
                 setPrice(product.price != null ? String(product.price) : "");
                 setOldPrice(product.oldPrice != null ? String(product.oldPrice) : "");
                 setIsNew(Boolean(product.isNew));
@@ -206,10 +256,35 @@ function AddProduct() {
 
 
     // Category change handler (resets variants if switching categories)
+    const syncActivity = (newCategory, newGender) => {
+        const options = getActivityOptions(newCategory, newGender);
+        if (!options.includes(activity))
+            setActivity(newCategory === "Shoes" ? "Lifestyle" : "");
+    };
+
     const handleCategoryChange = (e) => {
         const newCategory = e.target.value;
         setCategory(newCategory);
+        setSubcategory("");
+        syncActivity(newCategory, gender);
         setColorVariants({});
+    };
+
+    const handleGenderChange = (e) => {
+        const newGender = e.target.value;
+        setGender(newGender);
+        if (!getSubcategoryOptions(category, newGender).includes(subcategory)) {
+            setSubcategory("");
+            if (category === "Shoes")
+                setColorVariants({});
+        }
+        syncActivity(category, newGender);
+    };
+
+    const handleSubcategoryChange = (e) => {
+        setSubcategory(e.target.value);
+        if (gender === "Kids" && category === "Shoes")
+            setColorVariants({});
     };
 
     // Convert file to Base64
@@ -267,7 +342,8 @@ function AddProduct() {
 
 
         const type = categoryToType(category);
-        const keepCategory = isEdit && loadedProduct && loadedProduct.type === type && loadedProduct.category;
+        const isKnownSubcategory = [...Object.values(SUBCATEGORIES).flat(), ...KIDS_SUBCATEGORIES.Shoes].some((item) => item.toLowerCase() === String(loadedProduct?.category || "").toLowerCase());
+        const keepCategory = isEdit && loadedProduct && loadedProduct.type === type && loadedProduct.category && !isKnownSubcategory;
 
         const productData = {
             name: productName,
@@ -275,8 +351,8 @@ function AddProduct() {
             oldPrice: oldPrice ? parseFloat(oldPrice) : null,
             gender: gender,
             type: type,
-            category: keepCategory ? loadedProduct.category : category,
-            activity: activity,
+            category: subcategory || (keepCategory ? loadedProduct.category : category),
+            activity: isShoes || visibleActivityOptions.includes(activity) ? activity : "",
             description: description,
             images: colorImages,
             colors: selectedColors,
@@ -284,16 +360,17 @@ function AddProduct() {
             variants
         };
 
+        setNotice(null);
+
         if (isEdit) {
             setIsSaving(true);
             try {
                 await updateProduct(id, productData);
-                alert("Product updated successfully!");
-                navigate("/manage-products");
+                navigate("/manage-products", { state: { notice: "Product updated successfully!" } });
             }
             catch (error) {
                 console.error("Update product error:", error);
-                alert("Failed to save product. Please log in again as admin and try once more.");
+                setNotice({ type: "error", text: "Failed to save product. Please log in again as admin and try once more." });
             }
             finally {
                 setIsSaving(false);
@@ -301,10 +378,20 @@ function AddProduct() {
             return;
         }
 
-        await createProduct(productData);
+        setIsSaving(true);
+        try {
+            await createProduct(productData);
 
-        console.log("Created Product Data Object:", productData);
-        alert("Product added successfully!");
+            console.log("Created Product Data Object:", productData);
+            setNotice({ type: "success", text: "Product added successfully!" });
+        }
+        catch (error) {
+            console.error("Create product error:", error);
+            setNotice({ type: "error", text: "Failed to add product. Please log in again as admin and try once more." });
+        }
+        finally {
+            setIsSaving(false);
+        }
     };
 
     const pageTitle = isEdit ? "Edit Product" : "Add Product";
@@ -389,10 +476,11 @@ function AddProduct() {
                                         <label className={styles.label}>
                                             Gender <span className={styles.required}>*</span>
                                         </label>
-                                        <select value={gender} onChange={(e) => setGender(e.target.value)} required>
+                                        <select value={gender} onChange={handleGenderChange} required>
                                             <option value="Unisex">Unisex</option>
                                             <option value="Men">Men</option>
                                             <option value="Women">Women</option>
+                                            <option value="Kids">Kids</option>
                                             {!genderOptions.includes(gender) && (
                                                 <option value={gender}>{gender}</option>
                                             )}
@@ -400,18 +488,30 @@ function AddProduct() {
                                     </div>
                                 </div>
 
+                                {subcategoryOptions.length > 0 && (
+                                    <div className={styles.fieldGroup}>
+                                        <label className={styles.label}>
+                                            Subcategory <span className={styles.required}>*</span>
+                                        </label>
+                                        <select value={subcategory} onChange={handleSubcategoryChange} required>
+                                            <option value="" disabled>Select subcategory</option>
+                                            {subcategoryOptions.map((item) => (
+                                                <option key={item} value={item}>{item}</option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                )}
+
                                 <div className={styles.fieldGroup}>
                                     <label className={styles.label}>
-                                        Activity <span className={styles.required}>*</span>
+                                        {isShoes ? <>Activity <span className={styles.required}>*</span></> : "Sport"}
                                     </label>
-                                    <select value={activity} onChange={(e) => setActivity(e.target.value)} required>
-                                        <option value="Lifestyle">Lifestyle</option>
-                                        <option value="Running">Running</option>
-                                        <option value="Training">Training</option>
-                                        <option value="Soccer">Soccer</option>
-                                        <option value="Basketball">Basketball</option>
-                                        <option value="Tennis">Tennis</option>
-                                        {!activityOptions.includes(activity) && (
+                                    <select value={activity} onChange={(e) => setActivity(e.target.value)} required={isShoes}>
+                                        {!isShoes && <option value="">None</option>}
+                                        {visibleActivityOptions.map((item) => (
+                                            <option key={item} value={item}>{item}</option>
+                                        ))}
+                                        {activity && !visibleActivityOptions.includes(activity) && (
                                             <option value={activity}>{activity}</option>
                                         )}
                                     </select>
@@ -620,6 +720,8 @@ function AddProduct() {
                                 </div>
                             )}
 
+                            <Notice type={notice?.type} onClose={() => setNotice(null)}>{notice?.text}</Notice>
+
                             {/* Submit Button Container */}
                             <div className={styles.actionContainer}>
                                 {isEdit && (
@@ -632,7 +734,7 @@ function AddProduct() {
                                     </button>
                                 )}
                                 <button type="submit" className={styles.submitBtn} disabled={isSaving}>
-                                    {isEdit ? (isSaving ? "Saving..." : "Save Changes") : "Add Product"}
+                                    {isSaving ? "Saving..." : (isEdit ? "Save Changes" : "Add Product")}
                                 </button>
                             </div>
                         </form>

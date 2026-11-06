@@ -1,0 +1,331 @@
+.discountsPage.hero {
+    position: relative;
+    width: 100%;
+    max-width: 1940px;
+    height: 10px;
+    min-height: 10px;
+    margin: 0 auto;
+    overflow: visible;
+}
+
+.page {
+    width: 100%;
+    max-width: 1940px;
+    margin: 70px auto 0;
+    color: #111;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    line-height: 1.7;
+}
+
+.boldLink {
+    color: inherit;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.boldLink:hover {
+    text-decoration: underline;
+}
+
+.banner {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-height: max(560px, 44vw);
+    margin: 0 2.25vw;
+    padding: 60px 12.5vw 120px;
+    background: linear-gradient(100deg, #6c5c54 0%, #85746b 40%, #b3a69c 70%, #d3cbc3 100%);
+    color: #fff;
+}
+
+.bannerText {
+    max-width: 560px;
+}
+
+.bannerTitle {
+    margin: 0 0 30px;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 58px;
+    font-weight: 400;
+    line-height: 1.15;
+    letter-spacing: -1px;
+}
+
+.bannerText p {
+    margin: 0 0 26px;
+    font-size: 17px;
+}
+
+.bannerButtons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 22px;
+    margin-top: 10px;
+}
+
+.bannerButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 170px;
+    min-height: 62px;
+    padding: 0 22px;
+    border: none;
+    border-radius: 2px;
+    background: #111;
+    color: #fff;
+    font-family: inherit;
+    font-size: 16px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.bannerButton:hover {
+    background: #333;
+}
+
+.bannerButton:focus-visible,
+.boldLink:focus-visible,
+.faqTrigger:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+}
+
+.finePrint {
+    position: absolute;
+    bottom: 18px;
+    left: 12.5vw;
+    max-width: 580px;
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.65;
+}
+
+.how {
+    padding: 120px 7.5vw 40px;
+    text-align: center;
+}
+
+.howTitle {
+    margin: 0;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 56px;
+    font-weight: 400;
+    line-height: 1.15;
+    letter-spacing: -1px;
+}
+
+.titleLine {
+    display: block;
+    width: 94px;
+    height: 4px;
+    margin: 32px auto 140px;
+    background: #cf0a2c;
+}
+
+.steps {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 4vw;
+}
+
+.step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.stepImage {
+    display: block;
+    width: min(100%, 430px);
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+}
+
+.stepTitle {
+    margin: 40px 0 12px;
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.stepText {
+    margin: 0;
+    font-size: 17px;
+}
+
+.faq {
+    padding: 40px 7.5vw 100px;
+}
+
+.faqTitle {
+    margin: 0 0 24px;
+    font-size: 34px;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.faqList {
+    padding: 0 10px;
+}
+
+.faqItem {
+    border-bottom: 1px solid #ddd;
+}
+
+.faqHeading {
+    margin: 0;
+    font-size: inherit;
+    font-weight: inherit;
+}
+
+.faqTrigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    width: 100%;
+    padding: 16px 0;
+    border: none;
+    background: none;
+    color: #111;
+    font-family: inherit;
+    font-size: 17px;
+    text-align: left;
+    cursor: pointer;
+}
+
+.faqTrigger:focus {
+    outline: none;
+}
+
+.chevron {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+}
+
+.chevronOpen {
+    transform: rotate(180deg);
+}
+
+.faqPanel {
+    padding: 0 40px 24px 0;
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+.faqPanel p {
+    margin: 0 0 12px;
+}
+
+.faqPanel p:last-child {
+    margin-bottom: 0;
+}
+
+.faqPanel ul {
+    margin: 0;
+    padding-left: 22px;
+}
+
+.faqPanel li {
+    margin-bottom: 6px;
+}
+
+@media (max-width: 992px) {
+    .banner {
+        padding: 50px 6vw 140px;
+    }
+
+    .finePrint {
+        right: 6vw;
+        left: 6vw;
+    }
+
+    .steps {
+        grid-template-columns: 1fr;
+        gap: 56px;
+    }
+
+    .titleLine {
+        margin-bottom: 70px;
+    }
+}
+
+@media (max-width: 768px) {
+    .page {
+        margin-top: 80px;
+        font-size: 15px;
+    }
+
+    .banner {
+        min-height: 0;
+        margin: 0;
+        padding: 40px 16px 150px;
+    }
+
+    .bannerTitle {
+        font-size: 38px;
+    }
+
+    .bannerText p {
+        font-size: 15px;
+    }
+
+    .bannerButton {
+        flex: 1;
+        min-width: 0;
+        min-height: 54px;
+    }
+
+    .finePrint {
+        right: 16px;
+        left: 16px;
+        font-size: 12px;
+    }
+
+    .how {
+        padding: 70px 16px 20px;
+    }
+
+    .howTitle {
+        font-size: 38px;
+    }
+
+    .titleLine {
+        width: 80px;
+        margin: 22px auto 50px;
+    }
+
+    .stepTitle {
+        margin-top: 24px;
+        font-size: 22px;
+    }
+
+    .stepText {
+        font-size: 15px;
+    }
+
+    .faq {
+        padding: 40px 16px 60px;
+    }
+
+    .faqTitle {
+        font-size: 26px;
+    }
+
+    .faqList {
+        padding: 0;
+    }
+
+    .faqTrigger {
+        font-size: 15px;
+    }
+
+    .faqPanel {
+        padding-right: 0;
+    }
+}

@@ -18,6 +18,17 @@
     font-weight: 700;
 }
 
+.cartHeaderEmpty {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.cartHeaderEmpty h2 {
+    font-size: 26px;
+    font-weight: 500;
+}
+
 .cartItemCount {
     color: #666;
     font-size: 15px;
@@ -28,9 +39,9 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: 350px;
+    min-height: 300px;
     text-align: center;
-    padding: 40px 20px;
+    padding: 60px 20px 80px;
 }
 
 .emptyCart h3 {
@@ -41,7 +52,7 @@
 }
 
 .emptyCart p {
-    color: #666;
+    color: #111;
     margin-bottom: 30px;
     font-size: 16px;
 }
@@ -50,12 +61,14 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 240px;
-    height: 50px;
-    background: black;
+    height: 52px;
+    padding: 0 14px;
+    border-radius: 2px;
+    background: #111;
     color: white;
     text-decoration: none;
-    font-weight: 600;
+    font-size: 15px;
+    font-weight: 400;
     transition: background 0.2s;
 }
 

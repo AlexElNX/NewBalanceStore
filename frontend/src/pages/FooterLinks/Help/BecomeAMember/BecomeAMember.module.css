@@ -1,0 +1,371 @@
+.memberPage.header {
+    position: relative;
+    width: 100%;
+    max-width: 1940px;
+    height: 10px;
+    min-height: 10px;
+    margin: 0 auto;
+    overflow: visible;
+}
+
+.main {
+    margin-top: 80px;
+    color: #111;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.hero {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    min-height: 760px;
+    overflow: hidden;
+    background: #dadada;
+}
+
+.heroImage {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: auto;
+    max-width: 75%;
+    height: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    object-position: center bottom;
+    -webkit-mask-image: linear-gradient(to right, transparent 0, #000 30%);
+    mask-image: linear-gradient(to right, transparent 0, #000 30%);
+}
+
+.heroContent {
+    position: relative;
+    z-index: 1;
+    max-width: 480px;
+    margin: 0 0 200px 32px;
+}
+
+.heroTitle {
+    margin: 0 0 22px;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 64px;
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: -1.5px;
+}
+
+.heroText {
+    margin: 0 0 28px;
+    font-size: 15px;
+    line-height: 1.65;
+}
+
+.heroButtons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.primaryButton,
+.secondaryButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 142px;
+    height: 54px;
+    padding: 0 18px;
+    border: 1px solid #111;
+    font-size: 14px;
+    text-decoration: none;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.primaryButton {
+    background: #111;
+    color: #fff;
+}
+
+.primaryButton:hover {
+    background: #333;
+}
+
+.secondaryButton {
+    border-color: #fff;
+    background: #fff;
+    color: #111;
+}
+
+.secondaryButton:hover {
+    border-color: #111;
+}
+
+.benefits {
+    padding: 40px 0 24px;
+}
+
+.benefitsTitle {
+    margin: 0 0 40px;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 54px;
+    font-weight: 400;
+    letter-spacing: -1px;
+    text-align: center;
+}
+
+.sliderWrap {
+    position: relative;
+}
+
+.slider {
+    display: grid;
+    grid-auto-columns: calc((100% - 3px) / 4);
+    grid-auto-flow: column;
+    gap: 1px;
+    margin: 0;
+    padding: 0 0 16px;
+    overflow-x: auto;
+    list-style: none;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: thin;
+    scrollbar-color: #bbb transparent;
+}
+
+.benefitCard {
+    scroll-snap-align: start;
+    text-align: center;
+}
+
+.benefitImage {
+    display: block;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+}
+
+.benefitTitle {
+    margin: 28px 16px 12px;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 30px;
+    font-weight: 400;
+    letter-spacing: -0.5px;
+}
+
+.benefitText {
+    margin: 0 auto;
+    max-width: 380px;
+    padding: 0 16px;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.sliderButton {
+    position: absolute;
+    top: calc((100vw / 4) / 2);
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 62px;
+    padding: 0;
+    border: none;
+    background: rgba(17, 17, 17, 0.75);
+    color: #fff;
+    cursor: pointer;
+    transform: translateY(-50%);
+    transition: background 0.2s ease;
+}
+
+.sliderButton:hover {
+    background: #111;
+}
+
+.sliderPrev {
+    left: 8px;
+}
+
+.sliderNext {
+    right: 8px;
+}
+
+.arrowIcon {
+    width: 16px;
+    height: 16px;
+}
+
+.faq {
+    max-width: 1940px;
+    margin: 0 auto;
+    padding: 56px 10px 40px;
+}
+
+.faqTitle {
+    margin: 0 0 40px;
+    font-size: 28px;
+    font-weight: 700;
+    text-align: center;
+}
+
+.faqItem {
+    border-bottom: 1px solid #ddd;
+}
+
+.faqHeading {
+    margin: 0;
+    font-size: inherit;
+    font-weight: inherit;
+}
+
+.faqTrigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    width: 100%;
+    padding: 18px 0;
+    border: none;
+    background: none;
+    color: #111;
+    font-family: inherit;
+    font-size: 17px;
+    text-align: left;
+    cursor: pointer;
+}
+
+.faqTrigger:focus-visible {
+    outline: 2px solid #111;
+    outline-offset: 2px;
+}
+
+.chevron {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+}
+
+.chevronOpen {
+    transform: rotate(180deg);
+}
+
+.faqPanel {
+    padding: 4px 40px 24px 0;
+    font-size: 15px;
+    line-height: 1.7;
+}
+
+.faqPanel p {
+    margin: 0 0 12px;
+}
+
+.faqPanel ul {
+    margin: 0 0 12px;
+    padding-left: 0;
+    list-style: none;
+}
+
+.faqPanel li {
+    margin-bottom: 10px;
+}
+
+.faqPanel li::before {
+    content: "• ";
+}
+
+.faqPanel a {
+    color: inherit;
+    text-decoration: underline;
+}
+
+@media (max-width: 1024px) {
+    .hero {
+        min-height: 620px;
+    }
+
+    .heroImage {
+        max-width: 85%;
+    }
+
+    .heroContent {
+        margin-bottom: 120px;
+    }
+
+    .slider {
+        grid-auto-columns: calc((100% - 1px) / 2);
+    }
+
+    .sliderButton {
+        top: calc((100vw / 2) / 2);
+    }
+}
+
+@media (max-width: 768px) {
+    .main {
+        margin-top: 70px;
+    }
+
+    .hero {
+        flex-direction: column;
+        align-items: stretch;
+        min-height: 0;
+    }
+
+    .heroImage {
+        position: static;
+        width: 100%;
+        max-width: none;
+        height: 380px;
+        aspect-ratio: auto;
+        object-fit: cover;
+        object-position: center top;
+        -webkit-mask-image: none;
+        mask-image: none;
+    }
+
+    .heroContent {
+        max-width: none;
+        margin: 0;
+        padding: 28px 16px 36px;
+    }
+
+    .heroTitle {
+        font-size: 44px;
+    }
+
+    .primaryButton,
+    .secondaryButton {
+        flex: 1;
+    }
+
+    .benefitsTitle {
+        font-size: 38px;
+        margin-bottom: 28px;
+    }
+
+    .slider {
+        grid-auto-columns: 82%;
+    }
+
+    .sliderButton {
+        display: none;
+    }
+
+    .benefitTitle {
+        font-size: 24px;
+    }
+
+    .faq {
+        padding: 40px 16px 32px;
+    }
+
+    .faqTitle {
+        font-size: 24px;
+    }
+
+    .faqTrigger {
+        font-size: 15px;
+    }
+
+    .faqPanel {
+        padding-right: 0;
+    }
+}

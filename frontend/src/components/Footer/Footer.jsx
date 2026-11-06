@@ -1,21 +1,26 @@
 import './Footer.css'
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { getCurrentUser } from "../../services/api/authService.js";
+import { FOOTER_COLUMNS, SOCIAL_LINKS } from "./footerLinks.js";
+import { useOpenItems } from "../FaqAccordion/useOpenItems.js";
 
 // SVG
 import logo from '../../assets/icons/footer/logo.svg';
-import instagramIcon from '../../assets/icons/footer/instagram.svg';
-import facebookIcon from '../../assets/icons/footer/facebook.svg';
-import twitterIcon from '../../assets/icons/footer/twitter.svg';
-import youtubeIcon from '../../assets/icons/footer/youtube.svg';
-import pinterestIcon from '../../assets/icons/footer/pinterest.svg';
-import tiktokIcon from '../../assets/icons/footer/tiktok.svg';
 import brineLogo from '../../assets/icons/footer/brine-logo.svg';
 import warriorLogo from '../../assets/icons/footer/warror.svg';
 import teamSportsLogo from '../../assets/icons/footer/teamsports-logo.svg';
 import usFlag from '../../assets/icons/header/US.png';
 
+const FAMILY_BRANDS = [
+    { label: "Brine", href: "https://www.brine.com/", logo: brineLogo },
+    { label: "Warrior", href: "https://www.warrior.com/en", logo: warriorLogo },
+    { label: "New Balance Team Sports", href: "https://www.newbalanceteam.com/", logo: teamSportsLogo },
+];
+
 function Footer() {
     const navigate = useNavigate();
+    const isLoggedIn = Boolean(getCurrentUser());
+    const { isOpen, toggle } = useOpenItems();
 
     function handleSignup() {
         navigate("/login");
@@ -24,58 +29,44 @@ function Footer() {
         <>
             <footer className="footer">
 
-                <div className="footer-signup">
-                    <p>Be the first to know about new arrivals</p>
-                    <button onClick={handleSignup}>Sign up</button>
-                </div>
+                {!isLoggedIn && (
+                    <div className="footer-signup">
+                        <p>Be the first to know about new arrivals</p>
+                        <button onClick={handleSignup}>Sign up</button>
+                    </div>
+                )}
 
                 <div className="footer-content">
 
                     <div className="footer-links">
 
-                        <div className="footer-column">
-                            <h3>Help</h3>
+                        {FOOTER_COLUMNS.map((column) => (
+                            <div key={column.title} className={`footer-column ${isOpen(column.title) ? "footer-column-open" : ""}`}>
+                                <h3>
+                                    <button
+                                        type="button"
+                                        className="footer-column-toggle"
+                                        aria-expanded={isOpen(column.title)}
+                                        onClick={() => toggle(column.title)}
+                                    >
+                                        {column.title}
+                                        <svg className="footer-column-chevron" viewBox="0 0 16 16" aria-hidden="true">
+                                            <path d="M2 5.5 8 11.5l6-6" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+                                        </svg>
+                                    </button>
+                                </h3>
 
-                            <a href="#">Contact us</a>
-                            <a href="#">Start a return</a>
-                            <a href="#">Track your order</a>
-                            <a href="#">Become a member</a>
-                            <a href="#">Size guide</a>
-                            <a href="#">FAQ</a>
-                        </div>
-
-                        <div className="footer-column">
-                            <h3>Shop</h3>
-
-                            <a href="#">Find a store</a>
-                            <a href="#">Gift cards</a>
-                            <a href="#">Shipping information</a>
-                            <a href="#">Sale exclusions</a>
-                            <a href="#">Custom uniforms</a>
-                            <a href="#">Reconsidered</a>
-                        </div>
-
-                        <div className="footer-column">
-                            <h3>About Us</h3>
-
-                            <a href="#">Our Purpose</a>
-                            <a href="#">Responsible leadership</a>
-                            <a href="#">New Balance Foundation</a>
-                            <a href="#">Careers</a>
-                            <a href="#">The TRACK at New Balance</a>
-                            <a href="#">Press box</a>
-                            <a href="#">Medical Plan Information</a>
-                        </div>
-
-                        <div className="footer-column">
-                            <h3>For You</h3>
-
-                            <a href="#">Special discounts</a>
-                            <a href="#">Idea submission</a>
-                            <a href="#">Affiliate program</a>
-                            <a href="#">Counterfeit products</a>
-                            <a href="#">Accessibility statement</a>
-                        </div>
+                                <div className="footer-column-links">
+                                    {column.links.map((link) => (
+                                        link.to ? (
+                                            <Link key={link.label} to={link.to} onClick={() => window.scrollTo(0, 0)}>{link.label}</Link>
+                                        ) : (
+                                            <a key={link.label} href="#">{link.label}</a>
+                                        )
+                                    ))}
+                                </div>
+                            </div>
+                        ))}
 
                     </div>
 
@@ -83,7 +74,9 @@ function Footer() {
 
                         <h2>Fearlessly Independent</h2>
 
-                        <img className="footer-logo" src={logo} alt="New Balance"/>
+                        <Link to="/" onClick={() => window.scrollTo(0, 0)} aria-label="New Balance home">
+                            <img className="footer-logo" src={logo} alt="New Balance"/>
+                        </Link>
 
                         <p>
                             Independent since 1906, we empower people
@@ -93,12 +86,17 @@ function Footer() {
                         </p>
 
                         <div className="social-icons">
-                            <img src={instagramIcon} alt="Instagram" />
-                            <img src={facebookIcon} alt="Facebook" />
-                            <img src={twitterIcon} alt="X" />
-                            <img src={youtubeIcon} alt="YouTube" />
-                            <img src={pinterestIcon} alt="Pinterest" />
-                            <img src={tiktokIcon} alt="TikTok" />
+                            {SOCIAL_LINKS.map((social) => (
+                                <a key={social.label} href={social.href} target="_blank" rel="noopener noreferrer">
+                                    <img src={social.icon} alt={social.label} />
+                                </a>
+                            ))}
+                        </div>
+
+                        <div className="footer-region">
+                            <span>Change region:</span>
+                            <img className="footer-region-flag" src={usFlag} alt="" />
+                            <span>US</span>
                         </div>
 
                     </div>
@@ -112,31 +110,47 @@ function Footer() {
                 <div className="footer-secondary-brands">
                     <span>New Balance family of brands</span>
 
-                    <img src={brineLogo} alt="Brine" />
-                    <img src={warriorLogo} alt="Warrior" />
-                    <img src={teamSportsLogo} alt="Team Sports" />
+                    {FAMILY_BRANDS.map((brand) => (
+                        <a
+                            key={brand.label}
+                            href={brand.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label={brand.label}
+                        >
+                            <img src={brand.logo} alt={brand.label} />
+                        </a>
+                    ))}
                 </div>
 
                 <div className="footer-secondary-top">
                     <img className="US-flag" src={usFlag} alt="US Flag" />
 
-                    <a href="#">US | English</a>
+                    <Link to="/country-language" className="footer-locale">
+                        <span>US</span>
+                    </Link>
 
-                    <a href="#">Privacy Policy</a>
+                    <Link to="/privacy-policy">Privacy Policy</Link>
 
-                    <a href="#">Responsible Disclosure</a>
+                    <Link to="/responsible-disclosure">Responsible Disclosure</Link>
 
-                    <a href="#">Website Terms & Conditions</a>
+                    <Link to="/terms">Website Terms & Conditions</Link>
 
-                    <a href="#">CA Supply Chains Act (SB 657) and Modern Slavery Act Statement</a>
+                    <Link to="/supply-chains-act">CA Supply Chains Act (SB 657) and Modern Slavery Act Statement</Link>
 
-                    <a href="#">Health Data Privacy Policy</a>
+                    <Link to="/health-data-privacy">Health Data Privacy Policy</Link>
 
-                    <a href="#">Do Not Sell or Share My Personal Information</a>
-                </div>
+                    <Link to="/privacy-choices" className="footer-privacy-choices">
+                        <span>Do Not Sell or Share My Personal Information</span>
+                        <svg className="footer-privacy-icon" viewBox="0 0 60 28" aria-hidden="true">
+                            <rect x="1" y="1" width="58" height="26" rx="13" fill="#fff" stroke="#0066ff" strokeWidth="2" />
+                            <path d="M30 1h16a13 13 0 0 1 0 26H24Z" fill="#0066ff" />
+                            <path d="M12 14.5l4.5 4.5 8-9" fill="none" stroke="#0066ff" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" />
+                            <path d="M38 9l10 10M48 9 38 19" stroke="#fff" strokeWidth="2.6" strokeLinecap="round" />
+                        </svg>
+                    </Link>
 
-                <div className="footer-secondary-bottom">
-                    <p>Copyright 2026, New Balance</p>
+                    <p className="footer-copyright">Copyright 2026, New Balance</p>
                 </div>
 
             </footer>

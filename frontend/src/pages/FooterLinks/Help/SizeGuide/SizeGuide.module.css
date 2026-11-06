@@ -1,0 +1,241 @@
+.sizePage.hero {
+    position: relative;
+    width: 100%;
+    max-width: 1940px;
+    height: 10px;
+    min-height: 10px;
+    margin: 0 auto;
+    overflow: visible;
+}
+
+.container {
+    width: 100%;
+    max-width: 1940px;
+    margin: 100px auto 0;
+    padding: 0 max(16px, 8.4vw) 60px;
+    color: #111;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.breadcrumbs {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.breadcrumbs a {
+    color: #111;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.separator {
+    color: #767676;
+    font-weight: 400;
+}
+
+.layout {
+    display: grid;
+    grid-template-columns: 300px minmax(0, 1fr);
+    gap: 68px;
+    margin-top: 44px;
+}
+
+.sideTitle {
+    margin: 0 0 10px;
+    font-size: 26px;
+    font-weight: 700;
+}
+
+.sideList {
+    margin: 0 0 28px;
+    padding: 0;
+    list-style: none;
+}
+
+.sideList li {
+    margin-bottom: 18px;
+}
+
+.sideList a {
+    color: #111;
+    font-size: 15px;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.sideList a:hover {
+    color: #cf0a2c;
+}
+
+.title {
+    margin: 0;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 56px;
+    font-weight: 400;
+    line-height: 1.1;
+    letter-spacing: -1px;
+}
+
+.titleLine {
+    display: block;
+    width: 80px;
+    height: 4px;
+    margin: 28px 0 44px;
+    background: #cf0a2c;
+}
+
+.section {
+    margin-bottom: 72px;
+}
+
+.sectionTitle {
+    margin: 0 0 16px;
+    font-size: 22px;
+    font-weight: 700;
+    text-align: center;
+}
+
+.tabs {
+    display: flex;
+    width: 400px;
+    max-width: 100%;
+    margin: 0 auto 40px;
+    padding: 4px;
+    border-radius: 3px;
+    background: #ececec;
+}
+
+.tab {
+    flex: 1;
+    height: 40px;
+    border: none;
+    border-radius: 2px;
+    background: transparent;
+    color: #111;
+    font-family: inherit;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.tabActive {
+    background: #fff;
+    font-weight: 700;
+}
+
+.tab:focus-visible {
+    outline: 2px solid #111;
+    outline-offset: 1px;
+}
+
+.tableWrap {
+    overflow-x: auto;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    text-align: center;
+}
+
+.table th,
+.table td {
+    height: 31px;
+    padding: 4px 10px;
+    border: 1px solid #dcdee2;
+    white-space: nowrap;
+}
+
+.table thead th {
+    background: #e8eaed;
+    font-weight: 700;
+    white-space: normal;
+}
+
+.table tbody th {
+    background: #e8eaed;
+    font-weight: 400;
+}
+
+.download {
+    display: inline-block;
+    margin-top: 40px;
+    color: #111;
+    font-size: 16px;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.tips {
+    margin-bottom: 20px;
+}
+
+.tipsTitle {
+    margin: 0 0 20px;
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.tipsList {
+    margin: 0;
+    padding-left: 22px;
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+.tipsList li {
+    margin-bottom: 10px;
+}
+
+@media (max-width: 1024px) {
+    .layout {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 40px;
+    }
+
+    .sidebar {
+        order: 2;
+    }
+
+    .title {
+        font-size: 44px;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        margin-top: 90px;
+        padding: 0 16px 32px;
+    }
+
+    .layout {
+        margin-top: 28px;
+    }
+
+    .title {
+        font-size: 36px;
+    }
+
+    .titleLine {
+        margin: 20px 0 32px;
+    }
+
+    .section {
+        margin-bottom: 48px;
+    }
+
+    .sectionTitle {
+        font-size: 20px;
+    }
+
+    .tabs {
+        margin-bottom: 24px;
+    }
+
+    .table {
+        font-size: 13px;
+    }
+}

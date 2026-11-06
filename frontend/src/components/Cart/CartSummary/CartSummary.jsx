@@ -29,12 +29,17 @@ function CartSummary({ cart }) {
     }
 
     const subtotal = cart.getSubtotal(products);
+    const hasUnavailable = cart.getItems(products).some(item =>
+        typeof item.product.getAvailableQuantity === "function" &&
+        item.product.getAvailableQuantity(item.color, item.size) < item.quantity
+    );
 
     const originalPrice = cart.getOriginalPrice(products);
     const savings = cart.getSavings(products);
     const hasDiscount = originalPrice > subtotal;
 
     const checkoutClick = () => {
+        if (hasUnavailable) return;
         navigate("/checkout");
     }
 
@@ -78,7 +83,10 @@ function CartSummary({ cart }) {
                     <span>${subtotal.toFixed(2)}</span>
                 </div>
 
-                <button className={styles.checkoutBtn} onClick={checkoutClick}>Checkout</button>
+                {hasUnavailable && (
+                    <p className={styles.stockError}>Some items in your bag are no longer available. Please update your bag to continue.</p>
+                )}
+                <button className={styles.checkoutBtn} onClick={checkoutClick} disabled={hasUnavailable}>Checkout</button>
             </div>
         </>
     )

@@ -126,6 +126,10 @@ body.manageProducts .mainHeader .header-icons img {
     max-width: 960px;
 }
 
+.notice {
+    margin-bottom: 20px;
+}
+
 .pageHeader {
     display: flex;
     align-items: center;
@@ -219,6 +223,70 @@ body.manageProducts .mainHeader .header-icons img {
 
 .searchInput:focus {
     border-color: #111;
+}
+
+.filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 14px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.typeTabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.typeTab {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    border: 1px solid #cccccc;
+    border-radius: 20px;
+    background-color: white;
+    color: #222;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: border-color 0.2s, background-color 0.2s, color 0.2s;
+}
+
+.typeTab:hover {
+    border-color: #111;
+}
+
+.typeTabActive {
+    border-color: #111;
+    background-color: #111;
+    color: white;
+}
+
+.typeCount {
+    font-size: 12px;
+    font-weight: 700;
+    opacity: 0.7;
+}
+
+.genderSelect {
+    padding: 9px 12px;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    background-color: white;
+    font-size: 14px;
+    color: #222;
+    font-family: inherit;
+    cursor: pointer;
+}
+
+.genderSelect:focus {
+    border-color: #111;
+    outline: none;
 }
 
 .statusText {
@@ -360,6 +428,11 @@ body.manageProducts .mainHeader .header-icons img {
     .searchInput {
         flex: 1 1 auto;
         width: 100%;
+    }
+
+    .filters {
+        flex-direction: column;
+        align-items: stretch;
     }
 
     .card {

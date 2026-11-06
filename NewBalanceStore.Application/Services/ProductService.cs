@@ -148,9 +148,11 @@ public class ProductService : IProductService
         Description = entity.Description,
         Type = entity.Type,
         Category = entity.Category,
+        Activity = entity.Activity,
         Gender = entity.Gender,
         Price = entity.Price,
         OldPrice = entity.OldPrice,
+        Colors = entity.Colors ?? new(),
         Images = entity.Images,
         IsNew = entity.IsNew,
         Variants = entity.Variants?.Select(v => new CreateProductVariantDto
@@ -170,9 +172,11 @@ public class ProductService : IProductService
         Description = dto.Description,
         Type = dto.Type,
         Category = dto.Category,
+        Activity = dto.Activity,
         Gender = dto.Gender,
         Price = dto.Price,
         OldPrice = dto.OldPrice,
+        Colors = dto.Colors ?? new(),
         Images = dto.Images,
         IsNew = dto.IsNew,
         Variants = dto.Variants?.Select(v => new ProductVariant

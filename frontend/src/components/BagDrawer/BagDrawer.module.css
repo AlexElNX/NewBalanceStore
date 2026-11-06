@@ -282,6 +282,20 @@
     background: #333;
 }
 
+.checkoutDisabled,
+.checkoutDisabled:hover {
+    border-color: #e8e8e8;
+    background: #e8e8e8;
+    color: #767676;
+    cursor: default;
+}
+
+.stockError {
+    margin: 8px 0 0;
+    color: #cf0a2c;
+    font-size: 13px;
+}
+
 .recommend {
     margin-top: 28px;
 }

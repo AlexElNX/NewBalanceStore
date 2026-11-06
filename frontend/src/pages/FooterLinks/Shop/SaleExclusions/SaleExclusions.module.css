@@ -1,0 +1,121 @@
+.salePage.hero {
+    position: relative;
+    width: 100%;
+    max-width: 1940px;
+    height: 10px;
+    min-height: 10px;
+    margin: 0 auto;
+    overflow: visible;
+}
+
+.container {
+    width: 100%;
+    max-width: 1940px;
+    margin: 100px auto 0;
+    padding: 30px max(16px, 7.8vw) 60px;
+    color: #111;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.columns {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 48px;
+}
+
+.column {
+    min-width: 0;
+}
+
+.title {
+    margin: 0;
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 1.15;
+}
+
+.titleLine {
+    display: block;
+    width: 94px;
+    height: 4px;
+    margin: 14px 0 22px;
+    background: #cf0a2c;
+}
+
+.intro {
+    max-width: 800px;
+    margin: 0 0 28px;
+    font-size: 17px;
+    line-height: 1.7;
+}
+
+.group {
+    margin-bottom: 60px;
+}
+
+.groupTitle {
+    margin: 0 0 14px;
+    font-size: 27px;
+    font-weight: 700;
+}
+
+.list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.list li {
+    font-size: 17px;
+    line-height: 47px;
+}
+
+.bigList {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.bigList li {
+    font-size: 27px;
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+.note {
+    margin: 0;
+    font-size: 15px;
+}
+
+@media (max-width: 768px) {
+    .container {
+        margin-top: 90px;
+        padding: 20px 16px 32px;
+    }
+
+    .columns {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0;
+    }
+
+    .title {
+        font-size: 30px;
+    }
+
+    .groupTitle {
+        font-size: 22px;
+    }
+
+    .group {
+        margin-bottom: 36px;
+    }
+
+    .list li {
+        font-size: 15px;
+        line-height: 36px;
+    }
+
+    .bigList li {
+        font-size: 22px;
+    }
+}

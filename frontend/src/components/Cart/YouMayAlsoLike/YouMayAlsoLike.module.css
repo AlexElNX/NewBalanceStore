@@ -1,0 +1,25 @@
+.wrapper {
+    width: 100%;
+    max-width: 1940px;
+    margin: 0 auto 40px;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.wrapper h2 {
+    font-family: "Libre Baskerville", Georgia, serif;
+    font-size: 40px;
+    font-weight: 400;
+}
+
+@media (max-width: 2560px) {
+    .wrapper {
+        max-width: 2560px;
+    }
+}
+
+@media (max-width: 768px) {
+    .wrapper h2 {
+        font-size: 28px;
+    }
+}

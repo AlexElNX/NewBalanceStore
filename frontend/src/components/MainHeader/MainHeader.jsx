@@ -1,9 +1,10 @@
 import './MainHeader.css'
 import { Link } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from 'react-dom';
 import { useCart } from "../../context/useCart.js";
 import BagDrawer from "../BagDrawer/BagDrawer.jsx";
+import SearchOverlay from "../SearchOverlay/SearchOverlay.jsx";
 
 // SVG
 import logo from '../../assets/icons/header/logo.svg';
@@ -13,8 +14,6 @@ import bagIcon from '../../assets/icons/header/bag-icon.svg';
 import menArrivals from '../../assets/images/new/men-arrivals.jpg';
 import womenArrivals from '../../assets/images/new/women-arrivals.jpg';
 import kidsArrivals from '../../assets/images/new/kids-arrivals.jpg';
-import launchCalendar from '../../assets/images/new/launch-calendar.jpg';
-import footballCollection from '../../assets/images/new/football-collection.jpg';
 
 
 
@@ -29,6 +28,57 @@ function MainHeader({
     const { cart } = useCart();
     const cartCount = cart.getProductCount();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const [isSearchOpen, setIsSearchOpen] = useState(false);
+    const [menusHidden, setMenusHidden] = useState(false);
+    const searchOpenRef = useRef(false);
+
+    useLayoutEffect(() => {
+        const header = headerRef.current;
+        searchOpenRef.current = isSearchOpen;
+        if (!header) return;
+
+        header.classList.toggle("search-open", isSearchOpen);
+        if (!isSearchOpen) return;
+
+        header.classList.remove("hidden");
+        document.body.classList.add("search-open");
+
+        if (!autoHide) {
+            return () => document.body.classList.remove("search-open");
+        }
+
+        const topBar = document.querySelector(".top-header");
+        const container = containerRef?.current;
+        const previousStyle = {
+            position: header.style.position,
+            top: header.style.top,
+            width: header.style.width,
+            left: header.style.left,
+            transition: header.style.transition,
+        };
+        const previousBodyPadding = document.body.style.paddingTop;
+        const topBarHeight = topBar ? topBar.offsetHeight : 0;
+
+        header.style.transition = "none";
+        header.style.position = "fixed";
+        header.style.top = `${topBarHeight}px`;
+        if (container) {
+            header.style.width = `${container.offsetWidth}px`;
+            header.style.left = `${container.getBoundingClientRect().left}px`;
+        }
+        if (topBar) {
+            topBar.classList.add("pinned");
+            document.body.style.paddingTop = `${topBarHeight}px`;
+        }
+
+        return () => {
+            document.body.classList.remove("search-open");
+            topBar?.classList.remove("pinned");
+            document.body.style.paddingTop = previousBodyPadding;
+            Object.assign(header.style, previousStyle);
+            requestAnimationFrame(() => window.dispatchEvent(new Event("scroll")));
+        };
+    }, [isSearchOpen, containerRef, autoHide]);
 
     const [menuStack, setMenuStack] = useState(['main']);
 
@@ -52,7 +102,7 @@ function MainHeader({
     // Close menu when switching to desktop
     useEffect(() => {
         const handleResize = () => {
-            if (window.innerWidth > 768) {
+            if (window.innerWidth > 992) {
                 closeMobileMenu();
             }
         };
@@ -87,6 +137,10 @@ function MainHeader({
 
         const handleScroll = () => {
             if (isMobileMenuOpen) return;
+            if (searchOpenRef.current) {
+                header.classList.remove("hidden");
+                return;
+            }
 
             const currentScroll = window.scrollY;
 
@@ -144,6 +198,8 @@ function MainHeader({
             case 'kids': return 'Kids';
             case 'kids-shoes': return 'Shoes';
             case 'kids-clothing': return 'Clothing';
+            case 'kids-sports': return 'Sports';
+            case 'kids-acc': return 'Accessories';
             case 'sale': return 'Sale';
             default: return '';
         }
@@ -179,7 +235,13 @@ function MainHeader({
                     </Link>
 
                     {/* DESKTOP NAVIGATION */}
-                    <nav className="nav-menu desktop-nav">
+                    <nav
+                        className={`nav-menu desktop-nav ${menusHidden ? "menus-hidden" : ""}`}
+                        onClickCapture={(event) => {
+                            if (event.target.closest(".mega-menu, .new-dropdown")) setMenusHidden(true);
+                        }}
+                        onMouseLeave={() => setMenusHidden(false)}
+                    >
                         <div className="nav-item has-dropdown">
                             <Link to={"/products?new=true"}>New</Link>
 
@@ -199,16 +261,6 @@ function MainHeader({
                                     <img src={kidsArrivals} alt=""/>
                                     <span>Kids' new arrivals</span>
                                 </Link>
-
-                                <Link to={"#"} className="new-card">
-                                    <img src={launchCalendar} alt=""/>
-                                    <span>Launch calendar</span>
-                                </Link>
-
-                                <Link to={"#"} className="new-card">
-                                    <img src={footballCollection} alt=""/>
-                                    <span>The international football collection</span>
-                                </Link>
                             </div>
                         </div>
 
@@ -218,29 +270,24 @@ function MainHeader({
                             <div className="mega-menu">
 
                                 <div className="mega-column featured">
-                                    <Link to={"/products?gender=men&activity=soccer"}>Soccer</Link>
                                     <Link to={"/products?gender=men&new=true"}>New Arrivals</Link>
-                                    <Link to={"#"}>Top Styles</Link>
-                                    <Link to={"#"}>NB Lifestyle</Link>
-                                    <Link to={"#"}>Made in USA</Link>
-                                    <Link to={"#"}>Made in UK</Link>
-                                    <Link to={"#"}>Launch Calendar</Link>
-                                    <Link to={"#"}>Color Edit</Link>
-                                    <Link to={"#"}>Klutch Athletics</Link>
-                                    <Link to={"#"}>Reconsidered</Link>
-                                    <Link to={"/products?sale=true"}>Sale</Link>
+                                    <Link to={"/products?gender=men&activity=lifestyle"}>NB Lifestyle</Link>
+                                    <Link to={"/products?gender=men&sale=true"}>Sale</Link>
                                 </div>
 
                                 <div className="mega-column">
                                     <h4>SHOES</h4>
                                     <Link to={"/products?gender=men&type=footwear&category=shoes"}>All Shoes</Link>
-                                    <Link to={"/products?gender=men&type=footwear&activity=running"}>Running</Link>
                                     <Link to={"/products?gender=men&type=footwear&activity=lifestyle"}>Lifestyle</Link>
+                                    <Link to={"/products?gender=men&type=footwear&activity=running"}>Running</Link>
+                                    <Link to={"/products?gender=men&type=footwear&activity=walking"}>Walking</Link>
+                                    <Link to={"/products?gender=men&type=footwear&activity=cleats"}>Cleats</Link>
                                     <Link to={"/products?gender=men&type=footwear&activity=basketball"}>Basketball</Link>
-                                    <Link to={"/products?gender=men&type=footwear&activity=football"}>Football</Link>
-                                    <Link to={"/products?gender=men&type=footwear&activity=soccer"}>Soccer</Link>
+                                    <Link to={"/products?gender=men&type=footwear&activity=hiking%20%26%20trail"}>Hiking & Trail</Link>
+                                    <Link to={"/products?gender=men&type=footwear&activity=skateboarding"}>Skateboarding</Link>
+                                    <Link to={"/products?gender=men&type=footwear&activity=training"}>Training</Link>
                                     <Link to={"/products?gender=men&type=footwear&activity=tennis"}>Tennis</Link>
-                                    <Link to={"/products?gender=men&type=footwear&activity=golf"}>Golf</Link>
+                                    <Link to={"/products?gender=men&type=footwear&activity=sandals"}>Sandals</Link>
                                 </div>
 
                                 <div className="mega-column">
@@ -260,6 +307,8 @@ function MainHeader({
                                     <Link to={"/products?gender=men&activity=running"}>Running</Link>
                                     <Link to={"/products?gender=men&activity=basketball"}>Basketball</Link>
                                     <Link to={"/products?gender=men&activity=football"}>Football</Link>
+                                    <Link to={"/products?gender=men&activity=training"}>Training</Link>
+                                    <Link to={"/products?gender=men&activity=golf"}>Golf</Link>
                                 </div>
 
                                 <div className="mega-column">
@@ -278,29 +327,24 @@ function MainHeader({
                             <div className="mega-menu">
 
                                 <div className="mega-column featured">
-                                    <Link to={"/products?gender=women&activity=soccer"}>All Accessories</Link>
                                     <Link to={"/products?gender=women&new=true"}>New Arrivals</Link>
-                                    <Link to={"#"}>Top Styles</Link>
-                                    <Link to={"#"}>NB Lifestyle</Link>
-                                    <Link to={"#"}>Made in USA</Link>
-                                    <Link to={"#"}>Made in UK</Link>
-                                    <Link to={"#"}>Launch Calendar</Link>
-                                    <Link to={"#"}>Color Edit</Link>
-                                    <Link to={"#"}>Klutch Athletics</Link>
-                                    <Link to={"#"}>Reconsidered</Link>
-                                    <Link to={"/products?sale=true"}>Sale</Link>
+                                    <Link to={"/products?gender=women&activity=lifestyle"}>NB Lifestyle</Link>
+                                    <Link to={"/products?gender=women&sale=true"}>Sale</Link>
                                 </div>
 
                                 <div className="mega-column">
                                     <h4>SHOES</h4>
                                     <Link to={"/products?gender=women&type=footwear&category=shoes"}>All Shoes</Link>
-                                    <Link to={"/products?gender=women&type=footwear&activity=running"}>Running</Link>
                                     <Link to={"/products?gender=women&type=footwear&activity=lifestyle"}>Lifestyle</Link>
-                                    <Link to={"/products?gender=women&type=footwear&activity=basketball"}>Basketball</Link>
-                                    <Link to={"/products?gender=women&type=footwear&activity=football"}>Football</Link>
-                                    <Link to={"/products?gender=women&type=footwear&activity=soccer"}>Soccer</Link>
+                                    <Link to={"/products?gender=women&type=footwear&activity=running"}>Running</Link>
+                                    <Link to={"/products?gender=women&type=footwear&activity=walking"}>Walking</Link>
+                                    <Link to={"/products?gender=women&type=footwear&activity=cleats"}>Cleats</Link>
+                                    <Link to={"/products?gender=women&type=footwear&activity=training"}>Training</Link>
+                                    <Link to={"/products?gender=women&type=footwear&activity=hiking%20%26%20trail"}>Hiking & Trail</Link>
                                     <Link to={"/products?gender=women&type=footwear&activity=tennis"}>Tennis</Link>
-                                    <Link to={"/products?gender=women&type=footwear&activity=golf"}>Golf</Link>
+                                    <Link to={"/products?gender=women&type=footwear&activity=basketball"}>Basketball</Link>
+                                    <Link to={"/products?gender=women&type=footwear&activity=skateboarding"}>Skateboarding</Link>
+                                    <Link to={"/products?gender=women&type=footwear&activity=sandals"}>Sandals</Link>
                                 </div>
 
                                 <div className="mega-column">
@@ -320,6 +364,8 @@ function MainHeader({
                                     <Link to={"/products?gender=women&activity=running"}>Running</Link>
                                     <Link to={"/products?gender=women&activity=basketball"}>Basketball</Link>
                                     <Link to={"/products?gender=women&activity=football"}>Football</Link>
+                                    <Link to={"/products?gender=women&activity=training"}>Training</Link>
+                                    <Link to={"/products?gender=women&activity=golf"}>Golf</Link>
                                 </div>
 
                                 <div className="mega-column">
@@ -339,49 +385,45 @@ function MainHeader({
                             <div className="mega-menu">
 
                                 <div className="mega-column featured">
-                                    <Link to={"#"}>Soccer</Link>
-                                    <Link to={"#"}>New Arrivals</Link>
-                                    <Link to={"#"}>School Uniform Shoes</Link>
-                                    <Link to={"#"}>Top Styles</Link>
-                                    <Link to={"#"}>Sibling Shop</Link>
-                                    <Link to={"#"}>Wide Shoes</Link>
-                                    <Link to={"#"}>Kid-friendly Closures</Link>
-                                    <Link to={"#"}>Shoes under $75</Link>
-                                    <Link to={"#"}>Sale</Link>
+                                    <Link to={"/products?gender=kids&new=true"}>New Arrivals</Link>
+                                    <Link to={"/products?gender=kids&sale=true"}>Sale</Link>
                                 </div>
 
                                 <div className="mega-column">
                                     <h4>SHOES</h4>
-                                    <Link to={"#"}>All Shoes</Link>
-                                    <Link to={"#"}>Big Kids (Size 3.5 - 7)</Link>
-                                    <Link to={"#"}>Little Kids (Size 10.5 - 3)</Link>
-                                    <Link to={"#"}>Babies & Toddlers (Size 0 - 10)</Link>
+                                    <Link to={"/products?gender=kids&type=footwear"}>All Shoes</Link>
+                                    <Link to={"/products?gender=kids&type=footwear&category=big%20kids"}>Big Kids (Size 3.5 - 7)</Link>
+                                    <Link to={"/products?gender=kids&type=footwear&category=little%20kids"}>Little Kids (Size 10.5 - 3)</Link>
+                                    <Link to={"/products?gender=kids&type=footwear&category=babies%20%26%20toddlers"}>Babies & Toddlers (Size 2 - 10)</Link>
                                 </div>
 
                                 <div className="mega-column">
                                     <h4>CLOTHING</h4>
-                                    <Link to={"#"}>All Clothing</Link>
-                                    <Link to={"#"}>Big Kids (Size 7Y - 16Y)</Link>
-                                    <Link to={"#"}>Little Kids (Size 3Y - 6Y)</Link>
-                                    <Link to={"#"}>Babies & Toddlers (Size 12M - 3T)</Link>
-                                </div>
-
-                                <div className="mega-column">
-                                    <h4>SPORTS</h4>
-                                    <Link to={"#"}>All Sports</Link>
-                                    <Link to={"/products?gender=kids&activity=soccer"}>Soccer</Link>
-                                    <Link to={"/products?gender=kids&activity=tennis"}>Tennis</Link>
-                                    <Link to={"/products?gender=kids&activity=running"}>Running</Link>
-                                    <Link to={"/products?gender=kids&activity=basketball"}>Basketball</Link>
-                                    <Link to={"/products?gender=kids&activity=football"}>Football</Link>
+                                    <Link to={"/products?gender=kids&type=clothing"}>All Clothing</Link>
+                                    <Link to={"/products?gender=kids&type=clothing&category=big%20kids"}>Big Kids (Size 7Y - 16Y)</Link>
+                                    <Link to={"/products?gender=kids&type=clothing&category=little%20kids"}>Little Kids (Size 3Y - 7Y)</Link>
+                                    <Link to={"/products?gender=kids&type=clothing&category=babies%20%26%20toddlers"}>Babies & Toddlers (Size 0M - 3T)</Link>
                                 </div>
 
                                 <div className="mega-column">
                                     <h4>ACCESSORIES</h4>
                                     <Link to={"/products?gender=kids&type=accessories"}>All Accessories</Link>
-                                    <Link to={"/products?gender=kids&type=accessories&category=hats%20%26%20gloves"}>Hats & Gloves</Link>
                                     <Link to={"/products?gender=kids&type=accessories&category=socks"}>Socks</Link>
-                                    <Link to={"/products?gender=kids&type=accessories&category=bags"}>Bags</Link>
+                                    <Link to={"/products?gender=kids&type=accessories&category=bags"}>Bags & Backpacks</Link>
+                                    <Link to={"/products?gender=kids&type=accessories&category=hats%20%26%20gloves"}>Hats</Link>
+                                </div>
+
+                                <div className="mega-column">
+                                    <h4>SPORTS</h4>
+                                    <Link to={"/products?gender=kids"}>All Sports</Link>
+                                    <Link to={"/products?gender=kids&activity=basketball"}>Basketball</Link>
+                                    <Link to={"/products?gender=kids&activity=baseball"}>Baseball</Link>
+                                    <Link to={"/products?gender=kids&activity=soccer"}>Soccer</Link>
+                                    <Link to={"/products?gender=kids&activity=running"}>Running</Link>
+                                    <Link to={"/products?gender=kids&activity=tennis"}>Tennis</Link>
+                                    <Link to={"/products?gender=kids&activity=lacrosse"}>Lacrosse</Link>
+                                    <Link to={"/products?gender=kids&activity=skateboarding"}>Skateboarding</Link>
+                                    <Link to={"/products?gender=kids&activity=softball"}>Softball</Link>
                                 </div>
                             </div>
                         </div>
@@ -392,33 +434,29 @@ function MainHeader({
                             <div className="mega-menu">
 
                                 <div className="mega-column featured">
-                                    <h4>All Sale</h4>
-                                    <Link to={"#"}>Under $50</Link>
-                                    <Link to={"#"}>Under $100</Link>
+                                    <Link to={"/products?sale=true"}>All Sale</Link>
+                                    <Link to={"/products?sale=true&maxPrice=50"}>Under $50</Link>
+                                    <Link to={"/products?sale=true&maxPrice=100"}>Under $100</Link>
                                 </div>
 
                                 <div className="mega-column">
                                     <h4>MEN</h4>
 
-                                    <Link to={"#"}>Shoes</Link>
-                                    <Link to={"#"}>Clothing</Link>
-                                    <Link to={"#"}>Accessories</Link>
+                                    <Link to={"/products?gender=men&type=footwear&sale=true"}>Shoes</Link>
+                                    <Link to={"/products?gender=men&type=accessories&sale=true"}>Accessories</Link>
                                 </div>
 
                                 <div className="mega-column">
                                     <h4>WOMEN</h4>
 
-                                    <Link to={"#"}>Shoes</Link>
-                                    <Link to={"#"}>Clothing</Link>
-                                    <Link to={"#"}>Accessories</Link>
+                                    <Link to={"/products?gender=women&type=footwear&sale=true"}>Shoes</Link>
+                                    <Link to={"/products?gender=women&type=accessories&sale=true"}>Accessories</Link>
                                 </div>
 
                                 <div className="mega-column">
                                     <h4>KIDS</h4>
 
-                                    <Link to={"#"}>Shoes</Link>
-                                    <Link to={"#"}>Clothing</Link>
-                                    <Link to={"#"}>Accessories</Link>
+                                    <Link to={"/products?gender=kids&type=footwear&sale=true"}>Shoes</Link>
                                 </div>
 
                             </div>
@@ -428,7 +466,14 @@ function MainHeader({
 
                 {/* RIGHT SIDE OF MOBILE HEADER: Search + Cart */}
                 <div className="header-icons">
-                    <img className="search-icon" src={searchIcon} alt="Search"/>
+                    <button
+                        type="button"
+                        className="search-btn"
+                        onClick={() => setIsSearchOpen(prev => !prev)}
+                        aria-label="Search"
+                    >
+                        <img className="search-icon" src={searchIcon} alt="Search"/>
+                    </button>
 
                     <Link to={"/login"} className="desktop-account-link">
                         <img className="account-icon" src={accountIcon} alt="Account"/>
@@ -507,8 +552,6 @@ function MainHeader({
                                     <Link to="/products?gender=men&new=true" className="menu-nav-row-link" onClick={closeMobileMenu}>Men's new arrivals</Link>
                                     <Link to="/products?gender=women&new=true" className="menu-nav-row-link" onClick={closeMobileMenu}>Women's new arrivals</Link>
                                     <Link to="/products?gender=kids&new=true" className="menu-nav-row-link" onClick={closeMobileMenu}>Kids' new arrivals</Link>
-                                    <Link to="#" className="menu-nav-row-link" onClick={closeMobileMenu}>Launch calendar</Link>
-                                    <Link to="#" className="menu-nav-row-link" onClick={closeMobileMenu}>The international football collection</Link>
                                 </div>
                             )}
 
@@ -533,7 +576,7 @@ function MainHeader({
                                         <span className="arrow-icon">→</span>
                                     </div>
                                     <Link to="/products?gender=men&new=true" className="menu-nav-row-link" onClick={closeMobileMenu}>New Arrivals</Link>
-                                    <Link to="/products?sale=true" className="menu-nav-row-link" onClick={closeMobileMenu}>Sale</Link>
+                                    <Link to="/products?gender=men&sale=true" className="menu-nav-row-link" onClick={closeMobileMenu}>Sale</Link>
                                 </div>
                             )}
 
@@ -541,13 +584,16 @@ function MainHeader({
                             {currentMenu === 'men-shoes' && (
                                 <div className="menu-page">
                                     <Link to="/products?gender=men&type=footwear&category=shoes" className="menu-nav-row-link" onClick={closeMobileMenu}>All Shoes</Link>
-                                    <Link to="/products?gender=men&type=footwear&activity=running" className="menu-nav-row-link" onClick={closeMobileMenu}>Running</Link>
                                     <Link to="/products?gender=men&type=footwear&activity=lifestyle" className="menu-nav-row-link" onClick={closeMobileMenu}>Lifestyle</Link>
+                                    <Link to="/products?gender=men&type=footwear&activity=running" className="menu-nav-row-link" onClick={closeMobileMenu}>Running</Link>
+                                    <Link to="/products?gender=men&type=footwear&activity=walking" className="menu-nav-row-link" onClick={closeMobileMenu}>Walking</Link>
+                                    <Link to="/products?gender=men&type=footwear&activity=cleats" className="menu-nav-row-link" onClick={closeMobileMenu}>Cleats</Link>
                                     <Link to="/products?gender=men&type=footwear&activity=basketball" className="menu-nav-row-link" onClick={closeMobileMenu}>Basketball</Link>
-                                    <Link to="/products?gender=men&type=footwear&activity=football" className="menu-nav-row-link" onClick={closeMobileMenu}>Football</Link>
-                                    <Link to="/products?gender=men&type=footwear&activity=soccer" className="menu-nav-row-link" onClick={closeMobileMenu}>Soccer</Link>
+                                    <Link to="/products?gender=men&type=footwear&activity=hiking%20%26%20trail" className="menu-nav-row-link" onClick={closeMobileMenu}>Hiking & Trail</Link>
+                                    <Link to="/products?gender=men&type=footwear&activity=skateboarding" className="menu-nav-row-link" onClick={closeMobileMenu}>Skateboarding</Link>
+                                    <Link to="/products?gender=men&type=footwear&activity=training" className="menu-nav-row-link" onClick={closeMobileMenu}>Training</Link>
                                     <Link to="/products?gender=men&type=footwear&activity=tennis" className="menu-nav-row-link" onClick={closeMobileMenu}>Tennis</Link>
-                                    <Link to="/products?gender=men&type=footwear&activity=golf" className="menu-nav-row-link" onClick={closeMobileMenu}>Golf</Link>
+                                    <Link to="/products?gender=men&type=footwear&activity=sandals" className="menu-nav-row-link" onClick={closeMobileMenu}>Sandals</Link>
                                 </div>
                             )}
 
@@ -571,6 +617,8 @@ function MainHeader({
                                     <Link to="/products?gender=men&activity=running" className="menu-nav-row-link" onClick={closeMobileMenu}>Running</Link>
                                     <Link to="/products?gender=men&activity=basketball" className="menu-nav-row-link" onClick={closeMobileMenu}>Basketball</Link>
                                     <Link to="/products?gender=men&activity=football" className="menu-nav-row-link" onClick={closeMobileMenu}>Football</Link>
+                                    <Link to="/products?gender=men&activity=training" className="menu-nav-row-link" onClick={closeMobileMenu}>Training</Link>
+                                    <Link to="/products?gender=men&activity=golf" className="menu-nav-row-link" onClick={closeMobileMenu}>Golf</Link>
                                 </div>
                             )}
 
@@ -605,7 +653,7 @@ function MainHeader({
                                         <span className="arrow-icon">→</span>
                                     </div>
                                     <Link to="/products?gender=women&new=true" className="menu-nav-row-link" onClick={closeMobileMenu}>New Arrivals</Link>
-                                    <Link to="/products?sale=true" className="menu-nav-row-link" onClick={closeMobileMenu}>Sale</Link>
+                                    <Link to="/products?gender=women&sale=true" className="menu-nav-row-link" onClick={closeMobileMenu}>Sale</Link>
                                 </div>
                             )}
 
@@ -613,13 +661,16 @@ function MainHeader({
                             {currentMenu === 'women-shoes' && (
                                 <div className="menu-page">
                                     <Link to="/products?gender=women&type=footwear&category=shoes" className="menu-nav-row-link" onClick={closeMobileMenu}>All Shoes</Link>
-                                    <Link to="/products?gender=women&type=footwear&activity=running" className="menu-nav-row-link" onClick={closeMobileMenu}>Running</Link>
                                     <Link to="/products?gender=women&type=footwear&activity=lifestyle" className="menu-nav-row-link" onClick={closeMobileMenu}>Lifestyle</Link>
-                                    <Link to="/products?gender=women&type=footwear&activity=basketball" className="menu-nav-row-link" onClick={closeMobileMenu}>Basketball</Link>
-                                    <Link to="/products?gender=women&type=footwear&activity=football" className="menu-nav-row-link" onClick={closeMobileMenu}>Football</Link>
-                                    <Link to="/products?gender=women&type=footwear&activity=soccer" className="menu-nav-row-link" onClick={closeMobileMenu}>Soccer</Link>
+                                    <Link to="/products?gender=women&type=footwear&activity=running" className="menu-nav-row-link" onClick={closeMobileMenu}>Running</Link>
+                                    <Link to="/products?gender=women&type=footwear&activity=walking" className="menu-nav-row-link" onClick={closeMobileMenu}>Walking</Link>
+                                    <Link to="/products?gender=women&type=footwear&activity=cleats" className="menu-nav-row-link" onClick={closeMobileMenu}>Cleats</Link>
+                                    <Link to="/products?gender=women&type=footwear&activity=training" className="menu-nav-row-link" onClick={closeMobileMenu}>Training</Link>
+                                    <Link to="/products?gender=women&type=footwear&activity=hiking%20%26%20trail" className="menu-nav-row-link" onClick={closeMobileMenu}>Hiking & Trail</Link>
                                     <Link to="/products?gender=women&type=footwear&activity=tennis" className="menu-nav-row-link" onClick={closeMobileMenu}>Tennis</Link>
-                                    <Link to="/products?gender=women&type=footwear&activity=golf" className="menu-nav-row-link" onClick={closeMobileMenu}>Golf</Link>
+                                    <Link to="/products?gender=women&type=footwear&activity=basketball" className="menu-nav-row-link" onClick={closeMobileMenu}>Basketball</Link>
+                                    <Link to="/products?gender=women&type=footwear&activity=skateboarding" className="menu-nav-row-link" onClick={closeMobileMenu}>Skateboarding</Link>
+                                    <Link to="/products?gender=women&type=footwear&activity=sandals" className="menu-nav-row-link" onClick={closeMobileMenu}>Sandals</Link>
                                 </div>
                             )}
 
@@ -643,6 +694,8 @@ function MainHeader({
                                     <Link to="/products?gender=women&activity=running" className="menu-nav-row-link" onClick={closeMobileMenu}>Running</Link>
                                     <Link to="/products?gender=women&activity=basketball" className="menu-nav-row-link" onClick={closeMobileMenu}>Basketball</Link>
                                     <Link to="/products?gender=women&activity=football" className="menu-nav-row-link" onClick={closeMobileMenu}>Football</Link>
+                                    <Link to="/products?gender=women&activity=training" className="menu-nav-row-link" onClick={closeMobileMenu}>Training</Link>
+                                    <Link to="/products?gender=women&activity=golf" className="menu-nav-row-link" onClick={closeMobileMenu}>Golf</Link>
                                 </div>
                             )}
 
@@ -668,6 +721,14 @@ function MainHeader({
                                         <span>Clothing</span>
                                         <span className="arrow-icon">→</span>
                                     </div>
+                                    <div className="menu-nav-row" onClick={() => pushMenu('kids-acc')}>
+                                        <span>Accessories</span>
+                                        <span className="arrow-icon">→</span>
+                                    </div>
+                                    <div className="menu-nav-row" onClick={() => pushMenu('kids-sports')}>
+                                        <span>Sports</span>
+                                        <span className="arrow-icon">→</span>
+                                    </div>
                                 </div>
                             )}
 
@@ -675,9 +736,9 @@ function MainHeader({
                             {currentMenu === 'kids-shoes' && (
                                 <div className="menu-page">
                                     <Link to="/products?gender=kids&type=footwear" className="menu-nav-row-link" onClick={closeMobileMenu}>All Shoes</Link>
-                                    <Link to="#" className="menu-nav-row-link" onClick={closeMobileMenu}>Big Kids (Size 3.5 - 7)</Link>
-                                    <Link to="#" className="menu-nav-row-link" onClick={closeMobileMenu}>Little Kids (Size 10.5 - 3)</Link>
-                                    <Link to="#" className="menu-nav-row-link" onClick={closeMobileMenu}>Babies & Toddlers (Size 0 - 10)</Link>
+                                    <Link to="/products?gender=kids&type=footwear&category=big%20kids" className="menu-nav-row-link" onClick={closeMobileMenu}>Big Kids (Size 3.5 - 7)</Link>
+                                    <Link to="/products?gender=kids&type=footwear&category=little%20kids" className="menu-nav-row-link" onClick={closeMobileMenu}>Little Kids (Size 10.5 - 3)</Link>
+                                    <Link to="/products?gender=kids&type=footwear&category=babies%20%26%20toddlers" className="menu-nav-row-link" onClick={closeMobileMenu}>Babies & Toddlers (Size 2 - 10)</Link>
                                 </div>
                             )}
 
@@ -685,9 +746,32 @@ function MainHeader({
                             {currentMenu === 'kids-clothing' && (
                                 <div className="menu-page">
                                     <Link to="/products?gender=kids&type=clothing" className="menu-nav-row-link" onClick={closeMobileMenu}>All Clothing</Link>
-                                    <Link to="#" className="menu-nav-row-link" onClick={closeMobileMenu}>Big Kids (Size 7Y - 16Y)</Link>
-                                    <Link to="#" className="menu-nav-row-link" onClick={closeMobileMenu}>Little Kids (Size 3Y - 6Y)</Link>
-                                    <Link to="#" className="menu-nav-row-link" onClick={closeMobileMenu}>Babies & Toddlers (Size 12M - 3T)</Link>
+                                    <Link to="/products?gender=kids&type=clothing&category=big%20kids" className="menu-nav-row-link" onClick={closeMobileMenu}>Big Kids (Size 7Y - 16Y)</Link>
+                                    <Link to="/products?gender=kids&type=clothing&category=little%20kids" className="menu-nav-row-link" onClick={closeMobileMenu}>Little Kids (Size 3Y - 7Y)</Link>
+                                    <Link to="/products?gender=kids&type=clothing&category=babies%20%26%20toddlers" className="menu-nav-row-link" onClick={closeMobileMenu}>Babies & Toddlers (Size 0M - 3T)</Link>
+                                </div>
+                            )}
+
+                            {currentMenu === 'kids-sports' && (
+                                <div className="menu-page">
+                                    <Link to="/products?gender=kids" className="menu-nav-row-link" onClick={closeMobileMenu}>All Sports</Link>
+                                    <Link to="/products?gender=kids&activity=basketball" className="menu-nav-row-link" onClick={closeMobileMenu}>Basketball</Link>
+                                    <Link to="/products?gender=kids&activity=baseball" className="menu-nav-row-link" onClick={closeMobileMenu}>Baseball</Link>
+                                    <Link to="/products?gender=kids&activity=soccer" className="menu-nav-row-link" onClick={closeMobileMenu}>Soccer</Link>
+                                    <Link to="/products?gender=kids&activity=running" className="menu-nav-row-link" onClick={closeMobileMenu}>Running</Link>
+                                    <Link to="/products?gender=kids&activity=tennis" className="menu-nav-row-link" onClick={closeMobileMenu}>Tennis</Link>
+                                    <Link to="/products?gender=kids&activity=lacrosse" className="menu-nav-row-link" onClick={closeMobileMenu}>Lacrosse</Link>
+                                    <Link to="/products?gender=kids&activity=skateboarding" className="menu-nav-row-link" onClick={closeMobileMenu}>Skateboarding</Link>
+                                    <Link to="/products?gender=kids&activity=softball" className="menu-nav-row-link" onClick={closeMobileMenu}>Softball</Link>
+                                </div>
+                            )}
+
+                            {currentMenu === 'kids-acc' && (
+                                <div className="menu-page">
+                                    <Link to="/products?gender=kids&type=accessories" className="menu-nav-row-link" onClick={closeMobileMenu}>All Accessories</Link>
+                                    <Link to="/products?gender=kids&type=accessories&category=socks" className="menu-nav-row-link" onClick={closeMobileMenu}>Socks</Link>
+                                    <Link to="/products?gender=kids&type=accessories&category=bags" className="menu-nav-row-link" onClick={closeMobileMenu}>Bags & Backpacks</Link>
+                                    <Link to="/products?gender=kids&type=accessories&category=hats%20%26%20gloves" className="menu-nav-row-link" onClick={closeMobileMenu}>Hats</Link>
                                 </div>
                             )}
 
@@ -709,6 +793,11 @@ function MainHeader({
             </header>
 
             <BagDrawer triggerRef={cartLinkRef} />
+            <SearchOverlay
+                open={isSearchOpen}
+                onClose={() => setIsSearchOpen(false)}
+                anchorRef={headerRef}
+            />
         </>
     );
 }

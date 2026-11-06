@@ -82,11 +82,33 @@ namespace NewBalanceStore.Application.Services
             };
 
             decimal totalAmount = 0;
+            var orderedProducts = new Dictionary<int, Product>();
 
             foreach (var itemDto in dto.Items)
             {
-                var product = await _productRepository.GetByIdAsync(itemDto.ProductId.ToString());
-                if (product == null) continue;
+                if (itemDto.Quantity <= 0) continue;
+
+                if (!orderedProducts.TryGetValue(itemDto.ProductId, out var product))
+                {
+                    product = await _productRepository.GetByIdAsync(itemDto.ProductId.ToString());
+                    if (product == null) continue;
+                    orderedProducts[itemDto.ProductId] = product;
+                }
+
+                if (product.Variants != null && product.Variants.Count > 0)
+                {
+                    var variant = product.Variants.FirstOrDefault(v =>
+                        string.Equals(v.Color?.Trim(), itemDto.Color?.Trim(), StringComparison.OrdinalIgnoreCase) &&
+                        string.Equals(v.Size?.Trim(), itemDto.Size?.Trim(), StringComparison.OrdinalIgnoreCase));
+
+                    if (variant == null || variant.Quantity < itemDto.Quantity)
+                    {
+                        throw new InvalidOperationException(
+                            $"Not enough stock for {product.Name} ({itemDto.Color}, size {itemDto.Size}).");
+                    }
+
+                    variant.Quantity -= itemDto.Quantity;
+                }
 
                 var orderItem = new OrderItem
                 {
@@ -104,6 +126,14 @@ namespace NewBalanceStore.Application.Services
 
             order.TotalAmount = totalAmount;
             await _orderRepository.CreateAsync(order);
+
+            foreach (var product in orderedProducts.Values)
+            {
+                if (product.Variants != null && product.Variants.Count > 0)
+                {
+                    await _productRepository.UpdateAsync(product);
+                }
+            }
 
             return _mapper.Map<OrderDto>(order);
         }

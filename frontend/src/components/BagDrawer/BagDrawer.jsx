@@ -8,14 +8,13 @@ import { getProducts } from "../../services/productsService.js";
 import { createProductView } from "../../pages/Product/productView.js";
 import { formatColorName, formatPrice, formatSizeLabel } from "../../utils/productFormat.js";
 import { BAG_DRAWER_EVENT } from "./bagDrawerEvents.js";
-
-const MAX_QUANTITY_PER_ITEM = 5;
+import { MAX_QUANTITY_PER_ITEM } from "../../entities/Cart.js";
 const HOVER_OPEN_DELAY = 150;
 
 function pickFrequentlyBought(items, products) {
     const inBag = new Set(items.map(item => String(item.product.id)));
     const bagTypes = new Set(items.map(item => item.product.type));
-    const others = products.filter(product => !inBag.has(String(product.id)) && product.getMainImage());
+    const others = products.filter(product => !inBag.has(String(product.id)) && product.getMainImage() && product.isAvailable());
     const otherType = others.filter(product => !bagTypes.has(product.type));
 
     return [...otherType, ...others.filter(product => bagTypes.has(product.type))].slice(0, 2);
@@ -158,6 +157,7 @@ function BagDrawer({ triggerRef }) {
         .filter(item => item.product);
 
     const subtotal = items.reduce((sum, item) => sum + item.product.price * item.entry.quantity, 0);
+    const hasUnavailable = items.some(item => item.product.getAvailableQuantity(item.entry.color, item.entry.size) < item.entry.quantity);
     const frequentlyBought = pickFrequentlyBought(items, products);
 
     const changeQuantity = (entry, quantity) => {
@@ -221,7 +221,7 @@ function BagDrawer({ triggerRef }) {
                     <ul className={styles.items}>
                         {items.map(({ entry, product }) => {
                             const stock = product.getAvailableQuantity(entry.color, entry.size);
-                            const maxQuantity = stock > 0 ? Math.min(MAX_QUANTITY_PER_ITEM, stock) : MAX_QUANTITY_PER_ITEM;
+                            const maxQuantity = Math.min(MAX_QUANTITY_PER_ITEM, stock);
 
                             return (
                                 <li key={`${entry.productId}-${entry.color}-${entry.size}`} className={styles.item}>
@@ -291,6 +291,12 @@ function BagDrawer({ triggerRef }) {
                                                 {formatPrice(product.price * entry.quantity)}
                                             </span>
                                         </div>
+
+                                        {stock < entry.quantity && (
+                                            <p className={styles.stockError}>
+                                                {stock === 0 ? "This item is out of stock. Please remove it from your bag." : `Only ${stock} left. Please reduce the quantity.`}
+                                            </p>
+                                        )}
                                     </div>
                                 </li>
                             );
@@ -306,7 +312,11 @@ function BagDrawer({ triggerRef }) {
 
                     <div className={styles.actions}>
                         <Link to="/cart" className={styles.viewBag} onClick={close}>View Bag</Link>
-                        <Link to="/checkout" className={styles.checkout} onClick={close}>Checkout</Link>
+                        {hasUnavailable ? (
+                            <span className={`${styles.checkout} ${styles.checkoutDisabled}`} aria-disabled="true">Checkout</span>
+                        ) : (
+                            <Link to="/checkout" className={styles.checkout} onClick={close}>Checkout</Link>
+                        )}
                     </div>
 
                     {frequentlyBought.length > 0 && (

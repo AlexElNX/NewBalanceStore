@@ -384,6 +384,259 @@ details[open] .accordionIcon::after {
     text-decoration: underline;
 }
 
+.modalOverlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+}
+
+.modalContent {
+    background: #fff;
+    padding: 32px;
+    width: 100%;
+    max-width: 440px;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.modalContent h3 {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.modalContent label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+}
+
+.modalContent input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 2px;
+    font-size: 15px;
+}
+
+.modalError {
+    color: #cf0a2c;
+    font-size: 13px;
+    margin: 0;
+}
+
+.modalActions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 16px;
+}
+
+.cancelBtn, .saveBtn {
+    padding: 10px 20px;
+    font-size: 15px;
+    cursor: pointer;
+    border-radius: 2px;
+}
+
+.cancelBtn {
+    background: #fff;
+    border: 1px solid #ccc;
+}
+
+.saveBtn {
+    background: #111;
+    color: #fff;
+    border: none;
+}
+
+.ordersList {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 24px;
+}
+
+.orderCard {
+    border: 1px solid #e5e5e5;
+    border-radius: 4px;
+    padding: 24px;
+    background: #fff;
+}
+
+.orderHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 16px;
+    margin-bottom: 16px;
+}
+
+.orderId {
+    font-size: 18px;
+    font-weight: 700;
+    color: #111;
+    margin-right: 12px;
+}
+
+.orderDate {
+    font-size: 14px;
+    color: #666;
+}
+
+.orderStatus {
+    font-size: 13px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 20px;
+    text-transform: uppercase;
+}
+
+.orderStatus.paid, .orderStatus.completed {
+    background: #e6f4ea;
+    color: #137333;
+}
+
+.orderStatus.pending {
+    background: #fef7e0;
+    color: #b06000;
+}
+
+.orderProductsGrid {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 16px;
+}
+
+.orderItemRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 0;
+    border-bottom: 1px solid #f2f2f2;
+}
+
+.orderItemRow:last-child {
+    border-bottom: none;
+}
+
+.orderItemInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+}
+
+.itemName {
+    margin: 0;
+    color: #111;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.itemMeta {
+    margin: 0;
+    color: #555;
+    font-size: 14px;
+}
+
+.itemPrice {
+    flex-shrink: 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #111;
+}
+
+.orderFooter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding-top: 16px;
+    border-top: 1px solid #eee;
+    font-size: 14px;
+    color: #444;
+}
+
+.orderTotal {
+    font-size: 16px;
+    color: #111;
+}
+
+.orderTotal strong {
+    margin-left: 8px;
+    font-size: 18px;
+}
+
+.orderStatus.delivered {
+    background: #e6f4ea;
+    color: #137333;
+}
+
+.orderModal {
+    position: relative;
+    align-items: center;
+    text-align: center;
+}
+
+.orderModal h3 {
+    margin: 0;
+}
+
+.modalClose {
+    position: absolute;
+    top: 12px;
+    right: 14px;
+    border: none;
+    background: none;
+    font-size: 26px;
+    line-height: 1;
+    color: #111;
+    cursor: pointer;
+}
+
+.orderSuccessIcon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: #e6f4ea;
+    color: #137333;
+    font-size: 26px;
+    font-weight: 700;
+}
+
+.orderModalText {
+    margin: 0;
+    color: #333;
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+.orderModal .modalActions {
+    justify-content: center;
+    width: 100%;
+    margin-top: 8px;
+}
+
+.orderModal .cancelBtn {
+    display: inline-flex;
+    align-items: center;
+    color: #111;
+    text-decoration: none;
+}
+
 /* Adaptive */
 @media (max-width: 1200px) {
     .benefitsGrid {
@@ -451,6 +704,16 @@ details[open] .accordionIcon::after {
 
     .benefitImgPlaceholder {
         height: 320px;
+    }
+
+    .orderHeader {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .orderModal .modalActions {
+        flex-direction: column-reverse;
     }
 
     .blockHeader {

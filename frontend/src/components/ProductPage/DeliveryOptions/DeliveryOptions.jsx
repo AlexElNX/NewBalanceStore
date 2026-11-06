@@ -1,10 +1,13 @@
 import styles from "./DeliveryOptions.module.css";
 import { useCallback, useState } from "react";
-import StoreModal from "./StoreModal.jsx";
+import SelectStoreModal from "../../SelectStore/SelectStoreModal.jsx";
+import { useSelectedStore } from "../../SelectStore/selectedStore.js";
 
 function DeliveryOptions() {
     const [method, setMethod] = useState("shipping");
     const [storeOpen, setStoreOpen] = useState(false);
+
+    const selectedStore = useSelectedStore();
 
     const closeStore = useCallback(() => setStoreOpen(false), []);
 
@@ -31,11 +34,14 @@ function DeliveryOptions() {
                     onClick={() => setStoreOpen(true)}
                 >
                     <StoreIcon />
-                    <span>Store pickup</span>
+                    <span className={styles.optionText}>
+                        <span>Store pickup</span>
+                        {selectedStore && <span className={styles.storeName}>{selectedStore.name}</span>}
+                    </span>
                 </button>
             </div>
 
-            {storeOpen && <StoreModal onClose={closeStore} />}
+            {storeOpen && <SelectStoreModal onClose={closeStore} onSelect={() => setMethod("pickup")} />}
         </>
     );
 }

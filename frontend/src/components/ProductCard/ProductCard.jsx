@@ -40,7 +40,7 @@ function ProductCard({ product, onQuickAdd, page }) {
         : Boolean(product.oldPrice);
 
     return (
-        <div className={styles.productCard}>
+        <div className={`${styles.productCard} ${isHome ? styles.homeCard : ""}`}>
             {/* Image wrapper for positioning quickAddBtn */}
             <div className={styles.imageWrapper}>
                 <Link to={`/product/${product.id}`}>

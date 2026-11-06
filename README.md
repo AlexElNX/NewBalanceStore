@@ -1,69 +1,119 @@
+<div align="center">
+
+<img src="frontend/src/assets/icons/header/logo.svg" alt="New Balance Store logo" width="96" height="96">
+
 # New Balance Store
 
-> Повнофункціональна e-commerce вебплатформа для перегляду, фільтрації та онлайн-замовлення спортивного взуття й одягу, створена на основі офіційного онлайн-магазину New Balance. Навчальний курсовий проєкт на базі сучасного стеку React, ASP.NET Core Web API та Firebase.
+<p>
+  <em>
+    A full-featured e-commerce web platform for browsing, filtering, and ordering sportswear and footwear online,
+    modeled on the official New Balance online store. A project built on a modern stack:
+    React, ASP.NET Core Web API, and Firebase.
+  </em>
+</p>
 
-[🌐 Live Frontend](https://balancedevs.onrender.com/) &nbsp;|&nbsp; [📚 GitHub Репозиторій](https://github.com/AlexElNX/NewBalanceStore) &nbsp;|&nbsp; [📑 Документація API (Swagger)](https://newbalancestoreback.onrender.com/swagger) &nbsp;|&nbsp; [📄 Документація проєкту (DocFX)](https://zemnyux.github.io/NewBalanceStoreBack/index.html)
+<p>
+  <a href="https://balancedevs.onrender.com/"><b>Live Frontend</b></a>
+  &nbsp;&bull;&nbsp;
+  <a href="https://github.com/AlexElNX/NewBalanceStore"><b>GitHub Repository</b></a>
+  &nbsp;&bull;&nbsp;
+  <a href="https://newbalancestoreback.onrender.com/swagger"><b>API Documentation (Swagger)</b></a>
+  &nbsp;&bull;&nbsp;
+  <a href="https://zemnyux.github.io/NewBalanceStoreBack/index.html"><b>Project Documentation (DocFX)</b></a>
+</p>
 
----
-
-## 📖 About
-
-**New Balance Store** — це  вебзастосунок електронної комерції, спроєктований та реалізований з метою демонстрації принципів побудови масштабованої Clean Architecture, роботи з REST API, автентифікації на базі JWT, хмарних баз даних NoSQL (Firebase Realtime Database) та розробки інтерактивного інтерфейсу користувача на React.
-
-Проєкт відтворює ключові призначені для користувача сценарії сучасного онлайн-магазину брендового взуття: від перегляду та багатокритеріальної фільтрації каталогу до додавання варіацій товару (колір/розмір) у кошик, оформлення замовлення та адміністрування асортименту.
-
----
-
-## ✨ Features
-
-- 👟 **Каталог товарів із варіаціями**: відображення моделей взуття, одягу та аксесуарів із комбінаціями розмірів і кольорів та показом кількості (`quantity`).
-- 🔍 **Гнучка система пошуку та фільтрації**:
-  - Фільтрація за категоріями (`Footwear`, `Clothing`, `Accessories`).
-  - Фільтрація за статтю (`Men`, `Women`, `Unisex`).
-  - Фільтрація за діапазоном цін (`minPrice`, `maxPrice`).
-  - Вибір за кольорами, наявністю та ознакою новинки (`isNew`).
-  - Миттєвий текстовий пошук за назвою або описом моделі.
-- 🛍️ **Інтерактивна картка та сторінка товару**:
-  - Галерея зображень із перемиканням активного кольору.
-  - Динамічний вибір доступних розмірів для обраного кольору.
-  - Індикатор залишку та ціни (включно зі старими цінами зі знижкою `oldPrice`).
-- 🛒 **Кошик покупок (Shopping Cart)**:
-  - Бічна шторка (Drawer) та попап «Added to Bag» при додаванні товару.
-  - Зміна кількості та видалення позицій.
-  - Автоматичний підрахунок вартості замовлення.
-  - Синхронізація стану кошика через Context API + Reducer з автозбереженням у `LocalStorage`.
-- 📦 **Оформлення замовлення (Checkout Flow)**:
-  - Покрокова валідація контактних даних покупця та адреси доставки.
-  - Збереження замовлення у базі даних зі статусом `Pending`.
-- 🔐 **Автентифікація та авторизація**:
-  - Реєстрація та авторизація користувачів за допомогою JWT-токенів.
-  - Рольова модель доступу: `Guest`, `Customer`, `Admin`.
-  - Захищені маршрути на фронтенді.
-- 🛠️ **Панель адміністратора (Admin Dashboard)**:
-  - Повний CRUD для товарів (створення, редагування, видалення).
-  - Завантаження зображень товарів безпосередньо у хмару Cloudinary через API.
-  - Керування та оновлення статусів замовлень (`Pending`, `Processing`, `Shipped`, `Delivered`, `Cancelled`).
-- 📱 **Адаптивний UI/UX**: підтримка мобільних пристроїв, планшетів і десктопів (Mobile-First від 320px).
+</div>
 
 ---
 
-## 🎨 Design
+## Disclaimer
 
-Дизайн інтерфейсу базується на зовнішньому вигляді офіційного магазину [**New Balance**](https://www.newbalance.com/):
+An independent educational project inspired by the official New Balance online store, developed for learning, experimentation, and portfolio purposes.
 
-- **Стилістика**: фірмовий мінімалізм, чітка типографіка без засічок та чистих світлих тонів для контрасту й фокусу на фотографіях виробів.
-- **Компоненти UI**:
-  - `TopHeader` & `MainHeader`: навігаційне меню, рядок пошуку, посилання на авторизацію та іконка кошика з лічильником товарів.
-  - `ProductFilters`: бічна панель фільтрів із підтримкою комбінованого вибору критеріїв.
-  - `ProductCard` & `ProductCarousel`: сітка та каруселі популярних товарів.
-  - `AddedToBagPopup` & `CartDrawer`: плавні модальні вікна та слайд-овери для взаємодії з кошиком без перезавантаження сторінки.
-  - `Footer`: навігаційні розділи, інформація про доставку, повернення та навчальний статус проєкту.
+This project is **not affiliated with, endorsed by, or associated with New Balance**.
+
+New Balance names, logos, trademarks, product images, and other brand-related materials belong to their respective owners. All rights to these materials remain with their respective copyright and trademark holders.
+
+This project is intended for educational and demonstration purposes only. It is not an official New Balance website and is not intended to mislead users into believing it is affiliated with the brand.
+
+### Purpose
+
+The project was created to practice and demonstrate web development skills, including:
+
+- React and JavaScript
+- C# and ASP.NET Core
+- E-commerce UI and application architecture
+- Product filtering, shopping cart, and checkout flows
+- Authentication, administration, and testing
+
+### Notice
+
+The original code and implementation created for this project are separate from New Balance's proprietary materials. The use of third-party brand assets does not imply ownership of, or permission to use, those assets.
+
+If you are a rights holder and have concerns regarding any material included in this repository, please contact the repository owner.
+
+<p align="center"><b>For educational use only. Not an official New Balance product or service.</b></p>
 
 ---
 
-## 🏗️ Architecture
+## About
 
-Проєкт побудовано за принципами **Clean / Onion Architecture** на бекенді та модульної компонентної архітектури з використанням шаблонів проєктування на фронтенді.
+**New Balance Store** is an e-commerce web application designed and built to demonstrate the principles of a scalable Clean Architecture, working with REST APIs, JWT-based authentication, cloud NoSQL databases (Firebase Realtime Database), and developing an interactive user interface in React.
+
+The project reproduces the key user scenarios of a modern branded footwear store: from browsing and multi-criteria filtering of the catalog, to adding product variations (color/size) to the cart, placing an order, and managing the product range.
+
+---
+
+## Features
+
+- **Product catalog with variations**: displays footwear, clothing, and accessories with combinations of sizes and colors, including stock quantity (`quantity`).
+- **Flexible search and filtering**:
+  - Filtering by category (`Footwear`, `Clothing`, `Accessories`).
+  - Filtering by gender (`Men`, `Women`, `Unisex`).
+  - Filtering by price range (`minPrice`, `maxPrice`).
+  - Selection by color, availability, and the new-arrival flag (`isNew`).
+  - Instant text search by model name or description.
+- **Interactive product card and product page**:
+  - Image gallery with switching of the active color.
+  - Dynamic selection of available sizes for the chosen color.
+  - Stock indicator and price display (including the previous discounted price, `oldPrice`).
+- **Shopping Cart**:
+  - Side drawer and an "Added to Bag" popup when a product is added.
+  - Quantity changes and item removal.
+  - Automatic order total calculation.
+  - Cart state synchronization via Context API + Reducer with automatic persistence to `LocalStorage`.
+- **Checkout Flow**:
+  - Step-by-step validation of the customer's contact details and delivery address.
+  - Order saved to the database with the `Pending` status.
+- **Authentication and authorization**:
+  - User registration and login using JWT tokens.
+  - Role-based access model: `Guest`, `Customer`, `Admin`.
+  - Protected routes on the frontend.
+- **Admin Dashboard**:
+  - Full CRUD for products (create, edit, delete).
+  - Product image upload directly to Cloudinary via the API.
+  - Management and updating of order statuses (`Pending`, `Processing`, `Shipped`, `Delivered`, `Cancelled`).
+- **Responsive UI/UX**: support for mobile devices, tablets, and desktops (Mobile-First, from 320px).
+
+---
+
+## Design
+
+The interface design is based on the look of the official [**New Balance**](https://www.newbalance.com/) store:
+
+- **Style**: signature minimalism, clear sans-serif typography, and clean light tones for contrast and a focus on product photography.
+- **UI components**:
+  - `TopHeader` & `MainHeader`: navigation menu, search bar, authentication links, and a cart icon with an item counter.
+  - `ProductFilters`: side filter panel supporting combined selection of criteria.
+  - `ProductCard` & `ProductCarousel`: grid and carousels of popular products.
+  - `AddedToBagPopup` & `CartDrawer`: smooth modal windows and slide-overs for interacting with the cart without reloading the page.
+  - `Footer`: navigation sections, shipping and returns information, and the project's educational status.
+
+---
+
+## Architecture
+
+The project follows the principles of **Clean / Onion Architecture** on the backend, and a modular component architecture with design patterns on the frontend.
 
 ```mermaid
 graph TD
@@ -99,84 +149,87 @@ graph TD
     Infra -->|Upload API| Cloudinary
 ```
 
-### Шари бекенду:
-1. **`NewBalanceStore.Domain`**: ядро системи, що не залежить від жодних зовнішніх бібліотек та баз даних. Містить бізнес-сутності (`Product`, `ProductVariant`, `Cart`, `Order`, `User`), перечислення (`ProductType`, `Gender`, `OrderStatus`, `UserRole`) та контракти репозиторіїв (`IProductRepository`, `IOrderRepository`, `IUserRepository`).
-2. **`NewBalanceStore.Application`**: реалізація сценаріїв використання. Містить сервіси товарів і замовлень, DTO та профіль мапінгу AutoMapper.
-3. **`NewBalanceStore.Infrastructure`**: зв'язок із зовнішніми хмарними сервісами. Містить адаптери до Firebase Realtime Database (`FirebaseProductRepository`, `FirebaseOrderRepository`, `FirebaseUserRepository`) та сервіс роботи з медіафайлами Cloudinary (`PhotoService`).
-4. **`NewBalanceStore.WebApi`**: точка входу вебсервера. REST API контролери (`AuthController`, `ProductsController`, `OrdersController`), конфігурація маршрутизації, налаштування JWT Bearer аутентифікації, CORS-політик та Swagger UI.
+### Backend Layers
 
-### Патерни проєктування (Design Patterns):
-- **Factory Pattern** (`frontend/src/factory/productFactory.js`): динамічне створення об'єктів товарів відповідних класів (`Shoe`, `Clothing`, `Accessory`) на основі атрибута `type`, що приходить з API.
-- **Repository Pattern**: інкапсуляція доступу до даних за інтерфейсами доменного шару.
-- **Reducer Pattern**: керування незмінним станом кошика (`cartReducer.js`).
-- **Dependency Injection (DI)**: впровадження залежностей через вбудований IoC-контейнер ASP.NET Core.
+1. **`NewBalanceStore.Domain`**: the core of the system, independent of any external libraries and databases. Contains business entities (`Product`, `ProductVariant`, `Cart`, `Order`, `User`), enumerations (`ProductType`, `Gender`, `OrderStatus`, `UserRole`), and repository contracts (`IProductRepository`, `IOrderRepository`, `IUserRepository`).
+2. **`NewBalanceStore.Application`**: implementation of use cases. Contains product and order services, DTOs, and the AutoMapper mapping profile.
+3. **`NewBalanceStore.Infrastructure`**: integration with external cloud services. Contains adapters for Firebase Realtime Database (`FirebaseProductRepository`, `FirebaseOrderRepository`, `FirebaseUserRepository`) and the Cloudinary media service (`PhotoService`).
+4. **`NewBalanceStore.WebApi`**: the web server entry point. REST API controllers (`AuthController`, `ProductsController`, `OrdersController`), routing configuration, JWT Bearer authentication setup, CORS policies, and Swagger UI.
+
+### Design Patterns
+
+- **Factory Pattern** (`frontend/src/factory/productFactory.js`): dynamic creation of product objects of the appropriate classes (`Shoe`, `Clothing`, `Accessory`) based on the `type` attribute received from the API.
+- **Repository Pattern**: encapsulation of data access behind domain-layer interfaces.
+- **Reducer Pattern**: management of the immutable cart state (`cartReducer.js`).
+- **Dependency Injection (DI)**: dependency injection via the built-in ASP.NET Core IoC container.
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
-| Категорія | Технологія | Опис |
+| Category | Technology | Description |
 | :--- | :--- | :--- |
-| **Frontend Framework** | React 19 | Бібліотека для побудови інтерфейсу користувача |
-| **Build Tool** | Vite 8 | Швидкий інструмент збірки та dev-сервер |
-| **Routing** | React Router DOM v7/v8 | Клієнтська маршрутизація сторінок |
-| **State Management** | React Context + Reducers | Управління глобальним станом кошика та автентифікації |
-| **Styles** | CSS / CSS Modules | Модульні та глобальні стилі компонентів |
-| **Backend Framework** | ASP.NET Core Web API (.NET 10) | Продуктивний серверний REST API фреймворк |
-| **Мова програмування** | C# 14 / JavaScript | Мови бекенду та фронтенду |
-| **Database** | Firebase Realtime Database | Хмарна NoSQL база даних реального часу від Google |
-| **Media Storage** | Cloudinary | Хмарний сервіс для оптимізації та збереження фотографій товарів |
-| **Authentication** | JWT (JSON Web Tokens) | Авторизація за допомогою підписаних токенів та ролей |
-| **Mapping** | AutoMapper | Автоматичне перетворення сутностей у DTO |
-| **API Documentation** | Swagger / OpenAPI + DocFX | Інтерактивна документація ендпоінтів та статичний сайт документації |
-| **Unit & Integration Testing** | NUnit, Vitest, Testing Library | Тестування бекенду та клієнтських компонентів |
-| **Containerization** | Docker | Контейнеризація бекенд-застосунку |
+| **Frontend Framework** | React 19 | Library for building the user interface |
+| **Build Tool** | Vite 8 | Fast build tool and dev server |
+| **Routing** | React Router DOM v7/v8 | Client-side page routing |
+| **State Management** | React Context + Reducers | Management of global cart and authentication state |
+| **Styles** | CSS / CSS Modules | Modular and global component styles |
+| **Backend Framework** | ASP.NET Core Web API (.NET 10) | High-performance server-side REST API framework |
+| **Programming Languages** | C# 14 / JavaScript | Backend and frontend languages |
+| **Database** | Firebase Realtime Database | Google's cloud real-time NoSQL database |
+| **Media Storage** | Cloudinary | Cloud service for optimizing and storing product photos |
+| **Authentication** | JWT (JSON Web Tokens) | Authorization using signed tokens and roles |
+| **Mapping** | AutoMapper | Automatic conversion of entities to DTOs |
+| **API Documentation** | Swagger / OpenAPI + DocFX | Interactive endpoint documentation and a static documentation site |
+| **Unit & Integration Testing** | NUnit, Vitest, Testing Library | Testing of the backend and client components |
+| **Containerization** | Docker | Containerization of the backend application |
 
 ---
 
-## 🔐 Authentication
+## Authentication
 
-Автентифікація реалізована за стандартом **JSON Web Tokens (JWT)**:
+Authentication is implemented using the **JSON Web Tokens (JWT)** standard:
 
-1. **Реєстрація / Вхід**: клієнт надсилає запит на `POST /api/auth/register` або `POST /api/auth/login`.
-2. **Видача токена**: бекенд перевіряє облікові дані та повертає підписаний токен із включенням ролі користувача (`ClaimTypes.Role`) та ідентифікатора.
-3. **Авторизація запитів**: для захищених операцій токен передається у заголовку:
+1. **Registration / Login**: the client sends a request to `POST /api/auth/register` or `POST /api/auth/login`.
+2. **Token issuance**: the backend verifies the credentials and returns a signed token that includes the user's role (`ClaimTypes.Role`) and identifier.
+3. **Request authorization**: for protected operations, the token is passed in the header:
    ```http
    Authorization: Bearer <jwt_token>
    ```
-4. **Рольовий доступ (RBAC)**:
-   - **Гість (Guest)**: перегляд каталогу, деталей товару, пошук, фільтрація, локальний кошик.
-   - **Покупець (Customer)**: створення замовлень.
-   - **Адміністратор (Admin)**: створення/редагування/видалення товарів (`[Authorize(Roles = "Admin")]`) і завантаження фото в Cloudinary. Маршрут зміни статусу замовлення наразі не захищений авторизацією.
+4. **Role-Based Access Control (RBAC)**:
+   - **Guest**: browsing the catalog and product details, search, filtering, local cart.
+   - **Customer**: creating orders.
+   - **Admin**: creating/editing/deleting products (`[Authorize(Roles = "Admin")]`) and uploading photos to Cloudinary. The order status update route is currently not protected by authorization.
 
 ---
 
-## 👟 Product Catalog
+## Product Catalog
 
-Каталог є ключовим розділом магазину та підтримує деталізовану модель предметної області:
+The catalog is the key section of the store and supports a detailed domain model:
 
-- **Сутність товару (`Product`)**:
-  - `id`: унікальний ідентифікатор.
-  - `name`: комерційна назва моделі (наприклад, *New Balance 9060*, *574 Core*).
-  - `description`: опис характеристик, матеріалів та технологій.
-  - `type`: `Footwear` (Взуття), `Clothing` (Одяг), `Accessories` (Аксесуари).
-  - `category`: категорія (наприклад, *Running*, *Lifestyle*, *Basketball*).
+- **Product entity (`Product`)**:
+  - `id`: unique identifier.
+  - `name`: commercial model name (for example, *New Balance 9060*, *574 Core*).
+  - `description`: description of features, materials, and technologies.
+  - `type`: `Footwear`, `Clothing`, `Accessories`.
+  - `category`: category (for example, *Running*, *Lifestyle*, *Basketball*).
   - `gender`: `Men`, `Women`, `Unisex`.
-  - `price` та `oldPrice`: актуальна ціна та стара ціна (акція / знижка).
-  - `images`: список URL зображень високої якості.
-  - `colors`: доступні кольорові гами моделі.
-  - `isNew`: позначка нової колекції.
-  - `variants`: масив конкретних складських варіацій.
-- **Варіація товару (`ProductVariant`)**:
-  - `color`: конкретний колір.
-  - `size`: розмір (наприклад, US 7, 8, 8.5, 9, 10, M, L).
-  - `quantity`: кількість одиниць у наявності на складі.
+  - `price` and `oldPrice`: the current price and the previous price (promotion / discount).
+  - `images`: list of high-quality image URLs.
+  - `colors`: available color options of the model.
+  - `isNew`: new collection flag.
+  - `variants`: array of specific stock variations.
+- **Product variant (`ProductVariant`)**:
+  - `color`: specific color.
+  - `size`: size (for example, US 7, 8, 8.5, 9, 10, M, L).
+  - `quantity`: number of units in stock.
 
 ---
 
-## ⚙️ Configuration
+## Configuration
 
 ### 1. Backend (`appsettings.json`)
+
 ```json
 {
   "Firebase": {
@@ -198,97 +251,109 @@ graph TD
 ```
 
 ### 2. Frontend (`frontend/.env`)
-Створіть файл `.env` у каталозі `frontend/`:
+
+Create a `.env` file in the `frontend/` directory:
+
 ```env
 VITE_API_URL=http://localhost:5124/api
 ```
 
-URL Firebase для репозиторіїв товарів і замовлень наразі задано безпосередньо в `NewBalanceStore.WebApi/Program.cs`; значення `Firebase:DatabaseUrl` у конфігурації використовується репозиторієм користувачів.
+The Firebase URL for the product and order repositories is currently set directly in `NewBalanceStore.WebApi/Program.cs`; the `Firebase:DatabaseUrl` value in the configuration is used by the user repository.
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
-### Попередні вимоги:
+### Prerequisites
+
 - [.NET 10.0 SDK](https://dotnet.microsoft.com/download)
-- [Node.js 20.19+ або 22.12+](https://nodejs.org/) & `npm`
+- [Node.js 20.19+ or 22.12+](https://nodejs.org/) & `npm`
 - [Git](https://git-scm.com/)
 
-### Кроки для запуску проєкту локально:
+### Running the project locally
 
-1. **Клонуйте репозиторій**:
+1. **Clone the repository**:
    ```bash
    git clone https://github.com/AlexElNX/NewBalanceStore.git
    cd NewBalanceStore
    ```
 
-2. **Запуск Backend**:
+2. **Run the Backend**:
    ```bash
-   # Відновлення пакетів та запуск API-проєкту
+   # Restore packages and run the API project
    dotnet restore
    dotnet run --project NewBalanceStore.WebApi
    ```
-   API запуститься за адресою `http://localhost:5124` (або `https://localhost:7124`).
-   Swagger UI доступний за адресою: `http://localhost:5124/swagger`.
+   The API will start at `http://localhost:5124` (or `https://localhost:7124`).
+   Swagger UI is available at: `http://localhost:5124/swagger`.
 
-3. **Запуск Frontend**:
+3. **Run the Frontend**:
    ```bash
    cd frontend
    npm install
    npm run dev
    ```
-   Клієнтський застосунок відкриється за адресою `http://localhost:5173`.
+   The client application will open at `http://localhost:5173`.
 
 ---
 
-## 📦 Build
+## Build
 
-### Збірка серверної частини (Release):
+### Building the backend (Release)
+
 ```bash
 dotnet build -c Release
 dotnet publish NewBalanceStore.WebApi/NewBalanceStore.WebApi.csproj -c Release -o ./publish
 ```
 
-### Збірка клієнтської частини (Frontend):
+### Building the frontend
+
 ```bash
 cd frontend
 npm run build
 ```
-Зібрані статичні оптимізовані файли будуть створені в директорії `frontend/dist/`.
 
-### Генерація сайту документації (DocFX):
+The optimized static build files will be created in the `frontend/dist/` directory.
+
+### Generating the documentation site (DocFX)
+
 ```bash
 docfx docfx.json
 ```
-Згенерована документація зберігається в папці `_site/`.
+
+The generated documentation is stored in the `_site/` folder.
 
 ---
 
-## 🌐 Deployment
+## Deployment
 
 - **Backend**: **Render**.
-- **Frontend**: див. посилання на розгорнутий застосунок на початку README.
-- **Database & Storage**: Google Firebase Realtime Database та Cloudinary керуються у хмарі та доступні за надійними API-ключами.
+- **Frontend**: see the link to the deployed application at the beginning of this README.
+- **Database & Storage**: Google Firebase Realtime Database and Cloudinary are managed in the cloud and accessed via secure API keys.
 
 ---
 
-## 🧪 Testing
+## Testing
 
-Проєкт містить модульні та інтеграційні тести для вибраних сценаріїв:
+The project contains unit and integration tests for selected scenarios:
 
-### 1. Бекенд-тести
-- **Unit Tests (`NewBalanceStore.UnitTests`)**: тести для `ProductService`, `OrderService`, `AuthService`, `Cart`, мапінгу AutoMapper та екшенів контролерів.
-- **Integration Tests (`NewBalanceStore.IntegrationTests`)**: тести на базі `WebApplicationFactory` для HTTP-сценаріїв автентифікації, товарів і замовлень.
+### 1. Backend tests
 
-**Запуск усіх тестів бекенду:**
+- **Unit Tests (`NewBalanceStore.UnitTests`)**: tests for `ProductService`, `OrderService`, `AuthService`, `Cart`, AutoMapper mapping, and controller actions.
+- **Integration Tests (`NewBalanceStore.IntegrationTests`)**: `WebApplicationFactory`-based tests for HTTP scenarios covering authentication, products, and orders.
+
+**Run all backend tests:**
+
 ```bash
 dotnet test
 ```
 
-### 2. Клієнтські тести
-- Покриття логіки кошика (`Cart.test.js`), замовлень (`Order.test.js`) та взаємодії на сторінці товару (`ProductPage.test.js`).
+### 2. Frontend tests
 
-**Запуск тестів фронтенду:**
+- Coverage of cart logic (`Cart.test.js`), orders (`Order.test.js`), and interaction on the product page (`ProductPage.test.js`).
+
+**Run the frontend tests:**
+
 ```bash
 cd frontend
 npm run test:run
@@ -296,57 +361,57 @@ npm run test:run
 
 ---
 
-## 🔒 Security
+## Security
 
-- **Захист від несанкціонованого доступу**: реалізовано атрибути `[Authorize(Roles = "Admin")]` на критичних ендпоінтах мутації даних (створення/редагування/видалення товарів).
-- **Валідація JWT**: сувора перевірка терміну дії токена, підпису секретним ключем, валідація видавця (`Issuer`) та споживача (`Audience`).
-- **Захист секретів**: використовуйте .NET User Secrets або змінні середовища для JWT-секрету й облікових даних Cloudinary; не додавайте реальні секрети до репозиторію.
-- **CORS**: політика `AllowReactApp` наразі дозволяє будь-яке походження, заголовки й методи; обмежте її перед розгортанням у production.
+- **Protection against unauthorized access**: `[Authorize(Roles = "Admin")]` attributes are applied to critical data mutation endpoints (creating/editing/deleting products).
+- **JWT validation**: strict verification of the token's expiration, secret key signature, issuer (`Issuer`), and audience (`Audience`).
+- **Secrets protection**: use .NET User Secrets or environment variables for the JWT secret and Cloudinary credentials; do not commit real secrets to the repository.
+- **CORS**: the `AllowReactApp` policy currently allows any origin, header, and method; restrict it before deploying to production.
 
 ---
 
-## 📚 API
+## API
 
-Основні REST API маршрути системи:
+The main REST API routes of the system:
 
-| Метод | Ендпоінт | Доступ | Опис |
+| Method | Endpoint | Access | Description |
 | :--- | :--- | :--- | :--- |
-| `POST` | `/api/auth/register` | Public | Реєстрація нового користувача |
-| `POST` | `/api/auth/login` | Public | Вхід та отримання JWT-токена |
-| `GET` | `/api/products` | Public | Отримання каталогу товарів із фільтрацією |
-| `GET` | `/api/products/{id}` | Public | Отримання детальної інформації про товар за ID |
-| `POST` | `/api/products` | `Admin` | Створення нового товару |
-| `PUT` | `/api/products/{id}` | `Admin` | Оновлення існуючого товару |
-| `DELETE`| `/api/products/{id}` | `Admin` | Видалення товару за ID |
-| `POST` | `/api/products/upload-image` | `Admin` | Завантаження зображення товару до Cloudinary |
-| `POST` | `/api/orders` | Public | Оформлення нового замовлення |
-| `GET` | `/api/orders/{id}` | Public | Отримання замовлення за ID |
-| `PATCH`| `/api/orders/{id}/status` | Public | Зміна статусу замовлення (`Shipped`, `Delivered` тощо) |
+| `POST` | `/api/auth/register` | Public | Register a new user |
+| `POST` | `/api/auth/login` | Public | Log in and obtain a JWT token |
+| `GET` | `/api/products` | Public | Retrieve the product catalog with filtering |
+| `GET` | `/api/products/{id}` | Public | Retrieve detailed product information by ID |
+| `POST` | `/api/products` | `Admin` | Create a new product |
+| `PUT` | `/api/products/{id}` | `Admin` | Update an existing product |
+| `DELETE` | `/api/products/{id}` | `Admin` | Delete a product by ID |
+| `POST` | `/api/products/upload-image` | `Admin` | Upload a product image to Cloudinary |
+| `POST` | `/api/orders` | Public | Place a new order |
+| `GET` | `/api/orders/{id}` | Public | Retrieve an order by ID |
+| `PATCH` | `/api/orders/{id}/status` | Public | Change the order status (`Shipped`, `Delivered`, etc.) |
 
-*Детальна інтерактивна специфікація доступна у Swagger UI за маршрутом `/swagger`.*
-
----
-
-## 🗺️ Roadmap
-
-- [x] Реалізація повноцінної Clean Architecture на бекенді.
-- [x] Каталог товарів з фільтрацією та варіаціями кольорів і розмірів.
-- [x] Повноцінний кошик із Context API та збереженням у LocalStorage.
-- [x] Оформлення замовлень та зміна їхніх статусів.
-- [x] Автентифікація через JWT та рольовий доступ (Admin/Customer).
-- [x] Завантаження фотографій через Cloudinary API.
-- [x] Покриття бізнес-логіки тестами (NUnit + Vitest).
-- [ ] Інтеграція платіжного шлюзу (Stripe / LiqPay / MonoPay).
-- [ ] Відгуки та рейтинги до товарів від верифікованих покупців.
-- [ ] Email-сповіщення клієнта про зміну статусу замовлення.
+*A detailed interactive specification is available in Swagger UI at the `/swagger` route.*
 
 ---
 
-## 👨‍💻 Authors
+## Roadmap
 
-Команда розробників **BalanceDevs**:
+- [x] Implementation of a complete Clean Architecture on the backend.
+- [x] Product catalog with filtering and color and size variations.
+- [x] Full-featured cart with Context API and LocalStorage persistence.
+- [x] Order placement and order status updates.
+- [x] JWT authentication and role-based access (Admin/Customer).
+- [x] Photo upload via the Cloudinary API.
+- [x] Business logic test coverage (NUnit + Vitest).
+- [ ] Payment gateway integration (Stripe / LiqPay / MonoPay).
+- [ ] Product reviews and ratings from verified buyers.
+- [ ] Email notifications to customers about order status changes.
 
-- **Олексій Єлісєєв** — [@AlexElNX](https://github.com/AlexElNX) — *Team Lead / Frontend Developer*
-- **Микита Габер** — [@ZemNyux](https://github.com/ZemNyux) — *Backend Developer*
-- **Данило Павлюк** — [@kasatjk](https://github.com/kasatjk) — *Tester and Technical Writer*
-- **Олексій Драціон** — [@AlexDrts](https://github.com/AlexDrts) — *Full-Stack Developer*
+---
+
+## Authors
+
+Development team **BalanceDevs**:
+
+- [@AlexElNX](https://github.com/AlexElNX) — *Team Lead and Frontend Developer*
+- [@ZemNyux](https://github.com/ZemNyux) — *Backend Developer*
+- [@kasatjk](https://github.com/kasatjk) — *Tester and Technical Writer*
+- [@AlexDrts](https://github.com/AlexDrts) — *Full-Stack Developer*

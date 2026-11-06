@@ -86,7 +86,7 @@ function Home() {
                             products, events,
                             and stories that highlight the unique and timeless qualities of the color grey.
                         </p>
-                        <button>The Grey Shop</button>
+                        <button onClick={handleShopNowBtn}>The Grey Shop</button>
                     </div>
                 </section>
 

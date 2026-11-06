@@ -255,3 +255,25 @@
         font-size: 12px;
     }
 }
+
+/* ===== HOME PAGE CARDS ===== */
+.homeCard {
+    --home-inset: 24px;
+}
+
+.homeCard > :not(.imageWrapper) {
+    margin-left: var(--home-inset);
+    margin-right: var(--home-inset);
+}
+
+@media (max-width: 1024px) {
+    .homeCard {
+        --home-inset: 16px;
+    }
+}
+
+@media (max-width: 768px) {
+    .homeCard {
+        --home-inset: 12px;
+    }
+}

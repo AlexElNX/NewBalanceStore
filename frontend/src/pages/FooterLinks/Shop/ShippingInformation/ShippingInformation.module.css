@@ -1,0 +1,287 @@
+.shippingPage.hero {
+    position: relative;
+    width: 100%;
+    max-width: 1940px;
+    height: 10px;
+    min-height: 10px;
+    margin: 0 auto;
+    overflow: visible;
+}
+
+.container {
+    width: 100%;
+    max-width: 1940px;
+    margin: 100px auto 0;
+    padding: 0 max(16px, 8.4vw) 60px;
+    color: #111;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.breadcrumbs {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: 12px;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.breadcrumbs a {
+    color: #111;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.separator {
+    color: #767676;
+    font-weight: 400;
+}
+
+.layout {
+    display: grid;
+    grid-template-columns: 300px minmax(0, 1fr);
+    gap: 68px;
+    margin-top: 44px;
+}
+
+.sideTitle {
+    margin: 0 0 10px;
+    font-size: 26px;
+    font-weight: 700;
+}
+
+.sideList {
+    margin: 0 0 28px;
+    padding: 0;
+    list-style: none;
+}
+
+.sideList li {
+    margin-bottom: 18px;
+}
+
+.sideList a {
+    color: #111;
+    font-size: 15px;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.sideList a:hover {
+    color: #cf0a2c;
+}
+
+.title {
+    margin: 0;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 56px;
+    font-weight: 400;
+    line-height: 1.1;
+    letter-spacing: -1px;
+}
+
+.titleLine {
+    display: block;
+    width: 80px;
+    height: 4px;
+    margin: 28px 0 36px;
+    background: #cf0a2c;
+}
+
+.intro {
+    margin: 0 0 18px;
+    font-size: 16px;
+    line-height: 1.75;
+}
+
+.tableWrap {
+    margin: 36px 0 48px;
+    padding-left: 8px;
+    overflow-x: auto;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 15px;
+    line-height: 1.6;
+    text-align: left;
+}
+
+.table thead th {
+    padding: 16px 14px;
+    border-top: 1px solid #ddd;
+    border-bottom: 2px solid #ccc;
+    font-weight: 700;
+}
+
+.table tbody th,
+.table tbody td {
+    padding: 16px 14px 18px;
+    border-bottom: 1px solid #e2e2e2;
+    vertical-align: top;
+}
+
+.table tbody th {
+    font-weight: 400;
+    white-space: nowrap;
+}
+
+.table a {
+    color: inherit;
+    text-decoration: underline;
+}
+
+.faqTitle {
+    margin: 0 0 16px;
+    font-size: 32px;
+    font-weight: 700;
+}
+
+.faqList {
+    padding-left: 8px;
+}
+
+.faqItem {
+    border-bottom: 1px solid #ddd;
+}
+
+.faqHeading {
+    margin: 0;
+    font-size: inherit;
+    font-weight: inherit;
+}
+
+.faqTrigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    width: 100%;
+    padding: 16px 0;
+    border: none;
+    background: none;
+    color: #111;
+    font-family: inherit;
+    font-size: 16px;
+    text-align: left;
+    cursor: pointer;
+}
+
+.faqTrigger:focus-visible {
+    outline: 2px solid #111;
+    outline-offset: 2px;
+}
+
+.chevron {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+}
+
+.chevronOpen {
+    transform: rotate(180deg);
+}
+
+.faqPanel {
+    padding: 4px 40px 24px 0;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.faqPanel p {
+    margin: 0 0 12px;
+}
+
+.faqPanel ul,
+.faqPanel ol {
+    margin: 0 0 12px;
+    padding-left: 22px;
+}
+
+.faqPanel li {
+    margin-bottom: 4px;
+}
+
+.faqPanel a {
+    color: inherit;
+    text-decoration: underline;
+}
+
+.more {
+    margin: 28px 0 0;
+    font-size: 16px;
+}
+
+.more a {
+    color: #1a4fd6;
+    font-weight: 700;
+    text-decoration: underline;
+}
+
+@media (max-width: 1024px) {
+    .layout {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 40px;
+    }
+
+    .sidebar {
+        order: 2;
+    }
+
+    .title {
+        font-size: 44px;
+    }
+}
+
+@media (max-width: 768px) {
+    .breadcrumbs {
+        margin-left: 0;
+    }
+
+    .container {
+        margin-top: 90px;
+        padding: 0 16px 32px;
+    }
+
+    .layout {
+        margin-top: 28px;
+    }
+
+    .title {
+        font-size: 34px;
+    }
+
+    .titleLine {
+        margin: 20px 0 28px;
+    }
+
+    .faqTitle {
+        font-size: 26px;
+    }
+
+    .tableWrap {
+        padding-left: 0;
+    }
+
+    .table {
+        font-size: 14px;
+    }
+
+    .table tbody th {
+        white-space: normal;
+    }
+
+    .faqList {
+        padding-left: 0;
+    }
+
+    .faqTrigger {
+        font-size: 15px;
+    }
+
+    .faqPanel {
+        padding-right: 0;
+    }
+}

@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import styles from "./ManageProducts.module.css";
 import TopHeader from "../../../components/TopHeader/TopHeader.jsx";
 import MainHeader from "../../../components/MainHeader/MainHeader.jsx";
 import Footer from "../../../components/Footer/Footer.jsx";
 import ConfirmModal from "../../../components/ConfirmModal/ConfirmModal.jsx";
 import { deleteProduct, fetchProducts } from "../../../services/api/productsApi.js";
+import Notice from "../../../components/Notice/Notice.jsx";
 
 function getCoverImage(product) {
     const images = product.images || {};
@@ -28,6 +29,15 @@ function getColorCount(product) {
     return colors.size;
 }
 
+const TYPE_FILTERS = [
+    { value: "all", label: "All" },
+    { value: "footwear", label: "Shoes" },
+    { value: "clothing", label: "Clothing" },
+    { value: "accessories", label: "Accessories" }
+];
+
+const GENDER_FILTERS = ["Men", "Women", "Unisex", "Kids"];
+
 function formatPrice(value) {
     const number = Number(value);
     return Number.isNaN(number) ? "" : `$${number.toFixed(2)}`;
@@ -36,13 +46,19 @@ function formatPrice(value) {
 function ManageProducts() {
     const pageRef = useRef(null);
     const navigate = useNavigate();
+    const location = useLocation();
 
     const [products, setProducts] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [loadError, setLoadError] = useState("");
     const [search, setSearch] = useState("");
+    const [typeFilter, setTypeFilter] = useState("all");
+    const [genderFilter, setGenderFilter] = useState("all");
     const [productToDelete, setProductToDelete] = useState(null);
     const [deletingId, setDeletingId] = useState(null);
+    const [notice, setNotice] = useState(() =>
+        location.state?.notice ? { type: "success", text: location.state.notice } : null
+    );
 
     useEffect(() => {
         let cancelled = false;
@@ -69,12 +85,21 @@ function ManageProducts() {
     }, []);
 
     const query = search.trim().toLowerCase();
-    const visibleProducts = query
-        ? products.filter((product) =>
-            String(product.name || "").toLowerCase().includes(query) ||
-            String(product.id).includes(query)
-        )
-        : products;
+    const matchesGender = (product) =>
+        genderFilter === "all" || String(product.gender || "").toLowerCase() === genderFilter.toLowerCase();
+    const matchesType = (product, type) =>
+        type === "all" || String(product.type || "").toLowerCase() === type;
+    const matchesSearch = (product) =>
+        !query ||
+        String(product.name || "").toLowerCase().includes(query) ||
+        String(product.id).includes(query);
+
+    const visibleProducts = products.filter((product) =>
+        matchesType(product, typeFilter) && matchesGender(product) && matchesSearch(product)
+    );
+    const countForType = (type) =>
+        products.filter((product) => matchesType(product, type) && matchesGender(product) && matchesSearch(product)).length;
+    const hasFilters = query || typeFilter !== "all" || genderFilter !== "all";
 
     const confirmDelete = async () => {
         const product = productToDelete;
@@ -82,13 +107,15 @@ function ManageProducts() {
         if (!product) return;
 
         setDeletingId(product.id);
+        setNotice(null);
         try {
             await deleteProduct(product.id);
             setProducts((prev) => prev.filter((item) => item.id !== product.id));
+            setNotice({ type: "success", text: `"${product.name}" was deleted.` });
         }
         catch (error) {
             console.error("Delete product error:", error);
-            alert("Failed to delete product. Please log in again as admin and try once more.");
+            setNotice({ type: "error", text: "Failed to delete product. Please log in again as admin and try once more." });
         }
         finally {
             setDeletingId(null);
@@ -120,6 +147,8 @@ function ManageProducts() {
                         </button>
                     </div>
 
+                    <Notice type={notice?.type} onClose={() => setNotice(null)} className={styles.notice}>{notice?.text}</Notice>
+
                     <div className={styles.card}>
                         <div className={styles.cardHeader}>
                             <h2 className={styles.cardTitle}>
@@ -138,12 +167,42 @@ function ManageProducts() {
                             />
                         </div>
 
+                        {!isLoading && !loadError && products.length > 0 && (
+                            <div className={styles.filters}>
+                                <div className={styles.typeTabs}>
+                                    {TYPE_FILTERS.map((item) => (
+                                        <button
+                                            key={item.value}
+                                            type="button"
+                                            className={`${styles.typeTab} ${typeFilter === item.value ? styles.typeTabActive : ""}`}
+                                            onClick={() => setTypeFilter(item.value)}
+                                        >
+                                            {item.label}
+                                            <span className={styles.typeCount}>{countForType(item.value)}</span>
+                                        </button>
+                                    ))}
+                                </div>
+
+                                <select
+                                    className={styles.genderSelect}
+                                    value={genderFilter}
+                                    onChange={(e) => setGenderFilter(e.target.value)}
+                                    aria-label="Filter by gender"
+                                >
+                                    <option value="all">All genders</option>
+                                    {GENDER_FILTERS.map((item) => (
+                                        <option key={item} value={item}>{item}</option>
+                                    ))}
+                                </select>
+                            </div>
+                        )}
+
                         {isLoading && <p className={styles.statusText}>Loading...</p>}
                         {loadError && <p className={styles.statusText}>{loadError}</p>}
 
                         {!isLoading && !loadError && visibleProducts.length === 0 && (
                             <p className={styles.statusText}>
-                                {query ? "No products match your search." : "There are no products yet."}
+                                {hasFilters ? "No products match your filters." : "There are no products yet."}
                             </p>
                         )}
 

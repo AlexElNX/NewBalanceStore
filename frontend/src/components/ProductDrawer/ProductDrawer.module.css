@@ -220,6 +220,13 @@
     margin-top: auto;
 }
 
+.lowStock {
+    margin: 0 0 12px;
+    color: #111;
+    font-size: 15px;
+    font-weight: 700;
+}
+
 .sizeError {
     margin-bottom: 12px;
     color: #d32f2f;

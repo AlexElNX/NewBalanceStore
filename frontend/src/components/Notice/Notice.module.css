@@ -1,0 +1,37 @@
+.notice {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    width: 100%;
+    padding: 14px 16px;
+    border-left: 4px solid;
+    font-size: 14px;
+    line-height: 1.4;
+    box-sizing: border-box;
+}
+
+.error {
+    border-color: #a8123e;
+    background: #fdeef1;
+    color: #7a0d2d;
+}
+
+.success {
+    border-color: #1a7f37;
+    background: #eaf6ee;
+    color: #145c29;
+}
+
+.text {
+    flex: 1;
+}
+
+.close {
+    padding: 0;
+    border: none;
+    background: none;
+    color: inherit;
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+}

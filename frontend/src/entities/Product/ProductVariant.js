@@ -15,7 +15,8 @@ export class ProductVariant {
      */
     constructor(data) {
         this.color = data.color;
-        this.size = Number(data.size);
+        const numericSize = Number(data.size);
+        this.size = Number.isNaN(numericSize) ? data.size : numericSize;
         this.quantity = data.quantity;
     }
 }

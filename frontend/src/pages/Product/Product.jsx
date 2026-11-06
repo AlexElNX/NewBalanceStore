@@ -18,12 +18,16 @@ import { openBagDrawer } from "../../components/BagDrawer/bagDrawerEvents.js";
 
 import { useCart } from "../../context/useCart.js";
 import { fetchProduct } from "../../services/api/productsApi.js";
-import { getProducts } from "../../services/productsService.js";
+import { getProducts, isInStock } from "../../services/productsService.js";
 import { addToRecentlyViewed, getRecentlyViewed } from "../../utils/recentlyViewed.js";
 import { formatColorName, formatPrice, formatSizeLabel, formatTypeLabel, getSizeGrid } from "../../utils/productFormat.js";
 import { createProductView, getCartQuantity, pickRelatedProducts } from "./productView.js";
+import { MAX_QUANTITY_PER_ITEM } from "../../entities/Cart.js";
+import { getProductActivity, getProductSubcategory } from "../Products/productTaxonomy.js";
 
-const MAX_QUANTITY_PER_ITEM = 5;
+const LOW_STOCK_LIMIT = 5;
+import { flashLoading, withLoading } from "../../components/LoadingOverlay/loadingStore.js";
+
 const HEADER_HIDE_AFTER = 70;
 
 function Product() {
@@ -86,7 +90,7 @@ function Product() {
         getProducts()
             .then(products => {
                 if (cancelled) return;
-                setRelated(pickRelatedProducts(product, products));
+                setRelated(pickRelatedProducts(product, products.filter(isInStock)));
                 setRecent(
                     recentIds
                         .map(recentId => products.find(item => String(item.id) === String(recentId)))
@@ -201,10 +205,12 @@ function ProductView({ product, hideAfterRef }) {
     };
 
     const handleColorSelect = (color) => {
+        if (color !== selectedColor) flashLoading();
         updateParams({ color, size: selectedSize });
     };
 
     const handleSizeSelect = (size) => {
+        if (String(size) !== String(selectedSize)) flashLoading();
         updateParams({ color: selectedColor, size });
         setSizeError(false);
     };
@@ -212,6 +218,7 @@ function ProductView({ product, hideAfterRef }) {
     const stock = selectedSize !== null ? product.getAvailableQuantity(selectedColor, selectedSize) : 0;
     const inCart = selectedSize !== null ? getCartQuantity(cart, product.id, selectedColor, selectedSize) : 0;
     const canAddMore = Math.max(0, Math.min(MAX_QUANTITY_PER_ITEM, stock) - inCart);
+    const showLowStock = selectedSize !== null && stock > 0 && stock <= LOW_STOCK_LIMIT;
     const colorInStock = product.isColorAvailable(selectedColor);
     const productInStock = product.isAvailable();
 
@@ -248,18 +255,20 @@ function ProductView({ product, hideAfterRef }) {
             return;
         }
 
-        dispatch({
-            type: "ADD_PRODUCT",
-            payload: {
-                product: { id: product.id },
-                productId: product.id,
-                color: selectedColor,
-                size: selectedSize,
-                quantity: 1
-            }
-        });
+        withLoading(() => {
+            dispatch({
+                type: "ADD_PRODUCT",
+                payload: {
+                    product: { id: product.id },
+                    productId: product.id,
+                    color: selectedColor,
+                    size: selectedSize,
+                    quantity: 1
+                }
+            });
 
-        openBagDrawer("added");
+            openBagDrawer("added");
+        });
     };
 
     const images = product.getImages(selectedColor);
@@ -293,7 +302,7 @@ function ProductView({ product, hideAfterRef }) {
                     <li>Style #: {product.id}</li>
                     {product.type && <li>Type: {formatTypeLabel(product.type)}</li>}
                     {product.category && <li>Category: {product.category}</li>}
-                    {product.activity && <li>Activity: {product.activity}</li>}
+                    {getProductActivity(product) && <li>Activity: {getProductActivity(product)}</li>}
                     {product.gender && <li>Gender: {product.gender}</li>}
                     <li>Available colors: {product.colors.map(formatColorName).join(", ")}</li>
                 </ul>
@@ -373,6 +382,14 @@ function ProductView({ product, hideAfterRef }) {
                             onSelect={handleSizeSelect}
                             showError={sizeError}
                         />
+
+                        {showLowStock && (
+                            <p className={styles.lowStock}>Only {stock} left.</p>
+                        )}
+
+                        {!productInStock && (
+                            <p className={styles.soldOut}>This item is sold out. Check out similar styles below.</p>
+                        )}
 
                         <button
                             ref={addButtonRef}
@@ -521,10 +538,19 @@ function getBreadcrumbs(product) {
             to: `/products?gender=${genderParam}&type=${type}`
         });
 
-        if (product.activity) {
+        const subcategory = getProductSubcategory(product);
+        const activity = getProductActivity(product);
+
+        if (subcategory) {
             crumbs.push({
-                label: product.activity,
-                to: `/products?gender=${genderParam}&type=${type}&activity=${product.activity.toLowerCase()}`
+                label: subcategory.label,
+                to: `/products?gender=${genderParam}&type=${type}&category=${encodeURIComponent(subcategory.value)}`
+            });
+        }
+        else if (type === "footwear" && activity) {
+            crumbs.push({
+                label: activity,
+                to: `/products?gender=${genderParam}&type=${type}&activity=${encodeURIComponent(activity.toLowerCase())}`
             });
         }
     }

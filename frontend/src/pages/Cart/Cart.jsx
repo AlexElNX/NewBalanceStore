@@ -5,8 +5,8 @@ import Footer from "../../components/Footer/Footer.jsx";
 import CartSummary from "../../components/Cart/CartSummary/CartSummary.jsx";
 import CartItems from "../../components/Cart/CartItems/CartItems.jsx";
 import { useRef } from "react";
-import RecentlyViewed from "../../components/Cart/RecentlyViewed/RecentlyViewed.jsx";
 import { useCart } from "../../context/useCart.js";
+import YouMayAlsoLike from "../../components/Cart/YouMayAlsoLike/YouMayAlsoLike.jsx";
 
 function Cart() {
     const { cart } = useCart();
@@ -37,7 +37,7 @@ function Cart() {
                 )}
             </div>
 
-            <RecentlyViewed />
+            <YouMayAlsoLike />
 
             <Footer />
         </>

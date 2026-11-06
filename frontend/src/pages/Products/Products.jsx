@@ -9,8 +9,13 @@ import { useEffect, useRef, useState } from "react";
 import ProductDrawer from "../../components/ProductDrawer/ProductDrawer.jsx";
 import { addToRecentlyViewed } from "../../utils/recentlyViewed.js";
 import AddedToBagPopup from "../../components/AddedToBagPopup/AddedToBagPopup.jsx";
-import { getProducts } from "../../services/productsService.js";
+import { getProducts, isInStock } from "../../services/productsService.js";
 import { createPortal } from "react-dom";
+import { flashLoading, useLoadingOnChange } from "../../components/LoadingOverlay/loadingStore.js";
+import { matchesSearch } from "../../components/SearchOverlay/searchProducts.js";
+import { getProductActivity, matchesActivity, matchesCategory } from "./productTaxonomy.js";
+
+const PAGE_SIZE = 18;
 
 function Products() {
     const [products, setProducts] = useState([]);
@@ -21,7 +26,7 @@ function Products() {
         async function loadProducts() {
             try {
                 const data = await getProducts();
-                setProducts(data.filter(product => !product.featured));
+                setProducts(data.filter(product => !product.featured && isInStock(product)));
             }
             catch(err){
                 setError(err);
@@ -40,6 +45,9 @@ function Products() {
     const type = searchParams.get("type");
     const category = searchParams.get("category");
     const activity = searchParams.get("activity");
+    const searchQuery = searchParams.get("q");
+    const maxPrice = searchParams.get("maxPrice");
+    const sizesParam = searchParams.get("sizes");
 
     const urlFilteredProducts = products.filter(product => {
         const productGender = product.gender.toLowerCase();
@@ -50,10 +58,10 @@ function Products() {
         if(type && product.type.toLowerCase() !== type)
             return false;
 
-        if(category && product.category.toLowerCase() !== category)
+        if(category && !matchesCategory(product, category))
             return false;
 
-        if(activity && product.activity.toLowerCase() !== activity)
+        if(activity && !matchesActivity(product, activity))
             return false;
 
         if (sale === "true" && !product.hasDiscount())
@@ -61,6 +69,18 @@ function Products() {
 
         if (isNew === "true" && !product.isNew)
             return false;
+
+        if (searchQuery && !matchesSearch(product, searchQuery))
+            return false;
+
+        if (maxPrice && product.price > Number(maxPrice))
+            return false;
+
+        if (sizesParam) {
+            const sizes = sizesParam.split(",");
+            if (!product.variants.some(variant => sizes.includes(String(variant.size)) && variant.quantity > 0))
+                return false;
+        }
 
         return true;
     });
@@ -76,6 +96,17 @@ function Products() {
         price: [],
     };
     const [filters, setFilters] = useState(initialFilters);
+    const sectionKey = `${gender ?? ""}|${type ?? ""}`;
+    const [filtersSection, setFiltersSection] = useState(sectionKey);
+    if (filtersSection !== sectionKey) {
+        setFiltersSection(sectionKey);
+        setFilters(initialFilters);
+    }
+
+    const getProductColors = (product) => {
+        const colors = product.colors?.length ? product.colors : Object.keys(product.images ?? {});
+        return colors.map(color => color.toLowerCase().replace(/\d+$/, "").replace(/^gray$/, "grey"));
+    };
 
     const checkPrice = (productPrice) => {
         if (!filters.price.length) return true;
@@ -94,9 +125,9 @@ function Products() {
             return false;
 
         if (filters.footwearSizes.length && !product.variants.some(
-                variant => filters.footwearSizes.includes(variant.size) &&
-                    variant.quantity > 0
-            ))
+            variant => filters.footwearSizes.includes(variant.size) &&
+                variant.quantity > 0
+        ))
 
             return false;
 
@@ -109,13 +140,13 @@ function Products() {
         if (filters.accessoryType.length && !filters.accessoryType.includes(product.category))
             return false;
 
-        if (filters.colors.length && !product.colors.some(color => filters.colors.includes(color)))
+        if (filters.colors.length && !getProductColors(product).some(color => filters.colors.includes(color)))
             return false;
 
         if (filters.gender.length && !filters.gender.includes(product.gender))
             return false;
 
-        if (filters.activity.length && !filters.activity.includes(product.activity))
+        if (filters.activity.length && !filters.activity.includes(getProductActivity(product)))
             return false;
 
         if (!checkPrice(product.price))
@@ -125,6 +156,11 @@ function Products() {
     });
 
     const [sortBy, setSortBy] = useState("featured");
+
+    const listKey = JSON.stringify({ filters, sortBy, params: searchParams.toString() });
+    useLoadingOnChange(listKey);
+    const [page, setPage] = useState({ key: listKey, count: PAGE_SIZE });
+    const visibleCount = page.key === listKey ? page.count : PAGE_SIZE;
     const sortedProducts = [...filteredProducts];
 
     switch (sortBy) {
@@ -145,7 +181,10 @@ function Products() {
     }
 
     const breadcrumbs = [""];
-    if (sale === "true") {
+    if (searchQuery) {
+        breadcrumbs.push(`Results for "${searchQuery}"`);
+    }
+    else if (sale === "true") {
         breadcrumbs.push("Sale");
     }
     else if (isNew === "true") {
@@ -168,12 +207,12 @@ function Products() {
             if(category === "shoes")
                 breadcrumbs.push("All Shoes");
             else
-                breadcrumbs.push(category.charAt(0).toUpperCase() + category.slice(1));
+                breadcrumbs.push(category.replace(/\b\w/g, letter => letter.toUpperCase()));
 
         }
         else if(activity) {
             breadcrumbs.push(" / ");
-            breadcrumbs.push(activity.charAt(0).toUpperCase() + activity.slice(1));
+            breadcrumbs.push(activity.replace(/\b\w/g, letter => letter.toUpperCase()));
         }
     }
 
@@ -264,6 +303,8 @@ function Products() {
                             filters={filters}
                             setFilters={setFilters}
                             initialFilters={initialFilters}
+                            sectionType={type}
+                            sectionGender={gender}
                         />
                     )}
 
@@ -271,8 +312,9 @@ function Products() {
                         <section className={`${styles.productGrid} ${(!showFilters || isMobile) ? styles.productGridWide : ""}`}>
                             {loading && <p>Loading products...</p>}
                             {error && <p>Failed to load products.</p>}
+                            {!loading && !error && sortedProducts.length === 0 && <p>No products found.</p>}
                             {!loading && !error &&
-                                sortedProducts.map(product => (
+                                sortedProducts.slice(0, visibleCount).map(product => (
                                     <ProductCard
                                         key={product.id}
                                         product={product}
@@ -286,6 +328,26 @@ function Products() {
                                 ))
                             }
                         </section>
+
+                        {!loading && !error && sortedProducts.length > 0 && (
+                            <div className={styles.loadMore}>
+                                <p className={styles.loadMoreText}>
+                                    You have viewed {Math.min(visibleCount, sortedProducts.length)} of {sortedProducts.length} results
+                                </p>
+                                {visibleCount < sortedProducts.length && (
+                                    <button
+                                        type="button"
+                                        className={styles.loadMoreBtn}
+                                        onClick={() => {
+                                            flashLoading();
+                                            setPage({ key: listKey, count: visibleCount + PAGE_SIZE });
+                                        }}
+                                    >
+                                        Load more
+                                    </button>
+                                )}
+                            </div>
+                        )}
                     </div>
                 </div>
             </main>
@@ -307,6 +369,8 @@ function Products() {
                             filters={filters}
                             setFilters={setFilters}
                             initialFilters={initialFilters}
+                            sectionType={type}
+                            sectionGender={gender}
                         />
                     </div>
                     <div className={styles.mobileFiltersFooter}>

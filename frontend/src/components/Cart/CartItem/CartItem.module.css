@@ -63,6 +63,15 @@
     background: #f0f0f0;
 }
 
+.qtyBtn:disabled {
+    opacity: 0.4;
+    cursor: default;
+}
+
+.qtyBtn:disabled:hover {
+    background: #fff;
+}
+
 .cartItemActions {
     display: flex;
     flex-direction: column;
@@ -153,4 +162,10 @@
         top: 0;
         right: 0;
     }
+}
+
+.stockError {
+    margin: 6px 0 10px;
+    color: #cf0a2c;
+    font-size: 14px;
 }

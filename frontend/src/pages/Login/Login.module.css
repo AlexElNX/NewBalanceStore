@@ -202,24 +202,91 @@ body.loginPage .mainHeader .header-icons img {
 }
 
 /* Password Requirements List */
-.passwordRequirements {
-    font-size: 13px;
-    color: #333;
-    margin-top: 4px;
+.floatingGroup {
+    position: relative;
+    width: 100%;
 }
 
-.passwordRequirements ul {
-    list-style-type: disc;
-    padding-left: 20px;
+.floatingField {
+    position: relative;
+    display: block;
+}
+
+.floatingField input {
+    width: 100%;
+    height: 64px;
+    padding: 26px 52px 0 14px;
+    border: 1px solid #767676;
+    border-radius: 4px;
+    font-size: 16px;
+    color: #111;
+    background: #fff;
+    outline: none;
+}
+
+.floatingField input:focus {
+    border-color: #000;
+}
+
+.floatingLabel {
+    position: absolute;
+    top: 12px;
+    left: 15px;
+    color: #555;
+    font-size: 14px;
+    pointer-events: none;
+}
+
+.floatingEye {
+    position: absolute;
+    top: 32px;
+    right: 14px;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    padding: 0;
+    border: none;
+    background: none;
+    color: #111;
+    cursor: pointer;
+}
+
+.floatingError .floatingField input {
+    border-color: #a8123e;
+}
+
+.fieldError {
     margin-top: 6px;
+    color: #a8123e;
+    font-size: 13px;
+}
+
+.passwordRules {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 6px;
+    padding-left: 18px;
+    list-style: none;
+    font-size: 14px;
 }
 
-.passwordRequirements li {
-    font-weight: 400;
-    color: #555;
+.passwordRules li {
+    display: flex;
+    gap: 10px;
+}
+
+.passwordRules span {
+    width: 14px;
+    flex-shrink: 0;
+    text-align: center;
+}
+
+.ruleFailed {
+    color: #a8123e;
+}
+
+.rulePassed {
+    color: #1a7f37;
 }
 
 /* Submit Button */
@@ -239,6 +306,12 @@ body.loginPage .mainHeader .header-icons img {
 
 .submitBtn:hover {
     background-color: #333;
+}
+
+.submitBtn:disabled {
+    background-color: #e5e7e9;
+    color: #757575;
+    cursor: not-allowed;
 }
 
 .termsText {
@@ -300,8 +373,8 @@ body.loginPage .mainHeader .header-icons img {
         font-size: 12px;
     }
 
-    .passwordRequirements {
-        font-size: 12px;
+    .passwordRules {
+        font-size: 13px;
     }
 
     .termsText {

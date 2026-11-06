@@ -2,7 +2,7 @@ import styles from "./ProductCarousel.module.css";
 import { useCallback, useEffect, useRef, useState } from "react";
 import ProductCard from "../ProductCard/ProductCard.jsx";
 
-function ProductCarousel({ title, products }) {
+function ProductCarousel({ title, products, wide = false }) {
     const trackRef = useRef(null);
     const [canPrev, setCanPrev] = useState(false);
     const [canNext, setCanNext] = useState(false);
@@ -44,7 +44,7 @@ function ProductCarousel({ title, products }) {
     }
 
     return (
-        <section className={styles.carousel} aria-label={title}>
+        <section className={`${styles.carousel} ${wide ? styles.wide : ""}`} aria-label={title}>
             <h2 className={styles.title}>{title}</h2>
 
             <div className={styles.viewport}>

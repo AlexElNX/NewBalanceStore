@@ -1,7 +1,10 @@
 import styles from './ProductDrawer.module.css';
 import { useState } from "react";
+import { flashLoading, withLoading } from "../LoadingOverlay/loadingStore.js";
 import { useCart } from "../../context/useCart.js";
 import { createPortal } from "react-dom";
+
+const LOW_STOCK_LIMIT = 5;
 
 function ProductDrawer({ product, activeColor, onClose, onAddedToCart }) {
     const { dispatch } = useCart();
@@ -15,6 +18,9 @@ function ProductDrawer({ product, activeColor, onClose, onAddedToCart }) {
 
     const images = product.images[selectedColor] || [];
 
+    const stock = selectedSize !== null ? product.getAvailableQuantity(selectedColor, selectedSize) : 0;
+    const showLowStock = stock > 0 && stock <= LOW_STOCK_LIMIT;
+
     const allSizes = product.type === "Footwear"
         ? [5, 5.5, 6, 6.5, 7, 7.5, 8, 8.5, 9, 9.5, 10, 10.5, 11, 12, 12.5]
         : ["XS", "S", "M", "L", "XL", "2XL"];
@@ -26,17 +32,19 @@ function ProductDrawer({ product, activeColor, onClose, onAddedToCart }) {
             return;
         }
 
-        dispatch({
-            type: "ADD_PRODUCT",
-            payload: {
-                product,
-                color: selectedColor,
-                size: selectedSize,
-            }
-        });
+        withLoading(() => {
+            dispatch({
+                type: "ADD_PRODUCT",
+                payload: {
+                    product,
+                    color: selectedColor,
+                    size: selectedSize,
+                }
+            });
 
-        onAddedToCart();
-        onClose();
+            onAddedToCart();
+            onClose();
+        });
     };
 
     const nextImage = () => {
@@ -105,6 +113,7 @@ function ProductDrawer({ product, activeColor, onClose, onAddedToCart }) {
                             <button
                                 key={color}
                                 onClick={() => {
+                                    if (color !== selectedColor) flashLoading();
                                     setSelectedColor(color);
                                     setImageIndex(0);
                                 }}
@@ -126,6 +135,7 @@ function ProductDrawer({ product, activeColor, onClose, onAddedToCart }) {
                                     key={size}
                                     disabled={!available}
                                     onClick={() => {
+                                        if (size !== selectedSize) flashLoading();
                                         setSelectedSize(size);
                                         setSizeError(false);
                                     }}
@@ -145,6 +155,10 @@ function ProductDrawer({ product, activeColor, onClose, onAddedToCart }) {
                         <div className={styles.sizeError}>
                             Please select a size
                         </div>
+                    )}
+
+                    {showLowStock && (
+                        <p className={styles.lowStock}>Only {stock} left.</p>
                     )}
 
                     <button onClick={handleAddToCart} className={styles.drawerAddToCart}>

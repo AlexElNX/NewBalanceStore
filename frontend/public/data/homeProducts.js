@@ -8,7 +8,7 @@ import productAthleticsFrenchTerryShort from '../../src/assets/images/main-page/
 
 export const homeProducts = [
     {
-        id: "home-204l",
+        id: "165510698",
         name: "204L",
         gender: "Unisex",
         price: 119.99,
@@ -17,7 +17,7 @@ export const homeProducts = [
     },
 
     {
-        id: "home-athletics-crew",
+        id: "1202739798",
         name: "Athletics Premium Logo Relaxed Crop Crew",
         gender: "Women",
         price: 63.75,
@@ -26,7 +26,7 @@ export const homeProducts = [
     },
 
     {
-        id: "home-574-core",
+        id: "1938111069",
         name: "574 Core",
         gender: "Men",
         price: 74.99,
@@ -35,7 +35,7 @@ export const homeProducts = [
     },
 
     {
-        id: "home-athletics-jersey-t-shirt",
+        id: "1357854977",
         name: "Athletics Jersey T-Shirt",
         gender: "Women",
         price: 31.49,
@@ -44,7 +44,7 @@ export const homeProducts = [
     },
 
     {
-        id: "home-nb-numeric-770",
+        id: "1334817162",
         name: "NB Numeric 770",
         gender: "Unisex",
         price: 124.99,
@@ -53,7 +53,7 @@ export const homeProducts = [
     },
 
     {
-        id: "home-athletics-french-terry-short",
+        id: "1236757528",
         name: "Athletics French Terry Short",
         gender: "Women",
         price: 45.49,

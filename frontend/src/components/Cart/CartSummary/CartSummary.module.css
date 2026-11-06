@@ -52,6 +52,19 @@
     background: #222;
 }
 
+.checkoutBtn:disabled,
+.checkoutBtn:disabled:hover {
+    background: #e8e8e8;
+    color: #767676;
+    cursor: default;
+}
+
+.stockError {
+    margin: 16px 0 0;
+    color: #cf0a2c;
+    font-size: 14px;
+}
+
 /* MEDIA QUERIES */
 
 @media (max-width: 425px) {

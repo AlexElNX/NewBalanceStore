@@ -33,6 +33,12 @@ export function cartReducer(state, action) {
 
             return cart;
         }
+        case 'LOAD_CART': {
+            return new Cart(action.payload.map(item => ({...item})));
+        }
+        case 'CLEAR_CART': {
+            return new Cart([]);
+        }
         default:
             return state;
     }

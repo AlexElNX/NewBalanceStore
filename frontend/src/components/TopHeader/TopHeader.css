@@ -1,4 +1,6 @@
 .top-header {
+    position: relative;
+    z-index: 1001;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -9,17 +11,19 @@
     color: white;
 }
 
+.top-header.pinned {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+}
+
 .US-flag {
     width: 25px;
     height: 15px;
 }
 
 .location-pin {
-    width: 15px;
-    height: 15px;
-}
-
-.recycle-icon {
     width: 15px;
     height: 15px;
 }
@@ -41,6 +45,44 @@
     color: gray;
 }
 
+.store-toggle {
+    padding: 0;
+    border: none;
+    background: none;
+    color: white;
+    font: inherit;
+    cursor: pointer;
+}
+
+.store-toggle:focus {
+    outline: none;
+}
+
+.store-current {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    line-height: 1.3;
+    text-align: left;
+}
+
+.left-menu .store-current-label {
+    color: white;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.left-menu .store-current-name {
+    color: white;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.store-toggle:focus-visible {
+    outline: 2px solid white;
+    outline-offset: 2px;
+}
+
 .right-menu {
     display: flex;
     align-items: center;
@@ -60,6 +102,82 @@
 
 .top-header a:hover {
     opacity: 0.7;
+}
+
+.help-menu {
+    position: relative;
+}
+
+.help-toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0;
+    border: none;
+    background: none;
+    color: white;
+    font: inherit;
+    cursor: pointer;
+}
+
+.help-toggle:hover {
+    opacity: 0.7;
+}
+
+.help-toggle:focus {
+    outline: none;
+}
+
+.help-toggle:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 3px;
+}
+
+.help-chevron {
+    width: 12px;
+    height: 12px;
+    transition: transform 0.2s ease;
+}
+
+.help-chevron-open {
+    transform: rotate(180deg);
+}
+
+.help-dropdown {
+    position: absolute;
+    top: calc(100% + 16px);
+    right: -16px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 190px;
+    padding: 12px 12px;
+    border: 1px solid #e2e2e2;
+    border-radius: 3px;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.help-dropdown::before {
+    content: "";
+    position: absolute;
+    top: -18px;
+    right: 0;
+    left: 0;
+    height: 18px;
+}
+
+.top-header .help-dropdown a {
+    color: #111;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.6;
+}
+
+.top-header .help-dropdown a:hover {
+    opacity: 1;
+    text-decoration: underline;
 }
 
 /* ===========================
@@ -87,11 +205,12 @@
    MOBILE
 =========================== */
 
-@media (max-width: 768px) {
+@media (max-width: 992px) {
 
     .top-header {
         display: block;
-        height: 50px;
+        height: 58px;
+        margin-bottom: -1px;
         padding: 0;
     }
 

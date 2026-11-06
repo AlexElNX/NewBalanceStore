@@ -1,6 +1,8 @@
 const TOKEN_KEY = "authToken";
 const USER_KEY = "authUser";
 
+export const AUTH_CHANGE_EVENT = "auth-change";
+
 /**
  * Зберігає дані авторизованої сесії (JWT-токен та профіль користувача) у LocalStorage.
  * @param {Object} authData - Відповідь сервера при успішній автентифікації.
@@ -20,6 +22,8 @@ export function saveAuth(authData) {
             role: authData.role
         })
     );
+
+    window.dispatchEvent(new Event(AUTH_CHANGE_EVENT));
 }
 
 /**
@@ -46,4 +50,5 @@ export function getCurrentUser() {
 export function logout() {
     localStorage.removeItem(TOKEN_KEY);
     localStorage.removeItem(USER_KEY);
+    window.dispatchEvent(new Event(AUTH_CHANGE_EVENT));
 }
