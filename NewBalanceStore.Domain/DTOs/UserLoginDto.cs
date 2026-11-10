@@ -18,6 +18,5 @@ public class UserLoginDto
     /// Пароль користувача у відкритому вигляді для перевірки на сервері.
     /// </summary>
     public string Password { get; set; } = string.Empty;
-    public string FullName { get; set; }
 }
 

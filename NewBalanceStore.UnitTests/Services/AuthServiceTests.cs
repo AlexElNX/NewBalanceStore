@@ -110,6 +110,74 @@ public class AuthServiceTests
     }
 
     [Test]
+    public async Task RegisterAsync_WithEmailService_SendsVerificationEmail()
+    {
+        var fakeRepo = new FakeUserRepository();
+        var emailMock = new Mock<IEmailService>();
+        var jwtMock = new Mock<IJwtTokenGenerator>();
+        jwtMock.Setup(j => j.GenerateAccessToken(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<IList<string>>())).Returns("jwt-token");
+
+        var service = new AuthService(fakeRepo, jwtMock.Object, emailMock.Object);
+        var email = $"email_test_{Guid.NewGuid()}@example.com";
+        await service.RegisterAsync(new UserRegisterDto { Email = email, Password = "Password123!", FullName = "Bob" });
+
+        emailMock.Verify(e => e.SendVerificationEmailAsync(email, It.IsAny<string>()), Times.Once);
+    }
+
+    [Test]
+    public async Task RefreshTokenAsync_WhenValidToken_ReturnsNewTokensAndUpdatesUser()
+    {
+        var fakeRepo = new FakeUserRepository();
+        var jwtMock = new Mock<IJwtTokenGenerator>();
+        jwtMock.Setup(j => j.GenerateAccessToken(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<IList<string>>())).Returns("new-jwt-token");
+
+        var user = new User
+        {
+            Id = "user-1",
+            Email = "user1@example.com",
+            RefreshToken = "valid-refresh-token",
+            RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(2)
+        };
+        await fakeRepo.CreateAsync(user);
+
+        var service = new AuthService(fakeRepo, jwtMock.Object);
+        var (accessToken, refreshToken) = await service.RefreshTokenAsync("valid-refresh-token");
+
+        Assert.That(accessToken, Is.EqualTo("new-jwt-token"));
+        Assert.That(refreshToken, Is.Not.Null.And.Not.Empty);
+        Assert.That(refreshToken, Is.Not.EqualTo("valid-refresh-token"));
+    }
+
+    [Test]
+    public async Task RefreshTokenAsync_WhenTokenNotFound_ThrowsUnauthorizedAccessException()
+    {
+        var fakeRepo = new FakeUserRepository();
+        var jwtMock = new Mock<IJwtTokenGenerator>();
+        var service = new AuthService(fakeRepo, jwtMock.Object);
+
+        await Assert.ThrowsAsync<UnauthorizedAccessException>(() => service.RefreshTokenAsync("missing-token"));
+    }
+
+    [Test]
+    public async Task RefreshTokenAsync_WhenTokenExpired_ThrowsUnauthorizedAccessException()
+    {
+        var fakeRepo = new FakeUserRepository();
+        var jwtMock = new Mock<IJwtTokenGenerator>();
+        var user = new User
+        {
+            Id = "user-2",
+            Email = "user2@example.com",
+            RefreshToken = "expired-refresh-token",
+            RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(-1)
+        };
+        await fakeRepo.CreateAsync(user);
+
+        var service = new AuthService(fakeRepo, jwtMock.Object);
+
+        await Assert.ThrowsAsync<UnauthorizedAccessException>(() => service.RefreshTokenAsync("expired-refresh-token"));
+    }
+
+    [Test]
     public async Task LoginAsync_ShouldReturnTokens_WhenEmailDiffersOnlyByCase()
     {
         var email = $"case_{Guid.NewGuid()}@example.com";

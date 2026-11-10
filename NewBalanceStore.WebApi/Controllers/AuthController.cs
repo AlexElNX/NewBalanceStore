@@ -105,6 +105,8 @@ public class AuthController : ControllerBase
 
     private void SetRefreshTokenCookie(string refreshToken)
     {
+        if (ControllerContext?.HttpContext?.Response == null) return;
+
         var cookieOptions = new CookieOptions
         {
             HttpOnly = true,

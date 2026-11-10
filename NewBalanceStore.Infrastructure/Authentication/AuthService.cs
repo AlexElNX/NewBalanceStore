@@ -12,13 +12,16 @@ public class AuthService : IAuthService
 {
     private readonly IUserRepository _userRepository;
     private readonly IJwtTokenGenerator _jwtTokenGenerator;
+    private readonly IEmailService? _emailService;
 
     public AuthService(
         IUserRepository userRepository,
-        IJwtTokenGenerator jwtTokenGenerator)
+        IJwtTokenGenerator jwtTokenGenerator,
+        IEmailService? emailService = null)
     {
         _userRepository = userRepository;
         _jwtTokenGenerator = jwtTokenGenerator;
+        _emailService = emailService;
     }
 
     public async Task<AuthResponseDto> RegisterAsync(UserRegisterDto registerDto)
@@ -38,6 +41,12 @@ public class AuthService : IAuthService
         };
 
         await _userRepository.CreateAsync(user);
+
+        if (_emailService != null)
+        {
+            var verificationCode = Random.Shared.Next(100000, 999999).ToString();
+            await _emailService.SendVerificationEmailAsync(user.Email, verificationCode);
+        }
 
         var roles = new List<string> { user.Role.ToString() };
         var accessToken = _jwtTokenGenerator.GenerateAccessToken(user.Id, user.Email, roles);

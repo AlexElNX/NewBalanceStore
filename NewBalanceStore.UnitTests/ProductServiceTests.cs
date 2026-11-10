@@ -275,5 +275,116 @@ namespace NewBalanceStore.UnitTests
 
             RepositoryMock.Verify(r => r.DeleteAsync(It.IsAny<string>()), Times.Never);
         }
+
+        [Test]
+        public async Task GetFilteredProductsAsync_FilterByDescriptionAndCategoryAndSortByName()
+        {
+            var testProducts = new List<Product>
+            {
+                new() { Id = 1, Name = "Alpha", Description = "Amazing running gear", Category = "Shoes", Price = 200 },
+                new() { Id = 2, Name = "Beta", Description = "Casual running shoe", Category = "Shoes", Price = 100 },
+                new() { Id = 3, Name = "Gamma", Description = "Running socks", Category = "Accessories", Price = 15 }
+            };
+            RepositoryMock.Setup(r => r.GetAllAsync()).ReturnsAsync(testProducts);
+
+            var filter = new ProductFilterDto
+            {
+                SearchTerm = "running",
+                Category = "Shoes",
+                SortBy = "name"
+            };
+
+            var result = (await ProductService.GetFilteredProductsAsync(filter)).ToList();
+
+            Assert.That(result, Has.Count.EqualTo(2));
+            Assert.That(result[0].Name, Is.EqualTo("Alpha"));
+            Assert.That(result[1].Name, Is.EqualTo("Beta"));
+        }
+
+        [Test]
+        public async Task GetFilteredProductsAsync_SortByPriceDesc_AndDefaultSort()
+        {
+            var testProducts = new List<Product>
+            {
+                new() { Id = 1, Name = "Shoe A", Price = 100 },
+                new() { Id = 2, Name = "Shoe B", Price = 300 }
+            };
+            RepositoryMock.Setup(r => r.GetAllAsync()).ReturnsAsync(testProducts);
+
+            var descResult = (await ProductService.GetFilteredProductsAsync(new ProductFilterDto { SortBy = "price_desc" })).ToList();
+            Assert.That(descResult[0].Price, Is.EqualTo(300));
+
+            var defaultResult = (await ProductService.GetFilteredProductsAsync(new ProductFilterDto { SortBy = "unknown" })).ToList();
+            Assert.That(defaultResult, Has.Count.EqualTo(2));
+        }
+
+        [Test]
+        public async Task GetFilteredProductsAsync_HandlesNullPropertiesGracefully()
+        {
+            var testProducts = new List<Product>
+        {
+            new() { Id = 1, Name = null!, Description = null!, Category = null! },
+            new() { Id = 2, Name = "Valid Shoe", Description = "Desc", Category = "Shoes", Price = 100 }
+        };
+            RepositoryMock.Setup(r => r.GetAllAsync()).ReturnsAsync(testProducts);
+
+            var filter = new ProductFilterDto
+            {
+                Category = "Shoes"
+            };
+
+            var result = (await ProductService.GetFilteredProductsAsync(filter)).ToList();
+
+            
+            Assert.That(result, Has.Count.EqualTo(1));
+            Assert.That(result[0].Name, Is.EqualTo("Valid Shoe"));
+        }
+
+        [Test]
+        public async Task CreateAsync_And_GetByIdAsync_WithVariants_MapsAllFieldsCorrectly()
+        {
+            Product? savedEntity = null;
+            RepositoryMock.Setup(r => r.CreateAsync(It.IsAny<Product>()))
+                .Callback<Product>(p => savedEntity = p)
+                .Returns(Task.CompletedTask);
+
+            var createDto = new CreateProductDto
+            {
+                Name = "Shoe With Variants",
+                Price = 150,
+                Category = "Shoes",
+                Variants = new List<CreateProductVariantDto>
+                {
+                    new() { Color = "Red", Size = "43", Quantity = 5 }
+                }
+            };
+
+            var created = await ProductService.CreateAsync(createDto);
+
+            Assert.That(savedEntity, Is.Not.Null);
+            Assert.That(savedEntity!.Variants, Has.Count.EqualTo(1));
+            Assert.That(savedEntity.Variants[0].Color, Is.EqualTo("Red"));
+
+            RepositoryMock.Setup(r => r.GetByIdAsync("10"))
+                .ReturnsAsync(savedEntity);
+
+            var fetched = await ProductService.GetByIdAsync("10");
+            Assert.That(fetched, Is.Not.Null);
+            Assert.That(fetched!.Variants, Has.Count.EqualTo(1));
+            Assert.That(fetched.Variants[0].Size, Is.EqualTo("43"));
+        }
+
+        [Test]
+        public async Task UpdateAsync_WithNonNumericId_KeepsProductDefaultId()
+        {
+            var existingProduct = new Product { Id = 55, Name = "Existing" };
+            RepositoryMock.Setup(r => r.GetByIdAsync("non-numeric")).ReturnsAsync(existingProduct);
+            RepositoryMock.Setup(r => r.UpdateAsync(It.IsAny<Product>())).Returns(Task.CompletedTask);
+
+            var updated = await ProductService.UpdateAsync("non-numeric", new CreateProductDto { Name = "New Name" });
+
+            Assert.That(updated, Is.True);
+            RepositoryMock.Verify(r => r.UpdateAsync(It.Is<Product>(p => p.Name == "New Name")), Times.Once);
+        }
     }
 }

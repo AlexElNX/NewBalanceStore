@@ -154,5 +154,34 @@ namespace NewBalanceStore.UnitTests.Services
 
             _orderRepoMock.Verify(r => r.UpdateStatusAsync(1, "Shipped"), Times.Once);
         }
+
+        [Test]
+        public async Task CreateOrderAsync_WhenProductNotFound_SkipsItemAndCalculatesRemaining()
+        {
+            var createDto = new CreateOrderDto
+            {
+                CustomerName = "Jane Doe",
+                Items = new List<CreateOrderItemDto>
+                {
+                    new() { ProductId = 999, Quantity = 1 },
+                    new() { ProductId = 1, Quantity = 2 }
+                }
+            };
+            _productRepoMock.Setup(r => r.GetByIdAsync("999")).ReturnsAsync((Product?)null);
+            _productRepoMock.Setup(r => r.GetByIdAsync("1")).ReturnsAsync(new Product { Id = 1, Name = "Sneaker", Price = 100 });
+
+            Order? createdOrder = null;
+            _orderRepoMock.Setup(r => r.CreateAsync(It.IsAny<Order>()))
+                .Callback<Order>(o => createdOrder = o)
+                .Returns(Task.CompletedTask);
+            _mapperMock.Setup(m => m.Map<OrderDto>(It.IsAny<Order>()))
+                .Returns(new OrderDto { Id = 20, TotalAmount = 200 });
+
+            var result = await _orderService.CreateOrderAsync(createDto);
+
+            Assert.That(result.TotalAmount, Is.EqualTo(200));
+            Assert.That(createdOrder!.Items, Has.Count.EqualTo(1));
+            Assert.That(createdOrder.TotalAmount, Is.EqualTo(200));
+        }
     }
 }

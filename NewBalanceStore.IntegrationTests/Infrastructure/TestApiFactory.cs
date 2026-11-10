@@ -36,11 +36,13 @@ public sealed class TestApiFactory : WebApplicationFactory<Program>
             services.RemoveAll<Firebase.Database.FirebaseClient>();
             services.RemoveAll<IProductRepository>();
             services.RemoveAll<IOrderRepository>();
+            services.RemoveAll<IUserRepository>();
             services.RemoveAll<IPhotoService>();
             services.RemoveAll<IEmailService>();
 
             services.AddSingleton<IProductRepository, LocalProductRepository>();
             services.AddSingleton<IOrderRepository, LocalOrderRepository>();
+            services.AddSingleton<IUserRepository, LocalUserRepository>();
             services.AddSingleton<IPhotoService, LocalPhotoService>();
             services.AddSingleton(Mock.Of<IEmailService>());
 
@@ -222,4 +224,52 @@ internal sealed class LocalPhotoService : IPhotoService
         await fileStream.CopyToAsync(Stream.Null);
         return $"https://local.test/photos/{Uri.EscapeDataString(fileName)}";
     }
+}
+
+internal sealed class LocalUserRepository : IUserRepository
+{
+    private readonly Dictionary<string, User> _users = new(StringComparer.OrdinalIgnoreCase);
+
+    public Task<User?> GetByEmailAsync(string email)
+    {
+        var user = _users.Values.FirstOrDefault(u => u.Email.Equals(email, StringComparison.OrdinalIgnoreCase));
+        return Task.FromResult(user != null ? Clone(user) : null);
+    }
+
+    public Task CreateAsync(User user)
+    {
+        if (string.IsNullOrEmpty(user.Id))
+        {
+            user.Id = Guid.NewGuid().ToString();
+        }
+        _users[user.Id] = Clone(user);
+        return Task.CompletedTask;
+    }
+
+    public Task UpdateAsync(User user)
+    {
+        if (!string.IsNullOrEmpty(user.Id))
+        {
+            _users[user.Id] = Clone(user);
+        }
+        return Task.CompletedTask;
+    }
+
+    public Task<IEnumerable<User>> GetAllAsync()
+    {
+        return Task.FromResult<IEnumerable<User>>(_users.Values.Select(Clone).ToList());
+    }
+
+    private static User Clone(User user) => new()
+    {
+        Id = user.Id,
+        Email = user.Email,
+        PasswordHash = user.PasswordHash,
+        FirstName = user.FirstName,
+        LastName = user.LastName,
+        Phone = user.Phone,
+        Role = user.Role,
+        RefreshToken = user.RefreshToken,
+        RefreshTokenExpiryTime = user.RefreshTokenExpiryTime
+    };
 }
