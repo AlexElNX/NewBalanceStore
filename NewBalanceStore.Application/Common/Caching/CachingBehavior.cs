@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 namespace NewBalanceStore.Application.Common.Caching;
 
 public class CachingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
-    where TRequest : notnull, IPipelineBehavior<TRequest, TResponse>
+    where TRequest : notnull
 {
     private readonly IMemoryCache _memoryCache;
     private readonly ILogger<CachingBehavior<TRequest, TResponse>> _logger;

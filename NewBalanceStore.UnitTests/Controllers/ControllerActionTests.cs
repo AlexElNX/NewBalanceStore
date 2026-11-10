@@ -93,45 +93,121 @@ public class ProductsControllerTests
     }
 
     [Test]
+    public void GetAnalytics_ReturnsOk()
+    {
+        var result = _controller.GetAnalytics();
+        Assert.That(result, Is.InstanceOf<OkObjectResult>());
+    }
+
+    [Test]
+    public async Task GetById_WhenValidationError_ReturnsProblem400()
+    {
+        _mediatorMock.Setup(m => m.Send(It.IsAny<GetProductByIdQuery>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(Error.Validation("Product.Invalid", "Validation error"));
+
+        var result = await _controller.GetById("bad");
+        Assert.That(result, Is.InstanceOf<ObjectResult>());
+        Assert.That(((ObjectResult)result).StatusCode, Is.EqualTo(StatusCodes.Status400BadRequest));
+    }
+
+    [Test]
+    public async Task GetById_WhenUnauthorizedError_ReturnsProblem401()
+    {
+        _mediatorMock.Setup(m => m.Send(It.IsAny<GetProductByIdQuery>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(Error.Unauthorized("Product.Unauthorized", "Unauthorized access"));
+
+        var result = await _controller.GetById("denied");
+        Assert.That(result, Is.InstanceOf<ObjectResult>());
+        Assert.That(((ObjectResult)result).StatusCode, Is.EqualTo(StatusCodes.Status401Unauthorized));
+    }
+
+    [Test]
+    public async Task GetById_WhenUnexpectedError_ReturnsProblem500()
+    {
+        _mediatorMock.Setup(m => m.Send(It.IsAny<GetProductByIdQuery>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(Error.Unexpected("Product.Crash", "Server crash"));
+
+        var result = await _controller.GetById("crash");
+        Assert.That(result, Is.InstanceOf<ObjectResult>());
+        Assert.That(((ObjectResult)result).StatusCode, Is.EqualTo(StatusCodes.Status500InternalServerError));
+    }
+
+    [Test]
+    public async Task Create_WhenError_ReturnsProblem400()
+    {
+        _mediatorMock.Setup(m => m.Send(It.IsAny<CreateProductCommand>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(Error.Validation("Product.Invalid", "Name is invalid"));
+
+        var result = await _controller.Create(new CreateProductDto());
+        Assert.That(result, Is.InstanceOf<ObjectResult>());
+        Assert.That(((ObjectResult)result).StatusCode, Is.EqualTo(StatusCodes.Status400BadRequest));
+    }
+
+    [Test]
+    public async Task Update_WhenValidationError_ReturnsBadRequest()
+    {
+        _mediatorMock.Setup(m => m.Send(It.IsAny<UpdateProductCommand>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(Error.Validation("Product.Invalid", "Invalid data"));
+
+        var result = await _controller.Update("1", new CreateProductDto());
+        Assert.That(result, Is.InstanceOf<BadRequestObjectResult>());
+    }
+
+    [Test]
+    public async Task Delete_WhenUnexpectedError_ReturnsBadRequest()
+    {
+        _mediatorMock.Setup(m => m.Send(It.IsAny<DeleteProductCommand>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(Error.Unexpected("Product.Fail", "Failed to delete"));
+
+        var result = await _controller.Delete("1");
+        Assert.That(result, Is.InstanceOf<BadRequestObjectResult>());
+    }
+
+    [Test]
     public async Task Update_WhenProductExists_ReturnsNoContent()
     {
         var dto = new CreateProductDto { Name = "Updated sneaker" };
-        _productServiceMock.Setup(s => s.UpdateAsync("1", dto)).ReturnsAsync(true);
+        _mediatorMock.Setup(m => m.Send(It.Is<UpdateProductCommand>(c => c.Id == "1" && c.Dto == dto), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(Result.Success);
 
         var result = await _controller.Update("1", dto);
 
         Assert.That(result, Is.InstanceOf<NoContentResult>());
+        _mediatorMock.Verify(m => m.Send(It.IsAny<UpdateProductCommand>(), It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Test]
     public async Task Update_WhenProductDoesNotExist_ReturnsNotFound()
     {
-        _productServiceMock.Setup(s => s.UpdateAsync("missing", It.IsAny<CreateProductDto>()))
-            .ReturnsAsync(false);
+        _mediatorMock.Setup(m => m.Send(It.Is<UpdateProductCommand>(c => c.Id == "missing"), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(Error.NotFound("Product.NotFound", "Не найден"));
 
         var result = await _controller.Update("missing", new CreateProductDto());
 
-        Assert.That(result, Is.InstanceOf<NotFoundResult>());
+        Assert.That(result, Is.InstanceOf<NotFoundObjectResult>());
     }
 
     [Test]
     public async Task Delete_WhenProductExists_ReturnsNoContent()
     {
-        _productServiceMock.Setup(s => s.DeleteAsync("1")).ReturnsAsync(true);
+        _mediatorMock.Setup(m => m.Send(It.Is<DeleteProductCommand>(c => c.Id == "1"), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(Result.Success);
 
         var result = await _controller.Delete("1");
 
         Assert.That(result, Is.InstanceOf<NoContentResult>());
+        _mediatorMock.Verify(m => m.Send(It.IsAny<DeleteProductCommand>(), It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Test]
     public async Task Delete_WhenProductDoesNotExist_ReturnsNotFound()
     {
-        _productServiceMock.Setup(s => s.DeleteAsync("missing")).ReturnsAsync(false);
+        _mediatorMock.Setup(m => m.Send(It.Is<DeleteProductCommand>(c => c.Id == "missing"), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(Error.NotFound("Product.NotFound", "Не найден"));
 
         var result = await _controller.Delete("missing");
 
-        Assert.That(result, Is.InstanceOf<NotFoundResult>());
+        Assert.That(result, Is.InstanceOf<NotFoundObjectResult>());
     }
 
     [Test]
@@ -247,7 +323,13 @@ public class AuthControllerTests
     public void SetUp()
     {
         _authServiceMock = new Mock<IAuthService>();
-        _controller = new AuthController(_authServiceMock.Object);
+        _controller = new AuthController(_authServiceMock.Object)
+        {
+            ControllerContext = new ControllerContext
+            {
+                HttpContext = new DefaultHttpContext()
+            }
+        };
     }
 
     [Test]

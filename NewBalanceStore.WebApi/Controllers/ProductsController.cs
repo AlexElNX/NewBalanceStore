@@ -188,9 +188,4 @@ public class ProductsController : ControllerBase
                 : BadRequest(errors[0].Description)
         );
     }
-
-    public static implicit operator ProductsController(AuthController v)
-    {
-        throw new NotImplementedException();
-    }
 }

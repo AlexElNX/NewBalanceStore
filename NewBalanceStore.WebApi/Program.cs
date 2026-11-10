@@ -11,6 +11,7 @@ using NewBalanceStore.Application.Common.Security;
 using NewBalanceStore.Application.Interfaces;
 using NewBalanceStore.Application.Mappings;
 using NewBalanceStore.Application.Services;
+using NewBalanceStore.Application.Validators;
 using NewBalanceStore.Domain.Interfaces;
 using NewBalanceStore.Infrastructure.Authentication;
 using NewBalanceStore.Infrastructure.Configurations;
@@ -60,7 +61,7 @@ try
     builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
 
     builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
-    builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
+    builder.Services.AddValidatorsFromAssembly(typeof(CreateProductDtoValidator).Assembly);
     builder.Services.AddHealthChecks().AddCheck<FirebaseHealthCheck>("firebase-check");
     builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(CachingBehavior<,>));
     builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
@@ -179,4 +180,5 @@ finally
 {
     Log.CloseAndFlush();
 }
+[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
 public partial class Program { }
